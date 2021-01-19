@@ -1,0 +1,9 @@
+/node_modules/
+/bower_components/
+npm-debug.log
+/npm-debug.log.*
+.idea
+/logs/
+*.ignoreforgit.*
+/node_modules_*
+.env
