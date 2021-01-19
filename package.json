@@ -1,11 +1,11 @@
 {
-  "name": "restaurants-club-api",
+  "name": "app",
   "version": "1.0.0",
   "private": "true",
   "engines": {
     "node": "^14.15.0"
   },
-  "repository": "git@github.com:frizhub-repo/restaurants-club-api.git",
+  "repository": "git@github.com:frizhub-repo/express-boilerplate.git",
   "license": "MIT",
   "scripts": {
     "start": "nodemon ./bootstrap.js"

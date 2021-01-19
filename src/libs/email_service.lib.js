@@ -1,12 +1,12 @@
-const { SENDGRID_APIKEY } = process.env;
+const { SENDGRID_APIKEY, EMAIL_FROM } = process.env;
 
 sgMail.setApiKey(SENDGRID_APIKEY);
 
 exports.sendEmail = async function (user) {
   const msg = {
     to: user.email,
-    from: "restaurants.club.newsletter@gmail.com",
-    subject: "Restaurants Club",
+    from: EMAIL_FROM,
+    subject: "Subject",
     text: "verification code",
     html: "Your verification code is " + user.verificationCode,
   };
