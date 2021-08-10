@@ -38,7 +38,7 @@ UserSchema.methods.getJWTToken = function () {
     name: this.firstName + " " + this.lastName,
     email: this.email,
     id: this.id,
-    model: "owners",
+    model: "users",
   };
 
   return JWT.sign(payload, process.env.JWTSECRET, {

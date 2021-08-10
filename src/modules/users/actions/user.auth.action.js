@@ -1,4 +1,3 @@
-const { FRONTEND_URL } = process.env;
 const authService = new services.AuthService(models.Users);
 const crudService = new services.CrudService(models.Users);
 
