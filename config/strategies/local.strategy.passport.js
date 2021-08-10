@@ -12,15 +12,15 @@ module.exports = function () {
       },
       async (req, email, password, done) => {
         try {
-          let user = await models.Owner.findOne({
+          let user = await models.Users.findOne({
             email: email,
           });
           if (!user || !user.verifyPassword(password)) {
             return done(null, false, { message: messages.invalidLogin });
           }
-          if (!user.isVerified) {
-            return done(null, false, { message: messages.notVerified });
-          }
+          // if (!user.isVerified) {
+          //   return done(null, false, { message: messages.notVerified });
+          // }
           return done(null, user);
         } catch (error) {
           return done(error);

@@ -1,5 +1,5 @@
 const roleModel = {
-  owners: models.Owner,
+  owners: models.Users,
 };
 router.use(function (req, res, next) {
   let isChecked = 0;
