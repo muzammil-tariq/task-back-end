@@ -18,9 +18,7 @@ module.exports = function () {
           if (!user || !user.verifyPassword(password)) {
             return done(null, false, { message: messages.invalidLogin });
           }
-          // if (!user.isVerified) {
-          //   return done(null, false, { message: messages.notVerified });
-          // }
+
           return done(null, user);
         } catch (error) {
           return done(error);

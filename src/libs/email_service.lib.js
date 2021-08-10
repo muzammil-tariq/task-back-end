@@ -12,7 +12,7 @@ exports.sendEmail = async function (user) {
   };
 
   var sgResp = await sgMail.send(msg).catch((error) => {
-    console.error(error);
+    console.error(error.message);
   });
   console.log(sgResp);
 };
