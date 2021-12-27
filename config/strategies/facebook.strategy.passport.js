@@ -1,14 +1,13 @@
 const {
   FACEBOOK_CLIENT_ID,
   FACEBOOK_CLIENT_SECRET,
-  OWNER_FACEBOOK_CALLBACK,
+  USER_FACEBOOK_CALLBACK,
   BASE_URL,
 } = process.env;
 
 const FacebookStrategy = require("passport-facebook").Strategy;
-module.exports = function (passportName, role) {
-  const callbackURL =
-    role == "owners" ? BASE_URL + OWNER_FACEBOOK_CALLBACK : undefined;
+module.exports = function (passportName) {
+  const callbackURL = BASE_URL + USER_FACEBOOK_CALLBACK;
 
   passport.use(
     passportName,

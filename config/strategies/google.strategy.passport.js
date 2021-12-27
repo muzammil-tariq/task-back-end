@@ -3,14 +3,13 @@ const {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   BASE_URL,
-  OWNER_GOOGLE_CALLBACK,
+  USER_GOOGLE_CALLBACK,
 } = process.env;
 
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
-module.exports = function (passportName, role) {
-  const callbackURL =
-    role == "owners" ? BASE_URL + OWNER_GOOGLE_CALLBACK : undefined;
+module.exports = function (passportName) {
+  const callbackURL = BASE_URL + USER_GOOGLE_CALLBACK;
   passport.use(
     passportName,
     new GoogleStrategy(

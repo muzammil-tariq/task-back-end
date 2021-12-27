@@ -6,6 +6,11 @@ require("dotenv").config();
  */
 require("./src/global-package");
 /**
+ * Add Helper globally
+ */
+
+require("./src/helpers");
+/**
  * Add Util globally
  */
 
@@ -30,8 +35,9 @@ let types = {
   services: {},
   utils: {},
   libs: {},
+  helpers: {},
   actions: {},
-  validators: {},
+  validator: {},
 };
 
 // SCHEMA
@@ -41,7 +47,7 @@ for (let schemaFile of utils.globalFile.getGlobbedFiles("./**/*.schema.js")) {
     (types["models"][schema.modelName] = `typeof import("${schemaFile.replace(
       ".js",
       ""
-    )}")`.replace(/'/g, ""));
+    )}")`);
   // console.log(`${schema.modelName}: typeof import("${schemaFile}")`);
 }
 
@@ -98,6 +104,21 @@ fs.readdirSync(__dirname + libsDir)
     )}")`;
   });
 
+// HELPERS
+var helpersDir = "/src/helpers";
+fs.readdirSync(__dirname + helpersDir)
+  .filter(
+    (file) =>
+      file.indexOf(".") !== 0 &&
+      file.indexOf("index.js") === -1 &&
+      file.indexOf("helper.js") > -1
+  )
+  .forEach((file) => {
+    types.helpers[
+      file.replace(".helper.js", "")
+    ] = `typeof import(".${path.join(helpersDir, file.replace(".js", ""))}")`;
+  });
+
 // ACTIONS
 for (let actionFile of utils.globalFile.getGlobbedFiles("./**/*.action.js")) {
   const filePathArr = actionFile.split("/");
@@ -115,6 +136,8 @@ for (let actionFile of utils.globalFile.getGlobbedFiles("./**/*.action.js")) {
     };
   }
 }
+
+// VALIDATORS
 let files = utils.globalFile.getGlobbedFiles("./**/*.validator.js");
 for (let validatorFile of files) {
   const filePathArr = validatorFile.split("/");
@@ -131,10 +154,10 @@ for (let validatorFile of files) {
   });
   if (greaterThan1) {
     for (const validator in validators) {
-      types.validators = {
-        ...types.validators,
+      types.validator = {
+        ...types.validator,
         [moduleName]: {
-          ...types.validators[moduleName],
+          ...types.validator[moduleName],
           [validator]: `typeof import("./${path.join(
             validatorFile.replace(".js", "")
           )}").${validator}`,
@@ -142,8 +165,8 @@ for (let validatorFile of files) {
       };
     }
   } else {
-    types.validators = {
-      ...types.validators,
+    types.validator = {
+      ...types.validator,
       [moduleName]: `typeof import("./${path.join(
         validatorFile.replace(".js", "")
       )}")`,
@@ -151,49 +174,65 @@ for (let validatorFile of files) {
   }
 }
 
-var text = `
-declare global: {
+var text = `declare global {
+  var express: typeof import("express");
+  var app: ReturnType<typeof express>;
+  var router: ReturnType<typeof express.Router>;
+  var createError: typeof import("http-errors");
+  var cookieParser: typeof import("cookie-parser");
+  var logger: typeof import("morgan");
+  var _: typeof import("lodash");
+  var glob: typeof import("glob");
+  var path: typeof import("path");
+  var fs: typeof import("fs");
+  var passport: typeof import("passport");
+  var passportLocal: typeof import("passport-local");
+  var passportJWT: typeof import("passport-jwt");
+  var mongoose: typeof import("mongoose");
+  var crypto: typeof import("crypto");
+  var JWT: typeof import("jsonwebtoken");
+  var bodyParser: typeof import("body-parser");
+  var cors: typeof import("cors");
+  var expressValidator: typeof import("express-validator");
+  var sgMail: typeof import("@sendgrid/mail");
+  var util: typeof import("util");
+  
+  //MIDDLEWARES
+  var middlewares: ${convertToCode(types.middlewares)};
+  // SERVICES
+  var services: ${convertToCode(types.services)};
   // MODELS
-  var models: ${
-    util.inspect(types.models, false, 2, false)
-    // .replaceAll("'", "")
-    // .replaceAll(",", ";")
-  };
-
-  // MiDDLEWARES
-  var middlewares: ${util.inspect(types.middlewares, false, 2, false)};
-
-  //SERVICES
-  var services: ${util.inspect(types.services, false, 2, false)};
-
-  // UTILS
-  var utils: ${util.inspect(types.utils, false, 2, false)};
-
-  // LIBS
-  var libs: ${util.inspect(types.libs, false, 2, false)};
-
-  // ACTIONS
-  var actions: ${util.inspect(types.actions, false, 2, false)};
-
+  var models: ${convertToCode(types.models)};
+  
   // VALIDATORS
-  var validators: ${util.inspect(types.validators, false, 2, false)};
-
+  var validator: ${convertToCode(types.validator)};
+  
+  // ACTIONS
+  var actions: ${convertToCode(types.actions)};
+  // LIBS
+  var libs: ${convertToCode(types.libs)};
+  // UTILS
+  var utils: ${convertToCode(types.utils)};
+  // HELPERS
+  var helpers: ${convertToCode(types.helpers)};
+  
   var messages: typeof import("./config/messages");
   var dataConstraint: typeof import("./config/data_constraints");
-
-  namespace Express {
-    interface Request {
-      roleModel: Model<Document>;
-    }
-  }
-
+  var emailConstraints: typeof import("./config/emailConstraints");
+  var constants: typeof import("./config/constants");
+  var digitOceanUrl: typeof import("../config/digital_ocean");
 }
-
 export {};
-
 `;
 
-fs.writeFile("./test.d.ts", text, (err) => {
+function convertToCode(code) {
+  return util
+    .inspect(code, false, 2, false)
+    .replace(/'/g, "")
+    .replace(/,/g, ";");
+}
+
+fs.writeFile("./global.d.ts", text, (err) => {
   if (err) throw err;
-  console.log("Generated Types");
+  console.log("✅ Generated types");
 });
