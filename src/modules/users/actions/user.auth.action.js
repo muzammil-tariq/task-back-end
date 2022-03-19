@@ -1,5 +1,6 @@
 const authService = new services.AuthService(models.Users);
 const crudService = new services.CrudService(models.Users);
+const { FRONTEND_URL } = process.env;
 
 exports.auth = {
   signUp: async (req, res, next) => {
@@ -135,6 +136,26 @@ exports.auth = {
       });
     } catch (err) {
       next(err);
+    }
+  },
+  // continue with facebook callback url
+  facebookCb: async (req, res, next) => {
+    const token = req.user.getJWTToken();
+
+    if (token) {
+      return res.redirect(FRONTEND_URL + "/auth/callback?token=" + token);
+    } else {
+      throw createError(400, messages.badRequest);
+    }
+  },
+  // continue with google callback url
+  googleCb: async (req, res, next) => {
+    const token = req.user.getJWTToken();
+
+    if (token) {
+      res.redirect(FRONTEND_URL + "/auth/callback?token=" + token);
+    } else {
+      throw createError(400, messages.badRequest);
     }
   },
 };
