@@ -1,5 +1,8 @@
 const roleModel = {
   users: models.Users,
+  customers: models.Customers,
+  vendors: models.Vendors,
+  admins: models.Admin,
 };
 router.use(function (req, res, next) {
   let isChecked = 0;
@@ -9,7 +12,9 @@ router.use(function (req, res, next) {
       isChecked = 1;
     }
   }
-  if (req.path.search("/login") > -1) {
+  if (req.path.search("/seeder") > -1) {
+    next();
+  } else if (req.path.search("/login") > -1) {
     next();
   } else {
     if (req.path.search("auth/") > -1) {
