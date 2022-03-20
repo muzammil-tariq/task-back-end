@@ -57,12 +57,12 @@ router
   )
   .get(
     "/customers/auth/google/callback",
-    passport.authenticate("google", { session: false }),
+    passport.authenticate("customer-google", { session: false }),
     actions.customers.auth.googleCb
   )
   .get(
     "/customers/auth/facebook/callback",
-    passport.authenticate("facebook", { session: false }),
+    passport.authenticate("customer-facebook", { session: false }),
     actions.customers.auth.facebookCb
   );
 
