@@ -1,13 +1,14 @@
-const {
-  FACEBOOK_CLIENT_ID,
-  FACEBOOK_CLIENT_SECRET,
-  USER_FACEBOOK_CALLBACK,
-  BASE_URL,
-} = process.env;
+const { FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, BASE_URL } = process.env;
+
+const callbackUrls = {
+  users: "/api/v1/users/auth/facebook/callback",
+  customers: "/api/v1/customers/auth/facebook/callback",
+  vendors: "/api/v1/vendors/auth/facebook/callback",
+};
 
 const FacebookStrategy = require("passport-facebook").Strategy;
-module.exports = function (passportName) {
-  const callbackURL = BASE_URL + USER_FACEBOOK_CALLBACK;
+module.exports = function (passportName, type = "users") {
+  const callbackURL = BASE_URL + callbackUrls[type];
 
   passport.use(
     passportName,

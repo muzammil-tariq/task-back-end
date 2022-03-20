@@ -44,6 +44,26 @@ router
     validators.users.resetPasswordPayload,
     middlewares.validation.request,
     actions.users.auth.resetPassword
+  )
+  .get(
+    "/users/auth/google",
+    passport.authenticate("google", {
+      scope: ["profile", "email"],
+    })
+  )
+  .get(
+    "/users/auth/facebook",
+    passport.authorize("facebook", { scope: ["email"] })
+  )
+  .get(
+    "/users/auth/google/callback",
+    passport.authenticate("google", { session: false }),
+    actions.users.auth.googleCb
+  )
+  .get(
+    "/users/auth/facebook/callback",
+    passport.authenticate("facebook", { session: false }),
+    actions.users.auth.facebookCb
   );
 
 module.exports = { prefix: "users", router };

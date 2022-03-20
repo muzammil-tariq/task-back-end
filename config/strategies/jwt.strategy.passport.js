@@ -2,6 +2,9 @@ const { Strategy: JwtStrategy, ExtractJwt } = passportJWT;
 const { JWTSECRET } = process.env;
 const roleModel = {
   users: models.Users,
+  customers: models.Customers,
+  vendors: models.Vendors,
+  admins: models.Admin,
 };
 ExtractJwt.fromBodyField("token");
 const opts = { passReqToCallback: true, secretOrKey: JWTSECRET };

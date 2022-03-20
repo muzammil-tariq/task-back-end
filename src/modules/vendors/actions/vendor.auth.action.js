@@ -1,17 +1,17 @@
-const authService = new services.AuthService(models.Users);
-const crudService = new services.CrudService(models.Users);
+const authService = new services.AuthService(models.Vendors);
+const crudService = new services.CrudService(models.Vendors);
 const { FRONTEND_URL } = process.env;
 
 exports.auth = {
   signUp: async (req, res, next) => {
     const { body: payload } = req;
     try {
-      let Users = await authService.signUp(payload);
+      let Vendors = await authService.signUp(payload);
 
       return res.json({
         status: 200,
-        message: messages.created("Users"),
-        data: Users,
+        message: messages.created("Vendors"),
+        data: Vendors,
       });
     } catch (err) {
       next(err);
@@ -34,12 +34,12 @@ exports.auth = {
   verifyEmail: async (req, res, next) => {
     try {
       let { body: payload } = req;
-      let user = await authService.verifyEmail(payload);
+      let vendor = await authService.verifyEmail(payload);
 
       res.json({
         status: 200,
         message: messages.success,
-        data: user,
+        data: vendor,
       });
     } catch (error) {
       next(error);
@@ -51,14 +51,14 @@ exports.auth = {
       const id = req.params.id;
       const code = parseInt(req.body.code);
 
-      let user = await authService.verifyCode(id, code);
-      if (!user.isVerified) {
+      let vendor = await authService.verifyCode(id, code);
+      if (!vendor.isVerified) {
         throw createError(400, messages.notVerified);
       }
       return res.json({
         status: 200,
         message: messages.verified,
-        data: user,
+        data: vendor,
       });
     } catch (error) {
       next(error);
@@ -68,12 +68,12 @@ exports.auth = {
   resendCode: async (req, res, next) => {
     try {
       const id = req.params.id;
-      let user = await authService.resendCode(id);
+      let vendor = await authService.resendCode(id);
 
       return res.json({
         status: 200,
         message: messages.resendCode,
-        data: user,
+        data: vendor,
       });
     } catch (error) {
       next(error);
@@ -82,21 +82,21 @@ exports.auth = {
   forgotPassword: async (req, res, next) => {
     try {
       let { body: payload } = req;
-      let user = await authService.verifyEmail(payload);
+      let vendor = await authService.verifyEmail(payload);
       const verificationCode = utils.random.generateRandomNumber();
       const codeExpiryTime = Date.now();
-      user = await crudService.update(
+      vendor = await crudService.update(
         { verificationCode, codeExpiryTime },
-        user._id,
+        vendor._id,
         messages.userNotFound
       );
-      await libs.email_service.sendEmail(user);
-      // await AuthNotificationService.forgotPassword(user, "Client", "email");
-      user._doc["token"] = user.getJWTToken();
+      await libs.email_service.sendEmail(vendor);
+      // await AuthNotificationService.forgotPassword(vendor, "Client", "email");
+      vendor._doc["token"] = vendor.getJWTToken();
       return res.json({
         status: 200,
         message: messages.success,
-        data: user,
+        data: vendor,
       });
     } catch (err) {
       next(err);
@@ -109,30 +109,33 @@ exports.auth = {
         params: { id },
       } = req;
       const verificationCode = parseInt(code);
-      let user = await models.Users.findById(id);
-      if (!user) {
+      let vendor = await models.Vendors.findById(id);
+      if (!vendor) {
         throw createError(400, messages.userNotFound);
       }
       const currentTime = Date.now();
       // It will be empty when no request had been made for resetPassword
-      if (!user.codeExpiryTime) {
+      if (!vendor.codeExpiryTime) {
         throw createError(400, messages.invalidCode);
       }
-      if (currentTime - user.codeExpiryTime > dataConstraint.CODE_EXPIRY_TIME) {
+      if (
+        currentTime - vendor.codeExpiryTime >
+        dataConstraint.CODE_EXPIRY_TIME
+      ) {
         throw createError(400, messages.codeExpried);
       }
-      if (user.verificationCode !== verificationCode) {
+      if (vendor.verificationCode !== verificationCode) {
         throw createError(400, messages.invalidCode);
       }
-      user = await crudService.update(
+      vendor = await crudService.update(
         { password },
-        user._id,
+        vendor._id,
         messages.userNotFound
       );
       return res.json({
         status: 200,
         message: messages.updateAttr("Password"),
-        data: user,
+        data: vendor,
       });
     } catch (err) {
       next(err);

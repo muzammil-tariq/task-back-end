@@ -11,14 +11,14 @@ module.exports = function () {
         passReqToCallback: true,
       },
       async (req, email, password, done) => {
+        let model = req.roleModel;
         try {
-          let user = await models.Users.findOne({
+          let user = await model.findOne({
             email: email,
           });
           if (!user || !user.verifyPassword(password)) {
             return done(null, false, { message: messages.invalidLogin });
           }
-
           return done(null, user);
         } catch (error) {
           return done(error);

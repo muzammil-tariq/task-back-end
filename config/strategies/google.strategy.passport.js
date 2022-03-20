@@ -1,15 +1,16 @@
 "use strict";
-const {
-  GOOGLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET,
-  BASE_URL,
-  USER_GOOGLE_CALLBACK,
-} = process.env;
+const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, BASE_URL } = process.env;
+
+const callbackUrls = {
+  users: "/api/v1/users/auth/google/callback",
+  customers: "/api/v1/customers/auth/google/callback",
+  vendors: "/api/v1/vendors/auth/google/callback",
+};
 
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
-module.exports = function (passportName) {
-  const callbackURL = BASE_URL + USER_GOOGLE_CALLBACK;
+module.exports = function (passportName, type = "users") {
+  const callbackURL = BASE_URL + callbackUrls[type];
   passport.use(
     passportName,
     new GoogleStrategy(
