@@ -21,6 +21,15 @@ let signUpPayloadValidation = [
     .withMessage(messages.notEmpty)
     .isString()
     .withMessage(messages.invalidDataType("String")),
+  body("telephoneNumber")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .matches(dataConstraint.PHONE_NUMBER_REGEX)
+    .withMessage(messages.invalidFormat("PhoneNumber")),
   body("email")
     .exists()
     .withMessage(messages.notPresent)
