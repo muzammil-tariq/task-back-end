@@ -1,8 +1,11 @@
+//@ts-ignore
+
 const CustomerSchema = new mongoose.Schema(
   {
     firstName: { type: String, trim: true },
     lastName: { type: String, trim: true },
     email: { type: String, trim: true },
+    username: { type: String, trim: true },
     password: {
       type: String,
       set: (val) => utils.hash.makeHashValue(val),
@@ -33,6 +36,8 @@ const CustomerSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    zipCode: { type: Number },
+    country: { type: String },
   },
   { timestamps: true }
 );

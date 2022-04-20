@@ -1,31 +1,63 @@
 const { body, param } = expressValidator;
 let signUpPayloadValidation = [
   body("firstName")
+    .exists()
+    .withMessage(messages.notPresent)
     .notEmpty()
     .withMessage(messages.notEmpty)
     .isString()
     .withMessage(messages.invalidDataType("String")),
   body("lastName")
+    .exists()
+    .withMessage(messages.notPresent)
     .notEmpty()
     .withMessage(messages.notEmpty)
     .isString()
     .withMessage(messages.invalidDataType("String")),
+  body("username")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String")),
+  body("telephoneNumber")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .matches(dataConstraint.PHONE_NUMBER_REGEX)
+    .withMessage(messages.invalidFormat("PhoneNumber")),
   body("email")
     .exists()
     .withMessage(messages.notPresent)
-    .matches(dataConstraint.EMAIL_REGEX)
-    .withMessage(messages.invalidFormat("Email"))
+    .notEmpty()
+    .withMessage(messages.notEmpty)
     .isString()
-    .withMessage(messages.invalidDataType("String")),
+    .withMessage(messages.invalidDataType("String"))
+    .matches(dataConstraint.EMAIL_REGEX)
+    .withMessage(messages.invalidFormat("Email")),
   body("password")
     .isLength({ min: dataConstraint.PASSWORD_MIN_LENGTH })
     .withMessage(messages.invalidLength)
     .isString()
     .withMessage(messages.invalidDataType("String")),
-  // body("hash")
-  //   .isString()
-  //   .withMessage(messages.invalidDataType("String"))
-  //   .optional(true),
+  body("country")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String")),
+  body("zipCode")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isInt()
+    .withMessage(messages.invalidDataType("Integer")),
 ];
 
 let signInPayloadValidation = [

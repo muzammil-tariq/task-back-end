@@ -7,3 +7,4 @@ npm-debug.log
 *.ignoreforgit.*
 /node_modules_*
 .env
+/public/images

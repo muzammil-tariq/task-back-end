@@ -49,4 +49,11 @@ module.exports = {
   invalidQuery: (param) => {
     return `Query param ${param} cannot be empty`;
   },
+  filesLengthExceeded: "File Limit Exceeded",
+  missingAttr: (attr) => {
+    return `${attr} is missing in the payload`;
+  },
+  missingInfoStep: (step) => {
+    return `Complete ${step} first to continue!`;
+  },
 };
