@@ -49,4 +49,5 @@ module.exports = {
   invalidQuery: (param) => {
     return `Query param ${param} cannot be empty`;
   },
+  filesLengthExceeded: "File Limit Exceeded",
 };
