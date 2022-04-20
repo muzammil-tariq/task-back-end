@@ -33,9 +33,16 @@ exports.info = {
   addressInfo: async (req, res, next) => {
     try {
       const {
-        user: { _id: vendorId },
+        user: { _id: vendorId, informationSteps = null },
         body: payload,
       } = req;
+
+      if (!informationSteps || informationSteps !== "address")
+        throw createError(
+          400,
+          messages.missingInfoStep("Business Information")
+        );
+
       payload["informationSteps"] = "completed";
       const data = await VendorCrudService.update(
         _.omit(payload, strongParams),

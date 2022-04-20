@@ -53,4 +53,7 @@ module.exports = {
   missingAttr: (attr) => {
     return `${attr} is missing in the payload`;
   },
+  missingInfoStep: (step) => {
+    return `Complete ${step} first to continue!`;
+  },
 };
