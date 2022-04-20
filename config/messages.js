@@ -50,4 +50,7 @@ module.exports = {
     return `Query param ${param} cannot be empty`;
   },
   filesLengthExceeded: "File Limit Exceeded",
+  missingAttr: (attr) => {
+    return `${attr} is missing in the payload`;
+  },
 };

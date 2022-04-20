@@ -6,12 +6,12 @@ exports.auth = {
   signUp: async (req, res, next) => {
     const { body: payload } = req;
     try {
-      let Vendors = await authService.signUp(payload);
-
+      payload["informationSteps"] = "business";
+      const data = await authService.signUp(payload);
       return res.json({
         status: 200,
         message: messages.created("Vendors"),
-        data: Vendors,
+        data: data,
       });
     } catch (err) {
       next(err);

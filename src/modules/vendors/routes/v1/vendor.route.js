@@ -1,3 +1,5 @@
+// Vendor Auth Routes
+
 router
   .post(
     "/vendors/auth/signUp",
@@ -64,6 +66,28 @@ router
     "/vendors/auth/facebook/callback",
     passport.authenticate("vendor-facebook", { session: false }),
     actions.vendors.auth.facebookCb
+  );
+
+// Vendor authenticated routes
+
+router
+  .patch(
+    "/vendors/profile-photo",
+    middlewares.upload_local.uploadSingle,
+    actions.vendors.update.profilePhoto
+  )
+  .patch("/vendors", actions.vendors.update.profile)
+  .patch(
+    "/vendors/business-info",
+    validators.vendors.businessInfoValidation,
+    middlewares.validation.request,
+    actions.vendors.info.businessInfo
+  )
+  .patch(
+    "/vendors/address-info",
+    validators.vendors.addressInfoValidation,
+    middlewares.validation.request,
+    actions.vendors.info.addressInfo
   );
 
 module.exports = { prefix: "vendors", router };

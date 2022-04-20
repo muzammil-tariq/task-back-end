@@ -1,7 +1,7 @@
+//@ts-ignore
 const VendorSchema = new mongoose.Schema(
   {
-    firstName: { type: String, trim: true },
-    lastName: { type: String, trim: true },
+    fullName: { type: String, trim: true },
     email: { type: String, trim: true },
     password: {
       type: String,
@@ -33,6 +33,51 @@ const VendorSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    informationSteps: {
+      type: String,
+      enum: ["business", "address", "completed"],
+    },
+    businessCriteria: {
+      type: String,
+      enum: ["licensed", "bonded", "insured"],
+    },
+    dateOfRegisteration: {
+      type: Date,
+    },
+    birthDate: {
+      type: Date,
+    },
+    businessName: {
+      type: String,
+    },
+    websiteUrl: {
+      type: String,
+    },
+    gender: {
+      type: String,
+      enum: ["male", "female", "non-binary", "no-answer"],
+    },
+    languages: {
+      type: [String],
+    },
+    facebookUrl: { type: String },
+    instagramUrl: { type: String },
+    twitterUrl: { type: String },
+    contactName: { type: String },
+    contactTitle: { type: String },
+    contactEmail: { type: String, trim: true },
+    contactPhoneNumber: { type: String },
+    serviceDescription: { type: String },
+    businessType: { type: String },
+    virtualEvents: { type: Boolean },
+    convictedFelony: { type: Boolean },
+    felonyDescription: { type: String },
+    minorityEligibility: { type: [String] },
+    businessAddress: { type: String },
+    city: { type: String },
+    state: { type: String },
+    zipCode: { type: Number },
+    country: { type: String },
   },
   { timestamps: true }
 );
