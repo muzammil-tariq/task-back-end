@@ -88,7 +88,7 @@ VendorSchema.methods.verifyPassword = function (pwd) {
 
 VendorSchema.methods.getJWTToken = function () {
   const payload = {
-    name: this.firstName + " " + this.lastName,
+    name: this.fullName,
     email: this.email,
     id: this.id,
     model: "vendors",
