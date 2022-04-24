@@ -56,4 +56,9 @@ module.exports = {
   missingInfoStep: (step) => {
     return `Complete ${step} first to continue!`;
   },
+  alreadyExists: (attr) => {
+    return `${attr} already exists. Try again!`;
+  },
+  eventAlreadyExists: "Event already scheduled at this time. Try another slot!",
+  eventNotForThisCustomer: "Event does not belong to this customer",
 };
