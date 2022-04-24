@@ -8,6 +8,12 @@ const EventSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Customers",
     },
+    subCategories: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "EventSubCategories",
+      },
+    ],
     description: { type: String },
     scheduledDate: { type: Date },
     location: { type: String, enum: ["indoor", "outdoor", "virtual"] },
@@ -16,6 +22,7 @@ const EventSchema = new mongoose.Schema(
     numberOfPeople: { type: Number },
     startTime: { type: String },
     endTime: { type: String },
+    isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

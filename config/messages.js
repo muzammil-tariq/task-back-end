@@ -60,4 +60,5 @@ module.exports = {
     return `${attr} already exists. Try again!`;
   },
   eventAlreadyExists: "Event already scheduled at this time. Try another slot!",
+  eventNotForThisCustomer: "Event does not belong to this customer",
 };

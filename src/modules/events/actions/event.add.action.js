@@ -9,7 +9,7 @@ exports.add = {
       } = req;
 
       const customer = await models.Customers.findById({ _id: customerId });
-      if (!customer) throw createError(400, messages.notFound("Customer"));
+      if (!customer) throw createError(404, messages.notFound("Customer"));
 
       const alreadyExist = await models.Events.findOne({
         scheduledDate: payload.scheduledDate,
