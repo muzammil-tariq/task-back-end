@@ -1,6 +1,6 @@
 const QuoteCrudService = new services.CrudService(models.Quotes);
 exports.add = {
-  request: async (req, res, next) => {
+  quote: async (req, res, next) => {
     try {
       const {
         user: { _id: vendorId },

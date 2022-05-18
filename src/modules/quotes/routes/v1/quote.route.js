@@ -1,2 +1,7 @@
-router.post("/quote/vendors", actions.quotes.add.request);
+router.post(
+  "/quote/vendors",
+  validators.quotes.quotePayload,
+  middlewares.validation.request,
+  actions.quotes.add.quote
+);
 module.exports = { prefix: "quote", router };
