@@ -1,7 +1,7 @@
 (async () => {
   try {
     await mongoose.connect(
-      process.env.NODE_ENV != "test"
+      process.env.NODE_ENV != "development"
         ? process.env.MONGO_URL
         : process.env.MONGO_TEST_URL,
       {
@@ -11,7 +11,8 @@
         useCreateIndex: true,
       }
     );
-    console.log("Connected to  database") + process.env.NODE_ENV;
+    mongoose.set("debug", true);
+    console.log("Connected to database: " + process.env.NODE_ENV);
   } catch (error) {
     console.error(error);
     process.exit(1);
