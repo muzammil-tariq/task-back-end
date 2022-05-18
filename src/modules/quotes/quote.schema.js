@@ -1,9 +1,8 @@
 const QuotesSchema = new mongoose.Schema(
   {
-    qoute: {
+    quote: {
       type: String,
       trim: true,
-      required: [true, "A quotation must have Qoute"],
     },
     price: Number,
     eventId: { type: mongoose.Types.ObjectId, ref: "Quotes" },
