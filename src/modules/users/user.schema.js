@@ -46,14 +46,17 @@ UserSchema.methods.getJWTToken = function () {
   });
 };
 
+UserSchema.statics.excludedAttributes = [
+  "password",
+  "accessToken",
+  "verificationCode",
+  "isVerified",
+  "codeExpiryTime",
+];
+
 UserSchema.methods.toJSON = function () {
   const obj = this.toObject();
-  return _.omit(obj, [
-    "password",
-    "verificationCode",
-    "isVerified",
-    "codeExpiryTime",
-  ]);
+  return _.omit(obj, UserSchema.statics.excludedAttributes);
 };
 
 module.exports = mongoose.model("Users", UserSchema);
