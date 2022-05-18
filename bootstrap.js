@@ -5,6 +5,7 @@ require("dotenv").config();
  * Add packages globally
  */
 require("./src/global-package");
+require("./config/constants");
 /**
  * Add Util globally
  */
@@ -23,6 +24,7 @@ require("./config/db");
  */
 
 require("./src/server");
+require("./src/helpers");
 /**
  *  start server
  */
@@ -31,6 +33,6 @@ require("./bin/www");
 /**
  * Generate types for globals
  */
-// if (process.env.NODE_ENV != "production") {
-//   require("./generate-types");
-// }
+if (process.env.NODE_ENV === "development") {
+  require("./generateTypes");
+}
