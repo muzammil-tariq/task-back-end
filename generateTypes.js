@@ -196,6 +196,7 @@ var text = `declare global {
   var expressValidator: typeof import("express-validator");
   var sgMail: typeof import("@sendgrid/mail");
   var util: typeof import("util");
+  var axios: typeof import("axios").default;
   
   //MIDDLEWARES
   var middlewares: ${convertToCode(types.middlewares)};
