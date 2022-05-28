@@ -141,4 +141,19 @@ exports.auth = {
       next(err);
     }
   },
+  checkUsernameAvailability: async (req, res, next) => {
+    try {
+      const {
+        params: { username },
+      } = req;
+      const data = await models.Customers.findOne({ username });
+      return res.json({
+        status: 200,
+        message: messages.success,
+        data: { isAvailable: !Boolean(data) },
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
 };

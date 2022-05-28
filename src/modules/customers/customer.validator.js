@@ -117,6 +117,7 @@ let verifyCodePayloadValidation = [
 ];
 
 let resendCodePayloadValidation = [param("id").exists()];
+let usernameAvailabilityValidation = [param("username").exists()];
 
 module.exports = {
   signUpPayloadValidation,
@@ -125,4 +126,5 @@ module.exports = {
   resetPasswordPayload,
   verifyCodePayloadValidation,
   resendCodePayloadValidation,
+  usernameAvailabilityValidation,
 };

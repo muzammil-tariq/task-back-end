@@ -18,6 +18,12 @@ router
     middlewares.validation.request,
     actions.customers.auth.verifyEmail
   )
+  .get(
+    "/customers/auth/usernameAvailability/:username",
+    validators.customers.usernameAvailabilityValidation,
+    middlewares.validation.request,
+    actions.customers.auth.checkUsernameAvailability
+  )
 
   .post(
     "/customers/auth/verify-code/:id",
