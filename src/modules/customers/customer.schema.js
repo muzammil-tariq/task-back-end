@@ -69,4 +69,8 @@ CustomerSchema.methods.toJSON = function () {
   ]);
 };
 
+CustomerSchema.methods.getModelType = function () {
+  return "Customers";
+};
+
 module.exports = mongoose.model("Customers", CustomerSchema);

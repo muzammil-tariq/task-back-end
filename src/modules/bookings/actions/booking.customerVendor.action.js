@@ -12,7 +12,8 @@ exports.customerVendor = {
           },
           {
             "endedBy.customerEnded": "true",
-          }
+          },
+          { new: true }
         );
       } else if (model == "vendors") {
         data = await models.Bookings.findOneAndUpdate(
@@ -21,7 +22,8 @@ exports.customerVendor = {
           },
           {
             "endedBy.vendorEnded": "true",
-          }
+          },
+          { new: true }
         );
       } else {
         throw createError(400, "Invalid model type");
@@ -36,14 +38,12 @@ exports.customerVendor = {
           status: "completed",
         }
       );
-      let fetchupdatedData = await models.Bookings.findOne({
-        _id: payload.bookingId,
-      });
+
       const result = see;
       return res.json({
         status: 200,
         message: messages.success,
-        data: fetchupdatedData,
+        data: data,
       });
     } catch (error) {
       next(error);

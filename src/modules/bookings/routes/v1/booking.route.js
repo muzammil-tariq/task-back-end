@@ -4,9 +4,9 @@ router.post(
   middlewares.validation.request,
   actions.bookings.create.booking
 );
-router.patch("/bookings", actions.bookings.customerVendor.status);
+router.patch("/bookings/conclude", actions.bookings.customerVendor.status);
 router.patch(
-  "/bookingsdispute",
+  "/bookings/dispute",
   actions.bookings.disputeCustomerVendor.dispute
 );
 
