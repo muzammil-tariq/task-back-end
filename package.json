@@ -8,7 +8,8 @@
   "repository": "git@github.com:frizhub-repo/express-boilerplate.git",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon ./bootstrap.js"
+    "start": "node ./bootstrap.js",
+    "dev": "nodemon ./bootstrap.js"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.4.0",
@@ -29,11 +30,10 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.4",
     "passport": "^0.4.1",
-    "passport-facebook": "^3.0.0",
-    "passport-google-oauth": "^2.0.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "passport-twitter": "^1.0.4"
+    "redis": "3.0.2",
+    "socket.io": "^4.5.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"

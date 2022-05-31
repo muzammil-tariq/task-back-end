@@ -141,24 +141,19 @@ exports.auth = {
       next(err);
     }
   },
-  // continue with facebook callback url
-  facebookCb: async (req, res, next) => {
-    const token = req.user.getJWTToken();
-
-    if (token) {
-      return res.redirect(FRONTEND_URL + "/auth/callback?token=" + token);
-    } else {
-      throw createError(400, messages.badRequest);
-    }
-  },
-  // continue with google callback url
-  googleCb: async (req, res, next) => {
-    const token = req.user.getJWTToken();
-
-    if (token) {
-      res.redirect(FRONTEND_URL + "/auth/callback?token=" + token);
-    } else {
-      throw createError(400, messages.badRequest);
+  checkUsernameAvailability: async (req, res, next) => {
+    try {
+      const {
+        params: { username },
+      } = req;
+      const data = await models.Customers.findOne({ username });
+      return res.json({
+        status: 200,
+        message: messages.success,
+        data: { isAvailable: !Boolean(data) },
+      });
+    } catch (err) {
+      next(err);
     }
   },
 };

@@ -37,7 +37,7 @@ let types = {
   libs: {},
   helpers: {},
   actions: {},
-  validator: {},
+  validators: {},
 };
 
 // SCHEMA
@@ -154,10 +154,10 @@ for (let validatorFile of files) {
   });
   if (greaterThan1) {
     for (const validator in validators) {
-      types.validator = {
-        ...types.validator,
+      types.validators = {
+        ...types.validators,
         [moduleName]: {
-          ...types.validator[moduleName],
+          ...types.validators[moduleName],
           [validator]: `typeof import("./${path.join(
             validatorFile.replace(".js", "")
           )}").${validator}`,
@@ -165,8 +165,8 @@ for (let validatorFile of files) {
       };
     }
   } else {
-    types.validator = {
-      ...types.validator,
+    types.validators = {
+      ...types.validators,
       [moduleName]: `typeof import("./${path.join(
         validatorFile.replace(".js", "")
       )}")`,
@@ -196,6 +196,7 @@ var text = `declare global {
   var expressValidator: typeof import("express-validator");
   var sgMail: typeof import("@sendgrid/mail");
   var util: typeof import("util");
+  var axios: typeof import("axios").default;
   
   //MIDDLEWARES
   var middlewares: ${convertToCode(types.middlewares)};
@@ -205,7 +206,7 @@ var text = `declare global {
   var models: ${convertToCode(types.models)};
   
   // VALIDATORS
-  var validator: ${convertToCode(types.validator)};
+  var validators: ${convertToCode(types.validators)};
   
   // ACTIONS
   var actions: ${convertToCode(types.actions)};

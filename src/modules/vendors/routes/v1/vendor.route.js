@@ -46,26 +46,6 @@ router
     validators.vendors.resetPasswordPayload,
     middlewares.validation.request,
     actions.vendors.auth.resetPassword
-  )
-  .get(
-    "/vendors/auth/google",
-    passport.authenticate("vendor-google", {
-      scope: ["profile", "email"],
-    })
-  )
-  .get(
-    "/vendors/auth/facebook",
-    passport.authorize("vendor-facebook", { scope: ["email"] })
-  )
-  .get(
-    "/vendors/auth/google/callback",
-    passport.authenticate("vendor-google", { session: false }),
-    actions.vendors.auth.googleCb
-  )
-  .get(
-    "/vendors/auth/facebook/callback",
-    passport.authenticate("vendor-facebook", { session: false }),
-    actions.vendors.auth.facebookCb
   );
 
 // Vendor authenticated routes

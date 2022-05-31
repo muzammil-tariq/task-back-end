@@ -57,7 +57,7 @@ module.exports = {
     return `Complete ${step} first to continue!`;
   },
   alreadyExists: (attr) => {
-    return `${attr} already exists. Try again!`;
+    return `${attr} already exists!`;
   },
   eventAlreadyExists: "Event already scheduled at this time. Try another slot!",
   eventNotForThisCustomer: "Event does not belong to this customer",

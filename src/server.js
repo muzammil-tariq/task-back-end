@@ -1,4 +1,3 @@
-// const swaggerDocument = require(`../swagger/openApi.js`);
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -6,7 +5,6 @@ app.use(cookieParser());
 var session = require("express-session");
 app.use(session({ secret: "SECRET", resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
-// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(cors());
 
 global.messages = require("../config/messages");
@@ -36,6 +34,7 @@ app.use(function (err, req, res, next) {
   // res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
+  console.log({ err });
   res
     .status(err.status || 500)
     .send({ status: err.status, message: err.message, data: {} });

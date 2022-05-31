@@ -36,14 +36,14 @@ let addEventPayload = [
     .isString()
     .withMessage(messages.invalidDataType("String"))
     .isIn(["indoor", "outdoor", "virtual"]),
-  body("venuName")
+  body("venueName")
     .exists()
     .withMessage(messages.notPresent)
     .notEmpty()
     .withMessage(messages.notEmpty)
     .isString()
     .withMessage(messages.invalidDataType("String")),
-  body("venuAddress")
+  body("venueAddress")
     .exists()
     .withMessage(messages.notPresent)
     .notEmpty()
