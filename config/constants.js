@@ -3,6 +3,10 @@ const constants = {
     MESSAGE: "message",
     INCREMENT_UNREAD_COUNT: "incrementUnreadCount",
   },
+  USER_ROLE: {
+    CUSTOMER: "Customers",
+    VENDOR: "Vendors",
+  },
 };
 
 module.exports = constants;

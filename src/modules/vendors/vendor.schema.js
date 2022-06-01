@@ -109,4 +109,8 @@ VendorSchema.methods.toJSON = function () {
   ]);
 };
 
+VendorSchema.methods.getModelType = function () {
+  return "Customers";
+};
+
 module.exports = mongoose.model("Vendors", VendorSchema);
