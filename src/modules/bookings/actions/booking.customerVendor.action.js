@@ -1,11 +1,12 @@
-const BoookingCrudService = new services.CrudService(models.Bookings);
+const { USER_ROLE } = constants;
+
 exports.customerVendor = {
   status: async (req, res, next) => {
     try {
-      const { user, body: payload } = req;
-      let model = req.user.getModelType();
+      const { body: payload, user } = req;
+      const modelName = user.collection.modelName;
       let data;
-      if (model == "customers") {
+      if (modelName == USER_ROLE.CUSTOMER) {
         data = await models.Bookings.updateOne(
           {
             _id: payload.bookingId,
@@ -15,7 +16,7 @@ exports.customerVendor = {
           },
           { new: true }
         );
-      } else if (model == "vendors") {
+      } else if (modelName == USER_ROLE.CUSTOMER) {
         data = await models.Bookings.findOneAndUpdate(
           {
             _id: payload.bookingId,
@@ -26,9 +27,9 @@ exports.customerVendor = {
           { new: true }
         );
       } else {
-        throw createError(400, "Invalid model type");
+        throw createError(400, messages.invalidModel);
       }
-      let see = await models.Bookings.findOneAndUpdate(
+      models.Bookings.findOneAndUpdate(
         {
           _id: payload.bookingId,
           "endedBy.customerEnded": "true",
@@ -37,13 +38,12 @@ exports.customerVendor = {
         {
           status: "completed",
         }
-      );
+      ).exec();
 
-      const result = see;
       return res.json({
         status: 200,
         message: messages.success,
-        data: data,
+        data,
       });
     } catch (error) {
       next(error);

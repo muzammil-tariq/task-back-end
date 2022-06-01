@@ -5,24 +5,24 @@ const BookingsSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Vendors",
     },
-    customersId: { type: mongoose.Schema.Types.ObjectId, ref: "Customers" },
+    customerId: { type: mongoose.Schema.Types.ObjectId, ref: "Customers" },
     zipCode: { type: Number },
 
     quoteId: { type: mongoose.Schema.Types.ObjectId, ref: "Quotes" },
     status: {
       type: String,
-      enum: ["started", "disputed", "completed", "cancelled", "disputed"],
+      enum: ["started", "disputed", "completed", "cancelled"],
       default: "started",
     },
     endedBy: {
       customerEnded: { type: Boolean, default: false },
       vendorEnded: { type: Boolean, default: false },
     },
-    disputeFiler: {
+    disputeFilerId: {
       type: mongoose.Schema.Types.ObjectId,
-      refPath: "onModel",
+      refPath: "disputeFilerModel",
     },
-    onModel: {
+    disputeFilerModel: {
       type: String,
       enum: ["Customers", "Vendors"],
     },

@@ -3,26 +3,25 @@ exports.create = {
   booking: async (req, res, next) => {
     try {
       const { body: payload, user } = req;
-      //if it is already exists
-      const exist = await models.Bookings.findOne({
+      const alreadyExists = await models.Bookings.findOne({
         eventId: mongoose.Types.ObjectId(payload["eventId"]),
         quoteId: mongoose.Types.ObjectId(payload["quoteId"]),
       });
 
-      if (exist) {
+      if (alreadyExists) {
         throw createError(409, messages.alreadyExists("Booking"));
       }
-      payload["customersId"] = user.id;
+      payload["customerId"] = user.id;
 
-      const requests = await BookingCrudService.add(payload);
+      await BookingCrudService.add(payload);
 
       return res.status(201).json({
         status: 201,
         message: messages.success,
         data: payload,
       });
-    } catch (error) {
-      next(error);
+    } catch (err) {
+      next(err);
     }
   },
 };
