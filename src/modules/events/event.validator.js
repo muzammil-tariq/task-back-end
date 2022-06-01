@@ -26,8 +26,15 @@ let addEventPayload = [
     .withMessage(messages.notPresent)
     .notEmpty()
     .withMessage(messages.notEmpty)
-    .isDate()
-    .withMessage(messages.invalidDataType("Date")),
+    .withMessage(messages.invalidDataType("Date"))
+    .custom((value) => {
+      const date = new Date();
+      date.setHours(0, 0, 0, 0);
+      if (new Date(value) < date) {
+        throw new Error(messages.pastDate);
+      }
+      return true;
+    }),
   body("location")
     .exists()
     .withMessage(messages.notPresent)
@@ -70,7 +77,20 @@ let addEventPayload = [
     .notEmpty()
     .withMessage(messages.notEmpty)
     .isString()
-    .withMessage(messages.invalidDataType("String")),
+    .withMessage(messages.invalidDataType("String"))
+    .custom((endTime, { req }) => {
+      const { scheduledDate, startTime } = req.body;
+      const startTimeDate = new Date(scheduledDate);
+      const endTimeDate = new Date(scheduledDate);
+      const [startTimeHours, startTimeMins] = startTime.split(":");
+      const [endTimeHours, endTimeMins] = endTime.split(":");
+      startTimeDate.setHours(startTimeHours, startTimeMins, 0, 0);
+      endTimeDate.setHours(endTimeHours, endTimeMins, 0, 0);
+      if (startTime >= endTime) {
+        throw new Error(messages.timeLessThanOrEqual("startTime"));
+      }
+      return true;
+    }),
 ];
 
 module.exports = {

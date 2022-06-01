@@ -61,4 +61,6 @@ module.exports = {
   },
   eventAlreadyExists: "Event already scheduled at this time. Try another slot!",
   eventNotForThisCustomer: "Event does not belong to this customer",
+  pastDate: "Past date is not allowed!",
+  timeLessThanOrEqual: (date) => `Should not be less than or equal to ${date}`,
 };
