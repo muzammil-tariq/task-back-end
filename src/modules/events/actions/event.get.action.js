@@ -2,15 +2,12 @@ exports.get = {
   list: async (req, res, next) => {
     try {
       const {
-        query: { status, type, sort = 1 },
+        query: { status, type, sort = 1, text = "" },
       } = req;
       const where = { isDeleted: false };
-      if (status) {
-        where["status"] = status;
-      }
-      if (type) {
-        where["type"] = type;
-      }
+      if (status) where["status"] = status;
+      if (type) where["type"] = type;
+      if (text) where["title"] = { $regex: text, $options: "i" };
       const data = await models.Events.find(where)
         .sort({ createdAt: sort })
         .populate({
