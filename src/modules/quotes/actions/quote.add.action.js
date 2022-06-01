@@ -12,22 +12,22 @@ exports.add = {
       if (exist) {
         throw createError(409, messages.alreadyExists("Quote"));
       }
-      const request = await QuoteCrudService.add(payload);
-      const target = await models.Requests.findOneAndUpdate(
+      const quote = await QuoteCrudService.add(payload);
+      await models.Requests.findOneAndUpdate(
         {
           eventId: mongoose.Types.ObjectId(payload.eventId),
           "vendors._id": { $in: [vendorId] },
         },
         {
           "vendors.$.status": "accepted",
-          "vendors.$.quote": mongoose.Types.ObjectId(request.id),
+          "vendors.$.quote": mongoose.Types.ObjectId(quote.id),
         }
       );
 
       res.status(201).json({
         status: 201,
         message: messages.success,
-        data: request,
+        data: quote,
       });
     } catch (error) {
       next(error);

@@ -5,7 +5,7 @@ const QuotesSchema = new mongoose.Schema(
       trim: true,
     },
     price: Number,
-    eventId: { type: mongoose.Types.ObjectId, ref: "Quotes" },
+    eventId: { type: mongoose.Types.ObjectId, ref: "Events" },
   },
   { timestamps: true }
 );
