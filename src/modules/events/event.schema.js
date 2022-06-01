@@ -22,6 +22,11 @@ const EventSchema = new mongoose.Schema(
     numberOfPeople: { type: Number },
     startTime: { type: String },
     endTime: { type: String },
+    status: {
+      type: String,
+      enum: ["upcoming", "canceled", "completed"],
+      default: "upcoming",
+    },
     isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
