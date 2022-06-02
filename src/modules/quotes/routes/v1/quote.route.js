@@ -1,6 +1,7 @@
 router.post(
-  "/quote/vendors",
-  validators.quotes.quotePayload,
+  "/events/:id/quotes",
+  middlewares.verifyUserRole.vendor,
+  validators.quotes.add,
   middlewares.validation.request,
   actions.quotes.add.quote
 );
