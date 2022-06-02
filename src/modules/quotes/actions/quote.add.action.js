@@ -24,6 +24,7 @@ exports.add = {
         ...payload,
         eventId,
         vendorId,
+        customerId: event.customerId,
       });
       await models.Requests.findOneAndUpdate(
         {

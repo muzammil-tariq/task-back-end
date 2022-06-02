@@ -10,6 +10,10 @@ const QuotesSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Vendors",
     },
+    customerId: {
+      type: mongoose.Types.ObjectId,
+      ref: "Vendors",
+    },
   },
   { timestamps: true }
 );
