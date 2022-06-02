@@ -1,7 +1,7 @@
-const { param, body } = expressValidator;
+const { body } = expressValidator;
 
-let quotePayload = [
-  body("quote")
+const add = [
+  body("description")
     .exists()
     .withMessage(messages.notPresent)
     .notEmpty()
@@ -9,14 +9,8 @@ let quotePayload = [
     .isString()
     .withMessage(messages.invalidDataType("String")),
   body("price").exists().notEmpty().withMessage(messages.notEmpty),
-  body("eventId")
-    .exists()
-    .notEmpty()
-    .withMessage(messages.notEmpty)
-    .isString()
-    .withMessage(messages.invalidDataType("String")),
 ];
 
 module.exports = {
-  quotePayload,
+  add,
 };
