@@ -78,6 +78,12 @@ const VendorSchema = new mongoose.Schema(
     state: { type: String },
     zipCode: { type: Number },
     country: { type: String },
+    skills: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "EventSubCategories",
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -97,6 +103,10 @@ VendorSchema.methods.getJWTToken = function () {
   return JWT.sign(payload, process.env.JWTSECRET, {
     expiresIn: process.env.TOKEN_EXPIRY,
   });
+};
+
+VendorSchema.methods.getModelType = function () {
+  return "Vendors";
 };
 
 VendorSchema.methods.toJSON = function () {

@@ -68,6 +68,7 @@ router
     validators.vendors.addressInfoValidation,
     middlewares.validation.request,
     actions.vendors.info.addressInfo
-  );
+  )
+  .patch("/vendors/skills", actions.vendors.skill.updateSkill);
 
 module.exports = { prefix: "vendors", router };

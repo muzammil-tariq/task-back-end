@@ -12,7 +12,7 @@ router.use(function (req, res, next) {
       isChecked = 1;
     }
   }
-  if (req.path.search("/seeder") > -1) {
+  if (req.path.search("/seeder") > -1 || req.path.search("/public") > -1) {
     next();
   } else if (req.path.search("/login") > -1) {
     next();
