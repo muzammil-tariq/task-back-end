@@ -19,7 +19,7 @@ exports.add = {
 
       if (alreadyExist) throw createError(400, messages.eventAlreadyExists);
 
-      payload["customer"] = customerId;
+      payload["customerId"] = customerId;
       const event = await EventCrudService.add(payload);
 
       return res.json({
