@@ -23,7 +23,8 @@ let createThreadPayloadValidation = [
     .withMessage(messages.notEmpty)
     .isString()
     .isIn([USER_ROLE.VENDOR])
-    .withMessage(messages.invalidDataType("String")),
+    .withMessage(messages.invalidDataType("String"))
+    .optional(true),
 ];
 let createMessagePayloadValidation = [
   body("content")
