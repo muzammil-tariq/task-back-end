@@ -5,7 +5,9 @@ exports.get = {
       const { user } = req;
       const modelName = user.collection.modelName;
       if (modelName == USER_ROLE.CUSTOMER) {
-        const data = await models.Quotes.find({});
+        const data = await models.Quotes.find({})
+          .populate("eventId")
+          .populate("vendorId");
         res.status(200).json({ msg: "Service List", data });
       } else {
         throw createError(400, messages.invalidModel);

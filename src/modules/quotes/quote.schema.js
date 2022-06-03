@@ -1,11 +1,10 @@
 const QuotesSchema = new mongoose.Schema(
   {
-    quote: {
-      type: String,
-      trim: true,
-    },
     price: Number,
     eventId: { type: mongoose.Types.ObjectId, ref: "Events" },
+    description: { type: String, trim: true },
+    vendorId: { type: mongoose.Types.ObjectId, ref: "Vendors" },
+    location: { type: String },
   },
   { timestamps: true }
 );
