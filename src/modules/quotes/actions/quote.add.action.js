@@ -4,18 +4,31 @@ exports.add = {
     try {
       const {
         user: { _id: vendorId },
+        params: { id: eventId },
         body: payload,
       } = req;
-      const exist = await models.Quotes.findOne({
-        eventId: mongoose.Types.ObjectId(payload["eventId"]),
+      const event = await models.Events.findOne({
+        _id: mongoose.Types.ObjectId(eventId),
       });
-      if (exist) {
+      if (!event) {
+        throw createError(400, messages.notFound("Event"));
+      }
+      const alreadyExists = await models.Quotes.findOne({
+        eventId: mongoose.Types.ObjectId(eventId),
+        vendorId: mongoose.Types.ObjectId(vendorId),
+      });
+      if (alreadyExists) {
         throw createError(409, messages.alreadyExists("Quote"));
       }
-      const quote = await QuoteCrudService.add(payload);
+      const quote = await QuoteCrudService.add({
+        ...payload,
+        eventId,
+        vendorId,
+        customerId: event.customerId,
+      });
       await models.Requests.findOneAndUpdate(
         {
-          eventId: mongoose.Types.ObjectId(payload.eventId),
+          eventId: mongoose.Types.ObjectId(eventId),
           "vendors._id": { $in: [vendorId] },
         },
         {
