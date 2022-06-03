@@ -15,11 +15,8 @@ exports.initialize = async function (server) {
         process.env.JWTSECRET,
         async function (err, user) {
           if (err) return next(new Error("Authentication error"));
-          const userObj = await Promise.all([
-            models.Customers.findById(user.id),
-            models.Vendors.findById(user.id),
-          ]);
-          socket.user = userObj[0] ? userObj[0] : userObj[1];
+          const userObj = await models[user.model].findById(user.id);
+          socket.user = userObj;
           next();
         }
       );
@@ -40,6 +37,7 @@ exports.initialize = async function (server) {
     socket.on(SOCKET_EVENT.INCREMENT_UNREAD_COUNT, async function (data) {
       helpers.chat.updateUnreadCount({
         threadId: data.thread,
+
         receiverId: data.receiver,
         incrementBy: 1,
       });

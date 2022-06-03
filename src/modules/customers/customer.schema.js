@@ -1,4 +1,5 @@
 //@ts-ignore
+const { USER_ROLE } = constants;
 
 const CustomerSchema = new mongoose.Schema(
   {
@@ -51,7 +52,7 @@ CustomerSchema.methods.getJWTToken = function () {
     name: this.firstName + " " + this.lastName,
     email: this.email,
     id: this.id,
-    model: "customers",
+    model: USER_ROLE.CUSTOMER,
   };
 
   return JWT.sign(payload, process.env.JWTSECRET, {

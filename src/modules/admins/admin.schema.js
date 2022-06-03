@@ -1,3 +1,5 @@
+const { USER_ROLE } = constants;
+
 const adminSchema = new mongoose.Schema(
   {
     email: {
@@ -16,7 +18,7 @@ adminSchema.methods.verifyPassword = function (pwd) {
 };
 
 adminSchema.methods.getJWTToken = function () {
-  const payload = { email: this.email, id: this.id, model: "admins" };
+  const payload = { email: this.email, id: this.id, model: USER_ROLE.ADMIN };
   return JWT.sign(payload, process.env.JWTSECRET, { expiresIn: 15000 });
 };
 
