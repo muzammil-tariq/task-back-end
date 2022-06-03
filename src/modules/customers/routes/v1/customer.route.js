@@ -50,6 +50,13 @@ router
     validators.customers.resetPasswordPayload,
     middlewares.validation.request,
     actions.customers.auth.resetPassword
+  )
+  .patch(
+    "/customers",
+    middlewares.verifyUserRole.customer,
+    validators.customers.update,
+    middlewares.validation.request,
+    actions.customers.update.profile
   );
 
 module.exports = { prefix: "customers", router };

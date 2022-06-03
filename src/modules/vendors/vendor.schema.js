@@ -107,18 +107,18 @@ VendorSchema.methods.getJWTToken = function () {
   });
 };
 
+VendorSchema.statics.excludedAttributes = [
+  "password",
+  "accessToken",
+  "verificationCode",
+  "isVerified",
+  "codeExpiryTime",
+  "uId",
+];
+
 VendorSchema.methods.toJSON = function () {
   const obj = this.toObject();
-  return _.omit(obj, [
-    "password",
-    "verificationCode",
-    "isVerified",
-    "codeExpiryTime",
-  ]);
-};
-
-VendorSchema.methods.getModelType = function () {
-  return "Customers";
+  return _.omit(obj, VendorSchema.statics.excludedAttributes);
 };
 
 module.exports = mongoose.model("Vendors", VendorSchema);

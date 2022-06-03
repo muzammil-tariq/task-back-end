@@ -267,6 +267,95 @@ let addressInfoValidation = [
     .withMessage(messages.invalidDataType("Integer")),
 ];
 
+const update = [
+  body("firstName")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .optional(),
+  body("lastName")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .optional(),
+  body("username")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .optional(),
+  body("telephoneNumber")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .matches(dataConstraint.PHONE_NUMBER_REGEX)
+    .withMessage(messages.invalidFormat("PhoneNumber"))
+    .optional(),
+  body("email")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .matches(dataConstraint.EMAIL_REGEX)
+    .withMessage(messages.invalidFormat("Email"))
+    .optional(),
+  body("existingPassword")
+    .isLength({ min: dataConstraint.PASSWORD_MIN_LENGTH })
+    .withMessage(messages.invalidLength)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .optional(),
+  body("password").custom((value, { req }) => {
+    const { existingPassword } = req.body;
+    if (value && !existingPassword) {
+      throw new Error(messages.missingExistingPassword);
+    }
+    if (value && value.length < dataConstraint.PASSWORD_MIN_LENGTH) {
+      throw new Error(messages.invalidLength);
+    }
+    return true;
+  }),
+  body("languages")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isInt()
+    .withMessage(messages.invalidDataType("Integer"))
+    .optional(),
+  body("birthDate")
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isDate()
+    .withMessage(messages.invalidDataType("Date"))
+    .optional(),
+  body("businessName")
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .optional(),
+  body("websiteUrl")
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .optional(),
+];
+
 module.exports = {
   signUpPayloadValidation,
   signInPayloadValidation,
@@ -276,4 +365,5 @@ module.exports = {
   resendCodePayloadValidation,
   businessInfoValidation,
   addressInfoValidation,
+  update,
 };

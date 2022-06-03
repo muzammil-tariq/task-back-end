@@ -1,11 +1,10 @@
 const VendorCrudService = new services.CrudService(models.Vendors);
+const settingsService = new services.SettingsService(models.Vendors);
 
 const strongParams = [
-  "password",
+  ...models.Vendors.excludedAttributes,
+  "username",
   "email",
-  "isVerified",
-  "codeExpiryTime",
-  "verificationCode",
 ];
 
 exports.update = {
@@ -33,15 +32,23 @@ exports.update = {
   },
   profile: async (req, res, next) => {
     try {
-      const {
-        user: { _id: vendorId },
-        body: payload,
-      } = req;
-      const data = await VendorCrudService.update(
+      const { body: payload, user } = req;
+
+      const data = await models.Vendors.findOneAndUpdate(
+        { _id: user._id },
         _.omit(payload, strongParams),
-        vendorId,
-        messages.notFound("Vendor")
+        { new: true }
       );
+      if (payload.password && payload.existingPassword) {
+        await settingsService.changePassword({
+          existingPassword: payload.password,
+          password: payload.existingPassword,
+          user,
+        });
+      }
+      if (payload.email) {
+        await settingsService.changeEmail({ email: payload.email, user });
+      }
       return res.json({
         status: 200,
         message: messages.updatedModel("Vendor"),

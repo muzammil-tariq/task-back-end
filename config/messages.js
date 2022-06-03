@@ -46,6 +46,10 @@ module.exports = {
   codeExpried: "Your code has been expired!",
   invalidEmail: "invalid email",
   invalidEmailOrPassword: "invalid email or password",
+  missingExistingPassword: "You must provide existing password",
+  invalidPassword: "You have entered an invalid password",
+  samePassword: "New password can not be same as old password",
+  sameEmail: "New email can not be same as old email",
   invalidId: "Invalid Id!",
   invalidQuery: (param) => {
     return `Query param ${param} cannot be empty`;
