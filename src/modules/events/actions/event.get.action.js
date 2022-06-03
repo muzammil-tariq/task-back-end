@@ -3,8 +3,19 @@ exports.get = {
     try {
       const {
         query: { status, type, sort = 1, text = "" },
+        user: { _id: userId },
       } = req;
-      const where = { isDeleted: false };
+      const where = {
+        isDeleted: false,
+        $or: [
+          {
+            customerId: userId,
+          },
+          {
+            vendorIds: userId,
+          },
+        ],
+      };
       if (status) where["status"] = status;
       if (type) where["type"] = type;
       if (text) where["title"] = { $regex: text, $options: "i" };

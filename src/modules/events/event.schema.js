@@ -27,6 +27,12 @@ const EventSchema = new mongoose.Schema(
       enum: ["upcoming", "canceled", "completed"],
       default: "upcoming",
     },
+    vendorIds: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Vendors",
+      },
+    ],
     isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }

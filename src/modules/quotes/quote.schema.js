@@ -14,6 +14,11 @@ const QuotesSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Vendors",
     },
+    status: {
+      type: String,
+      enum: ["pending", "booked", "declined"],
+      default: "pending",
+    },
   },
   { timestamps: true }
 );
