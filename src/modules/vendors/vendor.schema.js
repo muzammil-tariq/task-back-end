@@ -105,10 +105,6 @@ VendorSchema.methods.getJWTToken = function () {
   });
 };
 
-VendorSchema.methods.getModelType = function () {
-  return "Vendors";
-};
-
 VendorSchema.methods.toJSON = function () {
   const obj = this.toObject();
   return _.omit(obj, [
