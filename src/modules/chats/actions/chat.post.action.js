@@ -1,12 +1,22 @@
+const { USER_ROLE } = constants;
+
 module.exports.post = {
   newThread: async (req, res, next) => {
     try {
       const {
-        body: { userId: otherUserId, content },
-        user: { _id: userId },
+        body: {
+          userId: otherUserId,
+          content,
+          userModel: otherUserModel = USER_ROLE.VENDOR,
+        },
+        user: {
+          _id: userId,
+          collection: { modelName },
+        },
       } = req;
 
-      const otherUser = await models.Users.findById(otherUserId)
+      const otherUser = await models[otherUserModel]
+        .findById(otherUserId)
         .select("_id")
         .lean();
 
@@ -27,14 +37,17 @@ module.exports.post = {
         users: [
           {
             user: userId,
+            userModel: modelName,
           },
           {
             user: otherUserId,
+            userModel: otherUserModel,
           },
         ],
       });
       await models.Message.create({
         sender: userId,
+        senderModel: modelName,
         thread: thread._id,
         content,
       });

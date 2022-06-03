@@ -15,8 +15,11 @@ exports.initialize = async function (server) {
         process.env.JWTSECRET,
         async function (err, user) {
           if (err) return next(new Error("Authentication error"));
-          const userObj = await models.Users.findById(user.id);
-          socket.user = userObj;
+          const userObj = await Promise.all([
+            models.Customers.findById(user.id),
+            models.Vendors.findById(user.id),
+          ]);
+          socket.user = userObj[0] ? userObj[0] : userObj[1];
           next();
         }
       );
