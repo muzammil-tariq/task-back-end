@@ -63,10 +63,18 @@ module.exports.get = {
         },
         {
           $lookup: {
-            from: "users",
+            from: "customers",
             localField: "users.user",
             foreignField: "_id",
-            as: "users",
+            as: "customers",
+          },
+        },
+        {
+          $lookup: {
+            from: "vendors",
+            localField: "users.user",
+            foreignField: "_id",
+            as: "vendors",
           },
         },
         {
@@ -76,13 +84,22 @@ module.exports.get = {
         },
         { $limit: Number(limit) },
         {
+          $addFields: {
+            users: {
+              $concatArrays: ["$customers", "$vendors"],
+            },
+          },
+        },
+        {
           $project: {
             users: {
-              ...models.Users.excludedAttributes.reduce(
+              ...models.Customers.excludedAttributes.reduce(
                 (acc, cur) => ({ ...acc, [cur]: 0 }),
                 {}
               ),
             },
+            customers: 0,
+            vendors: 0,
           },
         },
       ]);

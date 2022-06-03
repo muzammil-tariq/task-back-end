@@ -1,3 +1,4 @@
+const { USER_ROLE } = constants;
 const threadSchema = new mongoose.Schema(
   {
     users: [
@@ -12,7 +13,11 @@ const threadSchema = new mongoose.Schema(
         },
         user: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
+          refPath: "userModel",
+        },
+        userModel: {
+          type: String,
+          enum: [USER_ROLE.CUSTOMER, USER_ROLE.VENDOR],
         },
         unreadCount: {
           type: Number,

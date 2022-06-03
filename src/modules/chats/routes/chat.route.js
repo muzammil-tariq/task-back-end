@@ -1,6 +1,7 @@
 router
   .post(
     "/chats",
+    middlewares.verifyUserRole.customer,
     validators.chats.createThreadPayloadValidation,
     middlewares.validation.request,
     actions.chats.post.newThread

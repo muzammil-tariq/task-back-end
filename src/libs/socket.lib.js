@@ -15,7 +15,7 @@ exports.initialize = async function (server) {
         process.env.JWTSECRET,
         async function (err, user) {
           if (err) return next(new Error("Authentication error"));
-          const userObj = await models.Users.findById(user.id);
+          const userObj = await models[user.model].findById(user.id);
           socket.user = userObj;
           next();
         }
@@ -37,6 +37,7 @@ exports.initialize = async function (server) {
     socket.on(SOCKET_EVENT.INCREMENT_UNREAD_COUNT, async function (data) {
       helpers.chat.updateUnreadCount({
         threadId: data.thread,
+
         receiverId: data.receiver,
         incrementBy: 1,
       });
