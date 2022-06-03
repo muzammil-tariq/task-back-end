@@ -80,6 +80,12 @@ const VendorSchema = new mongoose.Schema(
     state: { type: String },
     zipCode: { type: Number },
     country: { type: String },
+    skills: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "EventSubCategories",
+      },
+    ],
   },
   { timestamps: true }
 );
