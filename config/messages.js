@@ -64,4 +64,5 @@ module.exports = {
   eventNotForThisCustomer: "Event does not belong to this customer",
   pastDate: "Past date is not allowed!",
   timeLessThanOrEqual: (date) => `Should not be less than or equal to ${date}`,
+  forbidden: "You do not have enough privileges to perform this action",
 };

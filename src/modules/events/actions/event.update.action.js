@@ -9,9 +9,6 @@ exports.update = {
         user: { _id: customerId },
       } = req;
 
-      const customer = await models.Customers.findById({ _id: customerId });
-      if (!customer) throw createError(404, messages.notFound("Customer"));
-
       const isEventBelongsToCustomer = await models.Events.findOne({
         customer: customerId,
         _id: id,
