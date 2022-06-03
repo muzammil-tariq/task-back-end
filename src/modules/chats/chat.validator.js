@@ -1,5 +1,5 @@
-const { MODEL } = constants;
-const { body, query } = expressValidator;
+const { USER_ROLE } = constants;
+const { body } = expressValidator;
 
 let createThreadPayloadValidation = [
   body("userId")
@@ -16,6 +16,15 @@ let createThreadPayloadValidation = [
     .withMessage(messages.notEmpty)
     .isString()
     .withMessage(messages.invalidDataType("String")),
+  body("userModel")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .isIn([USER_ROLE.VENDOR])
+    .withMessage(messages.invalidDataType("String"))
+    .optional(true),
 ];
 let createMessagePayloadValidation = [
   body("content")

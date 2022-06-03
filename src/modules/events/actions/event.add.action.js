@@ -5,11 +5,8 @@ exports.add = {
     try {
       const {
         body: payload,
-        user: { _id: customerId },
+        user: { _id: customerId, zipCode },
       } = req;
-
-      const customer = await models.Customers.findById({ _id: customerId });
-      if (!customer) throw createError(404, messages.notFound("Customer"));
 
       const alreadyExist = await models.Events.findOne({
         scheduledDate: payload.scheduledDate,
@@ -19,7 +16,12 @@ exports.add = {
 
       if (alreadyExist) throw createError(400, messages.eventAlreadyExists);
 
-      payload["customer"] = customerId;
+      const vendors = await models.Vendors.find({ zipCode }, { _id: 1 });
+
+      const vendorIds = vendors.map((item) => item._id);
+      payload["vendorIds"] = vendorIds;
+      payload["customerId"] = customerId;
+
       const event = await EventCrudService.add(payload);
 
       return res.json({

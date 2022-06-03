@@ -1,4 +1,6 @@
 //@ts-ignore
+const { USER_ROLE } = constants;
+
 const VendorSchema = new mongoose.Schema(
   {
     fullName: { type: String, trim: true },
@@ -97,7 +99,7 @@ VendorSchema.methods.getJWTToken = function () {
     name: this.fullName,
     email: this.email,
     id: this.id,
-    model: "vendors",
+    model: USER_ROLE.VENDOR,
   };
 
   return JWT.sign(payload, process.env.JWTSECRET, {

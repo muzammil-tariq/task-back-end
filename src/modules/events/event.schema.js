@@ -4,7 +4,7 @@ const EventSchema = new mongoose.Schema(
   {
     title: { type: String },
     type: { type: String },
-    customer: {
+    customerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Customers",
     },
@@ -27,6 +27,12 @@ const EventSchema = new mongoose.Schema(
       enum: ["upcoming", "canceled", "completed"],
       default: "upcoming",
     },
+    vendorIds: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Vendors",
+      },
+    ],
     isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }

@@ -1,10 +1,13 @@
-const { ROLE } = constants;
-
+const { USER_ROLE } = constants;
 const messageSchema = new mongoose.Schema(
   {
     sender: {
       type: mongoose.Schema.Types.ObjectId,
-      refPath: "User",
+      refPath: "senderModel",
+    },
+    senderModel: {
+      type: String,
+      enum: [USER_ROLE.CUSTOMER, USER_ROLE.VENDOR],
     },
     thread: {
       type: mongoose.Schema.Types.ObjectId,

@@ -1,8 +1,8 @@
+const { USER_ROLE } = constants;
 const roleModel = {
-  users: models.Users,
-  customers: models.Customers,
-  vendors: models.Vendors,
-  admins: models.Admin,
+  customers: models[USER_ROLE.CUSTOMER],
+  vendors: models[USER_ROLE.VENDOR],
+  admins: models[USER_ROLE.ADMIN],
 };
 router.use(function (req, res, next) {
   let isChecked = 0;
