@@ -26,16 +26,6 @@ exports.add = {
         vendorId,
         customerId: event.customerId,
       });
-      await models.Requests.findOneAndUpdate(
-        {
-          eventId: mongoose.Types.ObjectId(eventId),
-          "vendors._id": { $in: [vendorId] },
-        },
-        {
-          "vendors.$.status": "accepted",
-          "vendors.$.quote": mongoose.Types.ObjectId(quote.id),
-        }
-      );
 
       res.status(201).json({
         status: 201,
