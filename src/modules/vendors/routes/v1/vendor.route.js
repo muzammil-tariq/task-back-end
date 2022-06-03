@@ -56,7 +56,13 @@ router
     middlewares.upload_local.uploadSingle,
     actions.vendors.update.profilePhoto
   )
-  .patch("/vendors", actions.vendors.update.profile)
+  .patch(
+    "/vendors",
+    middlewares.verifyUserRole.customer,
+    validators.vendors.update,
+    middlewares.validation.request,
+    actions.vendors.update.profile
+  )
   .patch(
     "/vendors/business-info",
     validators.vendors.businessInfoValidation,

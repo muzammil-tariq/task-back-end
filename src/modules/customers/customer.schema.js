@@ -39,6 +39,20 @@ const CustomerSchema = new mongoose.Schema(
     },
     zipCode: { type: Number },
     country: { type: String },
+    languages: [
+      {
+        type: String,
+      },
+    ],
+    birthDate: {
+      type: Date,
+    },
+    businessName: {
+      type: String,
+    },
+    websiteUrl: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
@@ -66,6 +80,7 @@ CustomerSchema.statics.excludedAttributes = [
   "verificationCode",
   "isVerified",
   "codeExpiryTime",
+  "uId",
 ];
 
 CustomerSchema.methods.toJSON = function () {
