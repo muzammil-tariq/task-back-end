@@ -51,7 +51,9 @@ module.exports = {
             customerId: userId,
           },
         ],
-      });
+      })
+        .populate("eventId")
+        .poulate("vendorId");
       return res.json({
         status: 200,
         message: messages.success,
