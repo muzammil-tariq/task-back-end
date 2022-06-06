@@ -1,3 +1,5 @@
+const { USER_ROLE } = constants;
+
 router.post(
   "/categories/admins",
   middlewares.upload_local.uploadSingle,
