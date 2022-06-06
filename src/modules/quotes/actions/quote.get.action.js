@@ -40,7 +40,7 @@ module.exports = {
           path: "vendorId",
           select: ["fullName", "profilePhoto", "skills", "rating"],
           populate: {
-            path: "threads,skills",
+            path: "threads",
             select: "_id",
             match: {
               "users.0.user": userId,
@@ -94,7 +94,11 @@ module.exports = {
           vendorIds: 0,
         })
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
-        .populate({ path: "vendorId", populate: { path: "skills" } })
+        .populate({
+          path: "vendorId",
+          select: ["fullName", "profilePhoto", "skills", "rating"],
+          populate: { path: "skills" },
+        })
 
         .select(
           isVendor
