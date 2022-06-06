@@ -1,4 +1,4 @@
-const { USER_ROLES } = constants;
+const { USER_ROLE } = constants;
 
 router
   .post(
@@ -58,7 +58,7 @@ router
   )
   .patch(
     "/vendors",
-    middlewares.verifyUserRole(USER_ROLES.VENDOR),
+    middlewares.verifyUserRole(USER_ROLE.VENDOR),
     validators.vendors.update,
     middlewares.validation.request,
     actions.vendors.update.profile
