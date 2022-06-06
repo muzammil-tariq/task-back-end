@@ -32,6 +32,7 @@ router.patch(
 );
 router.patch(
   "/sub-categories/:id",
+  middlewares.verifyUserRole(USER_ROLE.ADMIN),
   middlewares.upload_local.uploadSingle,
   actions.eventCategories.update.subCategoryImage
 );

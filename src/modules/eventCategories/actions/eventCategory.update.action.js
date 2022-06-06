@@ -73,9 +73,6 @@ exports.update = {
         file,
       } = req;
 
-      const admin = await models.Admin.findById({ _id: adminId });
-      if (!admin) throw createError(404, messages.notFound("Admin"));
-
       if (!file) throw createError(404, messages.notFound("Image"));
       payload["image"] = `images/${file.filename}`;
 
