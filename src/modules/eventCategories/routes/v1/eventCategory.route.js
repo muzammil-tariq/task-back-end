@@ -1,14 +1,15 @@
 const { USER_ROLE } = constants;
 
 router.post(
-  "/categories/admins",
+  "/categories",
+  middlewares.verifyUserRole(USER_ROLE.ADMIN)
   middlewares.upload_local.uploadSingle,
   validators.eventCategories.addCategoryPayload,
   middlewares.validation.request,
   actions.eventCategories.add.category
 );
 router.post(
-  "/subcategories/:id",
+  "/subCategories/:id",
   middlewares.verifyUserRole(USER_ROLE.ADMIN)
   middlewares.upload_local.uploadSingle,
   middlewares.validation.request,
@@ -26,7 +27,7 @@ router.patch(
   actions.eventCategories.update.category
 );
 router.patch(
-  "/categories/:id/add-update/sub-categories",
+  "/categories/:id/sub-categories",
   actions.eventCategories.update.subCategoy
 );
 router.patch(
