@@ -107,7 +107,10 @@ module.exports = {
     try {
       const {
         params: { eventId },
-        user: { _id: userId },
+        user: {
+          _id: userId,
+          collection: { modelName },
+        },
         query: {
           limit = dataConstraint.PAGINATION_LIMIT,
           currentPage = dataConstraint.CURRENT_PAGE,
@@ -115,6 +118,7 @@ module.exports = {
           sortDirection = -1,
         },
       } = req;
+      const isAdmin = modelName === USER_ROLE.ADMIN;
       const where = {
         $or: [
           {
