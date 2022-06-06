@@ -20,6 +20,12 @@ let addCategoryPayload = [
     .isArray()
     .withMessage(messages.invalidDataType("Array"))
     .optional(),
+  body("image")
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .optional(),
 ];
 
 module.exports = {
