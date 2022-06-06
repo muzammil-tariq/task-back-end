@@ -11,6 +11,7 @@ exports.get = {
       } = req;
 
       const isVendor = modelName === USER_ROLE.VENDOR;
+      const isAdmin = modelName === USER_ROLE.ADMIN;
       const where = {
         isDeleted: false,
         $or: [
@@ -25,7 +26,7 @@ exports.get = {
       if (status) where["status"] = status;
       if (type) where["type"] = type;
       if (text) where["title"] = { $regex: text, $options: "i" };
-      const data = await models.Events.find(where)
+      const data = await models.Events.find(!isAdmin ? where : {})
         .sort({ createdAt: sort })
         .populate({
           path: "subCategories",
