@@ -41,7 +41,7 @@ module.exports = {
           select: ["fullName", "profilePhoto", "skills", "rating"],
           populate: {
             path: "threads",
-            // select: "_id",
+            select: "_id",
             match: {
               "users.0.user": userId,
             },
