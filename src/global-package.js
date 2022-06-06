@@ -27,3 +27,5 @@ global.axios = require("axios").default;
 global.multer = require("multer");
 global.redis = require("redis");
 global.redisClient = redis.createClient(process.env.REDIS_URL);
+global.s3 = require("@aws-sdk/client-s3");
+global.s3RequestPresigner = require("@aws-sdk/s3-request-presigner");
