@@ -36,6 +36,12 @@ exports.get = {
         })
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
         .populate("vendorIds", ["fullName", "profilePhoto", "skills"])
+        .populate({
+          path: "quotes",
+          match: {
+            vendorId: userId, // so that we only show the quotes to vendor, and to show him only his quote
+          },
+        })
         .select(isVendor ? { vendorIds: 0 } : {});
       return res.json({
         status: 200,
