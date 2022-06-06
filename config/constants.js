@@ -6,6 +6,7 @@ const constants = {
   USER_ROLE: {
     CUSTOMER: "Customers",
     VENDOR: "Vendors",
+    ADMIN: "Admin",
   },
 };
 
