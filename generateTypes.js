@@ -197,6 +197,8 @@ var text = `declare global {
   var sgMail: typeof import("@sendgrid/mail");
   var util: typeof import("util");
   var axios: typeof import("axios").default;
+  var s3: typeof import("@aws-sdk/client-s3");
+  var s3RequestPresigner: typeof import("@aws-sdk/s3-request-presigner");
   
   //MIDDLEWARES
   var middlewares: ${convertToCode(types.middlewares)};
