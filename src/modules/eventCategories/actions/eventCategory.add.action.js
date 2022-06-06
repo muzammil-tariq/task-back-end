@@ -11,9 +11,6 @@ exports.add = {
         user: { _id: adminId },
       } = req;
 
-      const admin = await models.Admin.findById({ _id: adminId });
-      if (!admin) throw createError(404, messages.notFound("Admin"));
-
       if (!file) throw createError(404, messages.notFound("Image"));
 
       const categoryPayload = {
@@ -50,8 +47,6 @@ exports.add = {
         file,
       } = req;
 
-      const admin = await models.Admin.findById({ _id: adminId });
-      if (!admin) throw createError(404, messages.notFound("Admin"));
       if (!file) throw createError(404, messages.notFound("Image"));
       const category = await models.EventCategories.findById({ _id: id });
 
