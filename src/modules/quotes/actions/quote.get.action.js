@@ -9,8 +9,12 @@ module.exports = {
           sortBy = "createdAt",
           sortDirection = -1,
         },
-        user: { _id: userId },
+        user: {
+          _id: userId,
+          collection: { modelName },
+        },
       } = req;
+      const isVendor = modelName === USER_ROLE.VENDOR;
       const data = await models.Quotes.find({
         $or: [
           {
@@ -25,7 +29,19 @@ module.exports = {
         .limit(limit)
         .sort({
           [sortBy]: sortDirection,
-        });
+        })
+        .populate("eventId", {
+          vendorIds: 0,
+        })
+        .populate("customerId", ["firstName", "lastName", "profilePhoto"])
+        .populate("vendorId", ["fullName", "profilePhoto", "skills", "rating"])
+        .select(
+          isVendor
+            ? { vendorId: 0 }
+            : {
+                customerId: 0,
+              }
+        );
       return res.json({
         status: 200,
         message: messages.success,
@@ -53,7 +69,7 @@ module.exports = {
         ],
       })
         .populate("eventId")
-        .poulate("vendorId");
+        .populate("vendorId");
       return res.json({
         status: 200,
         message: messages.success,
