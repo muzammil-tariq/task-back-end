@@ -1,6 +1,8 @@
+const { USER_ROLES } = constants;
+
 router.post(
   "/events",
-  middlewares.verifyUserRole.customer,
+  middlewares.verifyUserRole(USER_ROLES.CUSTOMER),
   validators.events.addEventPayload,
   middlewares.validation.request,
   actions.events.add.event
@@ -8,7 +10,7 @@ router.post(
 
 router.patch(
   "/events/:id",
-  middlewares.verifyUserRole.customer,
+  middlewares.verifyUserRole(USER_ROLES.CUSTOMER),
   actions.events.update.event
 );
 
