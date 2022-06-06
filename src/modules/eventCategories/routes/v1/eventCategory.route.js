@@ -6,7 +6,8 @@ router.post(
   actions.eventCategories.add.category
 );
 router.post(
-  "/subcategories/admins/:id",
+  "/subcategories/:id",
+  middlewares.verifyUserRole(USER_ROLE.ADMIN)
   middlewares.upload_local.uploadSingle,
   middlewares.validation.request,
   actions.eventCategories.add.subcategory
