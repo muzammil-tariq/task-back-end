@@ -2,7 +2,7 @@ const { USER_ROLE } = constants;
 
 router.post(
   "/categories",
-  middlewares.verifyUserRole(USER_ROLE.ADMIN)
+  middlewares.verifyUserRole(USER_ROLE.ADMIN),
   middlewares.upload_local.uploadSingle,
   validators.eventCategories.addCategoryPayload,
   middlewares.validation.request,
@@ -10,7 +10,7 @@ router.post(
 );
 router.post(
   "/subCategories/:id",
-  middlewares.verifyUserRole(USER_ROLE.ADMIN)
+  middlewares.verifyUserRole(USER_ROLE.ADMIN),
   middlewares.upload_local.uploadSingle,
   middlewares.validation.request,
   actions.eventCategories.add.subcategory
