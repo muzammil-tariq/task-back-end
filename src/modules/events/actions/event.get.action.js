@@ -1,10 +1,16 @@
+const { USER_ROLE } = constants;
 exports.get = {
   list: async (req, res, next) => {
     try {
       const {
         query: { status, type, sort = 1, text = "" },
-        user: { _id: userId },
+        user: {
+          _id: userId,
+          collection: { modelName },
+        },
       } = req;
+
+      const isVendor = modelName === USER_ROLE.VENDOR;
       const where = {
         isDeleted: false,
         $or: [
@@ -26,7 +32,10 @@ exports.get = {
           populate: {
             path: "category",
           },
-        });
+        })
+        .populate("customerId", ["firstName", "lastName", "profilePhoto"])
+        .populate("vendorIds", ["fullName", "profilePhoto", "skills"])
+        .select(isVendor ? { vendorIds: 0 } : {});
       return res.json({
         status: 200,
         message: messages.success,
