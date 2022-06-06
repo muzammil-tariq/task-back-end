@@ -64,4 +64,31 @@ exports.update = {
       next(error);
     }
   },
+  subCategoryImage: async (req, res, next) => {
+    try {
+      const {
+        body: payload,
+        user: { _id: adminId },
+        params: { id },
+        file,
+      } = req;
+
+      if (!file) throw createError(404, messages.notFound("Image"));
+      payload["image"] = `images/${file.filename}`;
+
+      const records = await models.EventSubCategories.findOneAndUpdate(
+        { _id: id },
+        { image: payload.image },
+        { new: true }
+      );
+
+      return res.json({
+        status: 200,
+        message: messages.updatedModel("SubCategory"),
+        data: records,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
