@@ -5,6 +5,7 @@ const strongParams = [
   ...models.Vendors.excludedAttributes,
   "username",
   "email",
+  "rating",
 ];
 
 exports.update = {
