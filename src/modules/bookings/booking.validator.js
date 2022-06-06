@@ -1,6 +1,7 @@
-const { param, body } = expressValidator;
+const { body } = expressValidator;
+const common = require("../common/common.validator");
 
-let addBookingPayload = [
+let add = [
   body("eventId")
     .exists()
     .withMessage(messages.notPresent)
@@ -38,7 +39,13 @@ let addBookingPayload = [
     .isString()
     .withMessage(messages.invalidDataType("String")),
 ];
+const getList = [...common.pagination, ...common.sort];
+const getById = [...common.paramMongoId()];
+const getEventBookings = [...common.paramMongoId("eventId")];
 
 module.exports = {
-  addBookingPayload,
+  add,
+  getList,
+  getById,
+  getEventBookings,
 };
