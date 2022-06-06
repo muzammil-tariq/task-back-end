@@ -37,6 +37,7 @@ module.exports = {
         })
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
         .populate("vendorId", ["fullName", "profilePhoto", "skills", "rating"])
+
         .select(
           isVendor
             ? { vendorId: 0 }
@@ -84,7 +85,8 @@ module.exports = {
           vendorIds: 0,
         })
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
-        .populate("vendorId", ["fullName", "profilePhoto", "skills", "rating"])
+        .populate({ path: "vendorId", populate: { path: "skills" } })
+
         .select(
           isVendor
             ? { vendorId: 0 }
