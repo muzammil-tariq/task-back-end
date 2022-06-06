@@ -115,7 +115,7 @@ VendorSchema.methods.getJWTToken = function () {
 VendorSchema.virtual("threads", {
   ref: "Thread",
   localField: "_id",
-  foreignField: "users.user",
+  foreignField: "users.1.user",
 });
 
 VendorSchema.statics.excludedAttributes = [
