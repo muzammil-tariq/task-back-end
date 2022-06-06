@@ -86,6 +86,11 @@ const VendorSchema = new mongoose.Schema(
         ref: "EventSubCategories",
       },
     ],
+    rating: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
   },
   { timestamps: true }
 );

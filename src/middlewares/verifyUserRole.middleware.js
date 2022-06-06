@@ -1,26 +1,14 @@
-const { USER_ROLE } = constants;
-
-exports.customer = (req, res, next) => {
-  try {
-    const { user } = req;
-    if (user.collection.modelName === USER_ROLE.CUSTOMER) {
-      next();
-    } else {
-      throw createError(403, messages.forbidden);
+module.exports = (...permittedRoles) => {
+  return (req, res, next) => {
+    try {
+      const { user } = req;
+      if (permittedRoles.includes(user.collection.modelName)) {
+        next();
+      } else {
+        throw createError(403, messages.forbidden);
+      }
+    } catch (error) {
+      next(error);
     }
-  } catch (error) {
-    next(error);
-  }
-};
-exports.vendor = (req, res, next) => {
-  try {
-    const { user } = req;
-    if (user.collection.modelName === USER_ROLE.VENDOR) {
-      next();
-    } else {
-      throw createError(403, messages.forbidden);
-    }
-  } catch (error) {
-    next(error);
-  }
+  };
 };

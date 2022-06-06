@@ -8,6 +8,24 @@ const constants = {
     VENDOR: "Vendors",
     ADMIN: "Admin",
   },
+  PUBLIC_ROUTES: [
+    {
+      methods: ["POST"],
+      path: /^(.+)?\/seeder\/?(.+)?/,
+    },
+    {
+      methods: ["GET"],
+      path: /^(.+)?\/login\/?(.+)?/,
+    },
+    {
+      methods: ["POST", "PATCH", "GET"],
+      path: /^(.+)?\/auth\/?(.+)?/,
+    },
+    {
+      methods: ["GET"],
+      path: /^(.+)?\/public\/?(.+)?/,
+    },
+  ],
 };
 
 module.exports = constants;

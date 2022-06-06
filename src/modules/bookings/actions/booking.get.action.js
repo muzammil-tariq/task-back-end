@@ -26,7 +26,7 @@ module.exports = {
           },
         ],
       };
-      const data = await models.Quotes.find(!isAdmin ? where : {})
+      const data = await models.Bookings.find(!isAdmin ? where : {})
         .skip(limit * currentPage - limit)
         .limit(limit)
         .sort({
@@ -76,7 +76,7 @@ module.exports = {
           },
         ],
       };
-      const data = await models.Quotes.findOne({
+      const data = await models.Bookings.findOne({
         _id: id,
         ...(!isAdmin ? where : {}),
       })
@@ -103,7 +103,7 @@ module.exports = {
       next(err);
     }
   },
-  getEventQuotes: async (req, res, next) => {
+  getEventBookings: async (req, res, next) => {
     try {
       const {
         params: { eventId },
@@ -129,7 +129,7 @@ module.exports = {
           },
         ],
       };
-      const data = await models.Quotes.find({
+      const data = await models.Bookings.find({
         eventId,
         ...(!isAdmin ? where : {}),
       })

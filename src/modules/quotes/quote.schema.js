@@ -12,7 +12,7 @@ const QuotesSchema = new mongoose.Schema(
     },
     customerId: {
       type: mongoose.Types.ObjectId,
-      ref: "Vendors",
+      ref: "Customers",
     },
     status: {
       type: String,
