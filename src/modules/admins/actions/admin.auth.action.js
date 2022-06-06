@@ -1,3 +1,4 @@
+const { ADMIN_EMAIL, ADMIN_PASSWORD } = process.env;
 exports.auth = {
   signIn: async (req, res, next) => {
     try {
@@ -15,8 +16,8 @@ exports.auth = {
   seeder: async (req, res, next) => {
     try {
       const obj = {
-        email: "admin@example.com",
-        password: "admin123",
+        email: ADMIN_EMAIL,
+        password: ADMIN_PASSWORD,
       };
       const isAlreadyExist = await models.Admin.findOne({ email: obj.email });
       if (isAlreadyExist) throw createError(400, messages.userExists);
