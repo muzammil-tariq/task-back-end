@@ -26,7 +26,7 @@ module.exports = {
           },
         ],
       };
-      const data = await models.Quotes.find(!isAdmin ? where : {})
+      const data = await models.Bookings.find(!isAdmin ? where : {})
         .skip(limit * currentPage - limit)
         .limit(limit)
         .sort({
@@ -36,17 +36,7 @@ module.exports = {
           vendorIds: 0,
         })
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
-        .populate({
-          path: "vendorId",
-          select: ["fullName", "profilePhoto", "skills", "rating"],
-          populate: {
-            path: "threads",
-            select: "_id",
-            match: {
-              "users.0.user": userId,
-            },
-          },
-        })
+        .populate("vendorId", ["fullName", "profilePhoto", "skills", "rating"])
         .select(
           isVendor
             ? { vendorId: 0 }
@@ -86,7 +76,7 @@ module.exports = {
           },
         ],
       };
-      const data = await models.Quotes.findOne({
+      const data = await models.Bookings.findOne({
         _id: id,
         ...(!isAdmin ? where : {}),
       })
@@ -94,12 +84,7 @@ module.exports = {
           vendorIds: 0,
         })
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
-        .populate({
-          path: "vendorId",
-          select: ["fullName", "profilePhoto", "skills", "rating"],
-          populate: { path: "skills" },
-        })
-
+        .populate("vendorId", ["fullName", "profilePhoto", "skills", "rating"])
         .select(
           isVendor
             ? { vendorId: 0 }
@@ -118,7 +103,7 @@ module.exports = {
       next(err);
     }
   },
-  getEventQuotes: async (req, res, next) => {
+  getEventBookings: async (req, res, next) => {
     try {
       const {
         params: { eventId },
@@ -144,7 +129,7 @@ module.exports = {
           },
         ],
       };
-      const data = await models.Quotes.find({
+      const data = await models.Bookings.find({
         eventId,
         ...(!isAdmin ? where : {}),
       })

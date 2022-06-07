@@ -1,7 +1,9 @@
+const { USER_ROLE } = constants;
+
 router
   .post(
     "/events/:id/quotes",
-    middlewares.verifyUserRole.vendor,
+    middlewares.verifyUserRole(USER_ROLE.VENDOR),
     validators.quotes.add,
     middlewares.validation.request,
     actions.quotes.add.quote

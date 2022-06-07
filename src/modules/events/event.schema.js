@@ -35,7 +35,17 @@ const EventSchema = new mongoose.Schema(
     ],
     isDeleted: { type: Boolean, default: false },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
+
+EventSchema.virtual("quotes", {
+  ref: "Quotes",
+  localField: "_id",
+  foreignField: "eventId",
+});
 
 module.exports = mongoose.model("Events", EventSchema);

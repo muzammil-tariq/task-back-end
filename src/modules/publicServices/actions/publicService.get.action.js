@@ -11,7 +11,7 @@ exports.get = {
     try {
       const data = await models.Vendors.find({
         skills: { $in: [req.params.id] },
-      }).populate("category");
+      });
       if (data.length === 0) {
         {
           throw createError(404, messages.notFound("Vendor"));

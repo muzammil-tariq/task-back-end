@@ -1,7 +1,8 @@
+const { USER_ROLE } = constants;
 router
   .post(
     "/chats",
-    middlewares.verifyUserRole.customer,
+    middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
     validators.chats.createThreadPayloadValidation,
     middlewares.validation.request,
     actions.chats.post.newThread

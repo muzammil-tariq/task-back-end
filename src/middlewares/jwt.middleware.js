@@ -12,30 +12,25 @@ router.use(function (req, res, next) {
       isChecked = 1;
     }
   }
-  if (req.path.search("/seeder") > -1 || req.path.search("/public") > -1) {
-    next();
-  } else if (req.path.search("/login") > -1) {
-    next();
-  } else {
-    if (req.path.search("auth/") > -1) {
-      next();
-      return;
-    }
-    passport.authenticate(
-      "jwt",
-      { session: false },
-      function (err, user, info) {
-        if (err || !user) {
-          let errMsg = info ? info.message : err.message;
-          if (errMsg.toLowerCase() == "jwt expired".toLowerCase()) {
-            errMsg = messages.sessionExpiry;
-          }
-          next(createError(401, errMsg));
-        } else {
-          req.user = user;
-          next();
+  passport.authenticate("jwt", { session: false }, function (err, user, info) {
+    if (err || !user) {
+      if (
+        utils.isObjInArray(constants.PUBLIC_ROUTES, {
+          method: req.method,
+          path: req.path,
+        })
+      ) {
+        next();
+      } else {
+        let errMsg = info ? info.message : err.message;
+        if (errMsg.toLowerCase() == "jwt expired".toLowerCase()) {
+          errMsg = messages.sessionExpiry;
         }
+        next(createError(401, errMsg));
       }
-    )(req, res, next);
-  }
+    } else {
+      req.user = user;
+      next();
+    }
+  })(req, res, next);
 });

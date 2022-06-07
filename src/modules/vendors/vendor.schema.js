@@ -92,7 +92,7 @@ const VendorSchema = new mongoose.Schema(
       min: 0,
     },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
 VendorSchema.methods.verifyPassword = function (pwd) {
@@ -111,6 +111,12 @@ VendorSchema.methods.getJWTToken = function () {
     expiresIn: process.env.TOKEN_EXPIRY,
   });
 };
+
+VendorSchema.virtual("threads", {
+  ref: "Thread",
+  localField: "_id",
+  foreignField: "users.1.user",
+});
 
 VendorSchema.statics.excludedAttributes = [
   "password",
