@@ -16,3 +16,18 @@ exports.sendEmail = async function (user) {
   });
   console.log(sgResp);
 };
+
+exports.sendEmailToSubscriber = async function (user) {
+  const msg = {
+    to: user.email,
+    from: EMAIL_FROM,
+    subject: "Subject",
+    text: "Subscription Email",
+    html: "Successfully Subscribed to newsletter stay tuned. ",
+  };
+
+  var sgResp = await sgMail.send(msg).catch((error) => {
+    console.error(error.message);
+  });
+  console.log(sgResp);
+};
