@@ -16,6 +16,7 @@ global.passportLocal = require("passport-local");
 global.passportJWT = require("passport-jwt");
 global.mongoose = require("mongoose");
 global.crypto = require("crypto");
+global.moment = require("moment");
 global.JWT = require("jsonwebtoken");
 global.bodyParser = require("body-parser");
 global.cors = require("cors");
