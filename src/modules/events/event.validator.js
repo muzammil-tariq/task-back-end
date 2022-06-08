@@ -70,7 +70,14 @@ let addEventPayload = [
     .notEmpty()
     .withMessage(messages.notEmpty)
     .isString()
-    .withMessage(messages.invalidDataType("String")),
+    .withMessage(messages.invalidDataType("String"))
+    .custom((startTime, { req }) => {
+      const { scheduledDate } = req.body;
+      if (moment(scheduledDate).add(startTime).isBefore(moment())) {
+        throw new Error(messages.timeLessThanOrEqual("current date"));
+      }
+      return true;
+    }),
   body("endTime")
     .exists()
     .withMessage(messages.notPresent)

@@ -190,6 +190,7 @@ var text = `declare global {
   var passportJWT: typeof import("passport-jwt");
   var mongoose: typeof import("mongoose");
   var crypto: typeof import("crypto");
+  var moment: typeof import("moment");
   var JWT: typeof import("jsonwebtoken");
   var bodyParser: typeof import("body-parser");
   var cors: typeof import("cors");
