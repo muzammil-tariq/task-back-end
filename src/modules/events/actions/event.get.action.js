@@ -76,4 +76,45 @@ exports.get = {
       next(error);
     }
   },
+  upcomingEvent: async (req, res, next) => {
+    try {
+      const {
+        user: { _id: customerId },
+      } = req;
+      let date = new Date();
+      date.setTime(0);
+      const iso = new Date(date).toISOString();
+      console.log(
+        moment()
+          .set({ hour: 0, seconds: 0, minutes: 0, milliseconds: 0 })
+          .toISOString()
+      );
+      const data = await models.Events.findOne({
+        customerId,
+        isDeleted: false,
+        scheduledDate: {
+          $gte: moment()
+            .set({ hour: 0, seconds: 0, minutes: 0, milliseconds: 0 })
+            .toISOString(),
+        },
+        startTime: {
+          $gte: moment().format("hh:mm"),
+        },
+      })
+        .sort({ scheduledDate: 1 })
+        .populate({
+          path: "subCategories",
+          populate: {
+            path: "category",
+          },
+        });
+      return res.json({
+        status: 200,
+        message: messages.success,
+        data: data,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
