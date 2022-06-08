@@ -75,6 +75,11 @@ router
     middlewares.validation.request,
     actions.vendors.info.addressInfo
   )
-  .patch("/vendors/skills", actions.vendors.skill.updateSkill);
+  .patch("/vendors/skills", actions.vendors.skill.updateSkill)
+  .patch(
+    "/vendor/featured/:id",
+    middlewares.verifyUserRole(USER_ROLE.ADMIN),
+    actions.vendors.feature.updateFeature
+  );
 
 module.exports = { prefix: "vendors", router };

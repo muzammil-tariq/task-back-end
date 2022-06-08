@@ -13,6 +13,10 @@ const VendorSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    coverPhoto: {
+      type: String,
+      default: "",
+    },
     telephoneNumber: String,
     verificationCode: {
       type: Number,
@@ -90,6 +94,10 @@ const VendorSchema = new mongoose.Schema(
       type: Number,
       default: 0,
       min: 0,
+    },
+    featured: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
