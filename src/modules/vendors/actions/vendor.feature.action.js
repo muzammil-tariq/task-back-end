@@ -6,7 +6,7 @@ exports.feature = {
       } = req;
       const featuredVendor = await models.Vendors.findOneAndUpdate(
         { _id: id },
-        { featured: true },
+        { isFeatured: true },
         { new: true }
       );
       res.status(200).json({
@@ -21,7 +21,7 @@ exports.feature = {
   getList: async (req, res, next) => {
     try {
       const featuredVendors = await models.Vendors.find({
-        featured: true,
+        isFeatured: true,
       }).populate({
         path: "skills",
         populate: { path: "category", select: "category" },

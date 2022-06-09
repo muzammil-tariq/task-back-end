@@ -95,7 +95,7 @@ const VendorSchema = new mongoose.Schema(
       default: 0,
       min: 0,
     },
-    featured: {
+    isFeatured: {
       type: Boolean,
       default: false,
     },
