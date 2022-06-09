@@ -9,7 +9,6 @@ exports.add = {
       } = req;
 
       const alreadyExist = await models.Events.findOne({
-        scheduledDate: payload.scheduledDate,
         startTime: payload.startTime,
         endTime: payload.endTime,
       });
