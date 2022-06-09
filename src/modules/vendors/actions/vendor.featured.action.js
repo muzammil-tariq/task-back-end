@@ -1,12 +1,13 @@
-exports.feature = {
-  updateFeature: async (req, res, next) => {
+exports.featured = {
+  update: async (req, res, next) => {
     try {
       const {
         params: { id },
+        body: { isFeatured },
       } = req;
       const featuredVendor = await models.Vendors.findOneAndUpdate(
         { _id: id },
-        { isFeatured: true },
+        { isFeatured: isFeatured },
         { new: true }
       );
       res.status(200).json({
