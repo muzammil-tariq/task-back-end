@@ -7,7 +7,11 @@ module.exports = {
           limit = dataConstraint.PAGINATION_LIMIT,
           currentPage = dataConstraint.CURRENT_PAGE,
           sortBy = "createdAt",
+          eventId,
+          status = "",
+          price = "",
           sortDirection = -1,
+          search = "",
         },
         user: {
           _id: userId,
@@ -17,6 +21,16 @@ module.exports = {
       const isVendor = modelName === USER_ROLE.VENDOR;
       const isAdmin = modelName === USER_ROLE.ADMIN;
       const where = {
+        ...(search
+          ? {
+              title: { $regex: search, $options: "i" },
+            }
+          : null),
+        ...(eventId
+          ? {
+              eventId,
+            }
+          : null),
         $or: [
           {
             vendorId: userId,
@@ -26,11 +40,17 @@ module.exports = {
           },
         ],
       };
+      if (status) where["status"] = status;
       const data = await models.Quotes.find(!isAdmin ? where : {})
         .skip(limit * currentPage - limit)
         .limit(limit)
         .sort({
           [sortBy]: sortDirection,
+          ...(price
+            ? {
+                [price]: Boolean(price),
+              }
+            : null),
         })
         .populate("eventId", {
           vendorIds: 0,
