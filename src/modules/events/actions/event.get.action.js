@@ -81,24 +81,12 @@ exports.get = {
       const {
         user: { _id: customerId },
       } = req;
-      let date = new Date();
-      date.setTime(0);
-      const iso = new Date(date).toISOString();
-      console.log(
-        moment()
-          .set({ hour: 0, seconds: 0, minutes: 0, milliseconds: 0 })
-          .toISOString()
-      );
+
       const data = await models.Events.findOne({
         customerId,
         isDeleted: false,
-        scheduledDate: {
-          $gte: moment()
-            .set({ hour: 0, seconds: 0, minutes: 0, milliseconds: 0 })
-            .toISOString(),
-        },
         startTime: {
-          $gte: moment().format("hh:mm"),
+          $gte: moment().toISOString(),
         },
       })
         .sort({ scheduledDate: 1 })

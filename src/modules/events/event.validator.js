@@ -21,20 +21,7 @@ let addEventPayload = [
     .isString()
     .withMessage(messages.invalidDataType("String"))
     .optional(),
-  body("scheduledDate")
-    .exists()
-    .withMessage(messages.notPresent)
-    .notEmpty()
-    .withMessage(messages.notEmpty)
-    .withMessage(messages.invalidDataType("Date"))
-    .custom((value) => {
-      const date = new Date();
-      date.setHours(0, 0, 0, 0);
-      if (new Date(value) < date) {
-        throw new Error(messages.pastDate);
-      }
-      return true;
-    }),
+
   body("location")
     .exists()
     .withMessage(messages.notPresent)
@@ -69,12 +56,11 @@ let addEventPayload = [
     .withMessage(messages.notPresent)
     .notEmpty()
     .withMessage(messages.notEmpty)
-    .isString()
-    .withMessage(messages.invalidDataType("String"))
-    .custom((startTime, { req }) => {
-      const { scheduledDate } = req.body;
-      if (moment(scheduledDate).add(startTime).isBefore(moment())) {
-        throw new Error(messages.timeLessThanOrEqual("current date"));
+    .withMessage(messages.invalidDataType("Date"))
+    .custom((value) => {
+      const date = new Date();
+      if (new Date(value) < date) {
+        throw new Error(messages.pastDate);
       }
       return true;
     }),
@@ -83,18 +69,11 @@ let addEventPayload = [
     .withMessage(messages.notPresent)
     .notEmpty()
     .withMessage(messages.notEmpty)
-    .isString()
-    .withMessage(messages.invalidDataType("String"))
+    .withMessage(messages.invalidDataType("Date"))
     .custom((endTime, { req }) => {
-      const { scheduledDate, startTime } = req.body;
-      const startTimeDate = new Date(scheduledDate);
-      const endTimeDate = new Date(scheduledDate);
-      const [startTimeHours, startTimeMins] = startTime.split(":");
-      const [endTimeHours, endTimeMins] = endTime.split(":");
-      startTimeDate.setHours(startTimeHours, startTimeMins, 0, 0);
-      endTimeDate.setHours(endTimeHours, endTimeMins, 0, 0);
+      const { startTime } = req.body;
       if (startTime >= endTime) {
-        throw new Error(messages.timeLessThanOrEqual("startTime"));
+        throw new Error(messages.timeLessThanOrEqual("endTime"));
       }
       return true;
     }),
