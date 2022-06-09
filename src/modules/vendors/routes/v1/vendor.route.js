@@ -47,9 +47,9 @@ router
     middlewares.validation.request,
     actions.vendors.auth.resetPassword
   );
-
+// Vendor public routes
+router.get("/vendor/feature/public", actions.vendors.featured.getList);
 // Vendor authenticated routes
-
 router
   .patch(
     "/vendors/profile-photo",
@@ -75,6 +75,13 @@ router
     middlewares.validation.request,
     actions.vendors.info.addressInfo
   )
-  .patch("/vendors/skills", actions.vendors.skill.updateSkill);
+  .patch("/vendors/skills", actions.vendors.skill.updateSkill)
+  .patch(
+    "/vendor/featured/:id",
+    middlewares.verifyUserRole(USER_ROLE.ADMIN),
+    validators.vendors.featurePayloadValidation,
+    middlewares.validation.request,
+    actions.vendors.featured.update
+  );
 
 module.exports = { prefix: "vendors", router };

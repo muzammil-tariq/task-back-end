@@ -130,7 +130,15 @@ let verifyCodePayloadValidation = [
 ];
 
 let resendCodePayloadValidation = [param("id").exists()];
-
+let featurePayloadValidation = [
+  param("id").exists(),
+  body("isFeatured")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .isBoolean()
+    .withMessage(messages.invalidDataType("Boolean")),
+];
 let businessInfoValidation = [
   body("facebookUrl")
     .notEmpty()
@@ -366,4 +374,5 @@ module.exports = {
   businessInfoValidation,
   addressInfoValidation,
   update,
+  featurePayloadValidation,
 };
