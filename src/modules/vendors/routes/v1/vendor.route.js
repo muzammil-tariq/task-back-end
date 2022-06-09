@@ -47,9 +47,9 @@ router
     middlewares.validation.request,
     actions.vendors.auth.resetPassword
   );
-
+// Vendor public routes
+router.get("/vendor/feature/public", actions.vendors.feature.getList);
 // Vendor authenticated routes
-
 router
   .patch(
     "/vendors/profile-photo",
