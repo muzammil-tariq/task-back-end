@@ -48,7 +48,7 @@ router
     actions.vendors.auth.resetPassword
   );
 // Vendor public routes
-router.get("/vendor/feature/public", actions.vendors.featured.getList);
+router.get("/vendors/featured/public", actions.vendors.featured.getList);
 // Vendor authenticated routes
 router
   .patch(
@@ -77,7 +77,7 @@ router
   )
   .patch("/vendors/skills", actions.vendors.skill.updateSkill)
   .patch(
-    "/vendor/featured/:id",
+    "/vendors/featured/:id",
     middlewares.verifyUserRole(USER_ROLE.ADMIN),
     validators.vendors.featurePayloadValidation,
     middlewares.validation.request,
