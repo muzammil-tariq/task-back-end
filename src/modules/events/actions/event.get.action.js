@@ -1,9 +1,18 @@
 const { USER_ROLE } = constants;
+
 exports.get = {
   list: async (req, res, next) => {
     try {
       const {
-        query: { status, type, sort = 1, text = "" },
+        query: {
+          status,
+          type,
+          text = "",
+          limit = dataConstraint.PAGINATION_LIMIT,
+          currentPage = dataConstraint.CURRENT_PAGE,
+          sortBy = "createdAt",
+          sortDirection = -1,
+        },
         user: {
           _id: userId,
           collection: { modelName },
@@ -27,7 +36,9 @@ exports.get = {
       if (type) where["type"] = type;
       if (text) where["title"] = { $regex: text, $options: "i" };
       const data = await models.Events.find(!isAdmin ? where : {})
-        .sort({ createdAt: sort })
+        .skip(limit * currentPage - limit)
+        .limit(limit)
+        .sort({ [sortBy]: sortDirection })
         .populate({
           path: "subCategories",
           populate: {
