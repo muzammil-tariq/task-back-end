@@ -1,4 +1,4 @@
-const { USER_ROLE } = constants;
+const { USER_ROLE, EVENT_REQUEST_DISTANCE } = constants;
 
 exports.get = {
   list: async (req, res, next) => {
@@ -36,7 +36,7 @@ exports.get = {
               type: "Point",
               coordinates: userCoordinates,
             },
-            $maxDistance: 1000,
+            $maxDistance: EVENT_REQUEST_DISTANCE,
           },
         };
       } else if (isCustomer) {
@@ -103,7 +103,7 @@ exports.get = {
               type: "Point",
               coordinates: userCoordinates,
             },
-            $maxDistance: 1000,
+            $maxDistance: EVENT_REQUEST_DISTANCE,
           },
         };
       } else if (isCustomer) {
