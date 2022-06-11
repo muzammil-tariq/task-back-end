@@ -7,16 +7,9 @@ exports.delete = async (req, res, next) => {
       user: { _id: customerId },
     } = req;
 
-    const doesEventBelongsToCustomer = await models.Events.findOne({
-      customer: customerId,
-      _id: id,
-    });
-    if (!doesEventBelongsToCustomer)
-      throw createError(403, messages.eventNotForThisCustomer);
-
-    const event = await eventCrudService.update(
+    const event = await eventCrudService.findOneAndUpdate(
       { isDeleted: true },
-      id,
+      { _id: id, customerId },
       messages.notFound("Event")
     );
 

@@ -17,6 +17,16 @@ class CrudService {
     return model;
   }
 
+  async findOneAndUpdate(payload, where, message) {
+    let model = await this.model.findOneAndUpdate(where, payload, {
+      new: true,
+    });
+    if (!model) {
+      throw createError(404, message);
+    }
+    return model;
+  }
+
   async getModelById(id, notFoundMessage) {
     let model = await this.model.findById(id);
 

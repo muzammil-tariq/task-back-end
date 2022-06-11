@@ -1,5 +1,5 @@
 const eventCrudService = new services.CrudService(models.Events);
-const strongParams = ["status", "location", "isDeleted"];
+const strongParams = ["status", "location", "isDeleted", "customerId"];
 
 exports.update = async (req, res, next) => {
   try {
@@ -9,16 +9,9 @@ exports.update = async (req, res, next) => {
       user: { _id: customerId },
     } = req;
 
-    const doesEventBelongsToCustomer = await models.Events.findOne({
-      customer: customerId,
-      _id: id,
-    });
-    if (!doesEventBelongsToCustomer)
-      throw createError(403, messages.eventNotForThisCustomer);
-
-    const event = await eventCrudService.update(
+    const event = await eventCrudService.findOneAndUpdate(
       _.omit(payload, strongParams),
-      id,
+      { _id: id, customerId },
       messages.notFound("Event")
     );
 
