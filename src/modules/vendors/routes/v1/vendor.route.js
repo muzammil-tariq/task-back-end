@@ -53,6 +53,7 @@ router.get("/vendors/featured/public", actions.vendors.featured.getList);
 router
   .patch(
     "/vendors/profile-photo",
+    middlewares.verifyUserRole(USER_ROLE.VENDOR),
     middlewares.upload_local.uploadSingle,
     actions.vendors.update.profilePhoto
   )
@@ -65,17 +66,23 @@ router
   )
   .patch(
     "/vendors/business-info",
+    middlewares.verifyUserRole(USER_ROLE.VENDOR),
     validators.vendors.businessInfoValidation,
     middlewares.validation.request,
     actions.vendors.info.businessInfo
   )
   .patch(
     "/vendors/address-info",
+    middlewares.verifyUserRole(USER_ROLE.VENDOR),
     validators.vendors.addressInfoValidation,
     middlewares.validation.request,
     actions.vendors.info.addressInfo
   )
-  .patch("/vendors/skills", actions.vendors.skill.updateSkill)
+  .patch(
+    "/vendors/skills",
+    middlewares.verifyUserRole(USER_ROLE.VENDOR),
+    actions.vendors.skill.updateSkill
+  )
   .patch(
     "/vendors/featured/:id",
     middlewares.verifyUserRole(USER_ROLE.ADMIN),
