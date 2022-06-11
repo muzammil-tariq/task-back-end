@@ -32,18 +32,16 @@ module.exports = {
         .sort({
           [sortBy]: sortDirection,
         })
-        .populate("eventId", {
-          vendorIds: 0,
-        })
+        .populate("eventId")
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
         .populate("vendorId", ["fullName", "profilePhoto", "skills", "rating"])
         .select(
-          isVendor
-            ? { vendorId: 0 }
-            : !isAdmin
-            ? {
-                customerId: 0,
-              }
+          !isAdmin
+            ? isVendor
+              ? { vendorId: 0 }
+              : {
+                  customerId: 0,
+                }
             : {}
         );
       return res.json({
@@ -64,7 +62,7 @@ module.exports = {
           collection: { modelName },
         },
       } = req;
-      const isVendor = modelName === USER_ROLE.VENDOR;
+      const isVendor = modelName === USER_ROLE.CUSTOMER;
       const isAdmin = modelName === USER_ROLE.ADMIN;
       const where = {
         $or: [
@@ -80,18 +78,16 @@ module.exports = {
         _id: id,
         ...(!isAdmin ? where : {}),
       })
-        .populate("eventId", {
-          vendorIds: 0,
-        })
+        .populate("eventId")
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
         .populate("vendorId", ["fullName", "profilePhoto", "skills", "rating"])
         .select(
-          isVendor
-            ? { vendorId: 0 }
-            : !isAdmin
-            ? {
-                customerId: 0,
-              }
+          !isAdmin
+            ? isVendor
+              ? { vendorId: 0 }
+              : {
+                  customerId: 0,
+                }
             : {}
         );
       return res.json({

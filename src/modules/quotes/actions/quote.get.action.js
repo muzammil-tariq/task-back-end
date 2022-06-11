@@ -52,9 +52,7 @@ module.exports = {
               }
             : null),
         })
-        .populate("eventId", {
-          vendorIds: 0,
-        })
+        .populate("eventId")
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
         .populate({
           path: "vendorId",
@@ -68,12 +66,12 @@ module.exports = {
           },
         })
         .select(
-          isVendor
-            ? { vendorId: 0 }
-            : !isAdmin
-            ? {
-                customerId: 0,
-              }
+          !isAdmin
+            ? isVendor
+              ? { vendorId: 0 }
+              : {
+                  customerId: 0,
+                }
             : {}
         );
       return res.json({
@@ -110,9 +108,7 @@ module.exports = {
         _id: id,
         ...(!isAdmin ? where : {}),
       })
-        .populate("eventId", {
-          vendorIds: 0,
-        })
+        .populate("eventId")
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
         .populate({
           path: "vendorId",
@@ -121,12 +117,12 @@ module.exports = {
         })
 
         .select(
-          isVendor
-            ? { vendorId: 0 }
-            : !isAdmin
-            ? {
-                customerId: 0,
-              }
+          !isAdmin
+            ? isVendor
+              ? { vendorId: 0 }
+              : {
+                  customerId: 0,
+                }
             : {}
         );
       return res.json({
