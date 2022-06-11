@@ -37,7 +37,23 @@ const CustomerSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    zipCode: { type: Number },
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: [
+        {
+          type: Number,
+        },
+      ],
+      address: { type: String, trim: true },
+      city: { type: String, trim: true },
+      state: { type: String, trim: true },
+      country: { type: String, trim: true },
+      postalCode: { type: String, trim: true },
+    },
     country: { type: String },
     languages: [
       {
@@ -56,6 +72,8 @@ const CustomerSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+CustomerSchema.index({ location: "2dsphere" });
 
 CustomerSchema.methods.verifyPassword = function (pwd) {
   return this.password == utils.hash.makeHashValue(pwd);

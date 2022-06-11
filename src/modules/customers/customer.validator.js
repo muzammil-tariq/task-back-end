@@ -51,13 +51,26 @@ let signUpPayloadValidation = [
     .withMessage(messages.notEmpty)
     .isString()
     .withMessage(messages.invalidDataType("String")),
-  body("zipCode")
-    .exists()
-    .withMessage(messages.notPresent)
+  body("location")
     .notEmpty()
     .withMessage(messages.notEmpty)
-    .isInt()
-    .withMessage(messages.invalidDataType("Integer")),
+    .custom((value) => {
+      if (!value?.coordinates?.length) {
+        throw createError(
+          400,
+          messages.invalidDataType("location.coordinates")
+        );
+      }
+      if (value?.coordinates?.length !== 2) {
+        throw createError(400, messages.invalidFormat("coordinates"));
+      }
+      value?.coordinates.forEach((item) => {
+        if (typeof item !== "number") {
+          throw createError(400, messages.invalidFormat("coordinates"));
+        }
+      });
+      return true;
+    }),
 ];
 
 let signInPayloadValidation = [

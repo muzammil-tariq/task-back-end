@@ -80,9 +80,23 @@ const VendorSchema = new mongoose.Schema(
     felonyDescription: { type: String },
     minorityEligibility: { type: [String] },
     businessAddress: { type: String },
-    city: { type: String },
-    state: { type: String },
-    zipCode: { type: Number },
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: [
+        {
+          type: Number,
+        },
+      ],
+      address: { type: String, trim: true },
+      city: { type: String, trim: true },
+      state: { type: String, trim: true },
+      country: { type: String, trim: true },
+      postalCode: { type: String, trim: true },
+    },
     country: { type: String },
     skills: [
       {
@@ -105,6 +119,8 @@ const VendorSchema = new mongoose.Schema(
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+VendorSchema.index({ location: "2dsphere" });
 
 VendorSchema.methods.verifyPassword = function (pwd) {
   return this.password == utils.hash.makeHashValue(pwd);
