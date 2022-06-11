@@ -208,6 +208,8 @@ const update = [
     .optional(),
 ];
 
+const getById = [...validators.common.paramMongoId()];
+
 module.exports = {
   signUpPayloadValidation,
   signInPayloadValidation,
@@ -217,4 +219,5 @@ module.exports = {
   resendCodePayloadValidation,
   usernameAvailabilityValidation,
   update,
+  getById,
 };

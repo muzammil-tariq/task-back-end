@@ -59,6 +59,18 @@ router
     validators.customers.update,
     middlewares.validation.request,
     actions.customers.update.profile
+  )
+  .get(
+    "/customers/:id",
+    middlewares.verifyUserRole(USER_ROLE.ADMIN),
+    validators.customers.getById,
+    middlewares.validation.request,
+    actions.customers.get.byId
+  )
+  .get(
+    "/customers",
+    middlewares.verifyUserRole(USER_ROLE.ADMIN),
+    actions.customers.get.list
   );
 
 module.exports = { prefix: "customers", router };
