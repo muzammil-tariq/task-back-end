@@ -19,6 +19,7 @@ const QuotesSchema = new mongoose.Schema(
       enum: ["pending", "booked", "declined"],
       default: "pending",
     },
+    isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

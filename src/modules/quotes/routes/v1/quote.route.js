@@ -8,6 +8,16 @@ router
     middlewares.validation.request,
     actions.quotes.add.quote
   )
+  .patch(
+    "/quotes/:id",
+    middlewares.verifyUserRole(USER_ROLE.VENDOR),
+    actions.quotes.update
+  )
+  .delete(
+    "/quotes/:id",
+    middlewares.verifyUserRole(USER_ROLE.VENDOR),
+    actions.quotes.delete
+  )
   .get(
     "/quotes",
     validators.quotes.getList,
