@@ -1,4 +1,4 @@
-const { query, param } = expressValidator;
+const { query, param, body } = expressValidator;
 
 const pagination = [
   query("limit").toInt().optional(true),
@@ -13,9 +13,13 @@ const sort = [
 function paramMongoId(name = "id") {
   return [param(name).exists().isMongoId()];
 }
+function bodyMongoId(name) {
+  return [body(name).exists().isMongoId()];
+}
 
 module.exports = {
   pagination,
   sort,
   paramMongoId,
+  bodyMongoId,
 };
