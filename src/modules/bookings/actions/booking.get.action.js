@@ -62,7 +62,7 @@ module.exports = {
           collection: { modelName },
         },
       } = req;
-      const isVendor = modelName === USER_ROLE.CUSTOMER;
+      const isVendor = modelName === USER_ROLE.VENDOR;
       const isAdmin = modelName === USER_ROLE.ADMIN;
       const where = {
         $or: [
