@@ -69,4 +69,7 @@ module.exports = {
   pastDate: "Past date is not allowed!",
   timeLessThanOrEqual: (date) => `Should not be less than or equal to ${date}`,
   forbidden: "You do not have enough privileges to perform this action",
+  paypalNotConnected: "Paypal is not connected",
+  paypalAlreadyConnected: "Paypal is already connected",
+  alreadyPaid: "You have already paid for this booking",
 };

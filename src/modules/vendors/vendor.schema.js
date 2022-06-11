@@ -99,6 +99,9 @@ const VendorSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    paypalMerchantId: {
+      type: String,
+    },
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );

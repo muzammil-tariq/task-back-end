@@ -1,18 +1,17 @@
 const BookingsSchema = new mongoose.Schema(
   {
+    title: { type: String, trim: true },
+    description: { type: String, trim: true },
     eventId: { type: mongoose.Schema.Types.ObjectId, ref: "Events" },
     vendorId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Vendors",
     },
     customerId: { type: mongoose.Schema.Types.ObjectId, ref: "Customers" },
-    zipCode: { type: Number },
-
-    quoteId: { type: mongoose.Schema.Types.ObjectId, ref: "Quotes" },
     status: {
       type: String,
-      enum: ["started", "disputed", "completed", "cancelled"],
-      default: "started",
+      enum: ["pending", "paid", "disputed", "completed", "cancelled"],
+      default: "pending",
     },
     endedBy: {
       customerEnded: { type: Boolean, default: false },
@@ -25,6 +24,9 @@ const BookingsSchema = new mongoose.Schema(
     disputeFilerModel: {
       type: String,
       enum: ["Customers", "Vendors"],
+    },
+    paypalOrderId: {
+      type: String,
     },
   },
   { timestamps: true }

@@ -9,3 +9,4 @@ npm-debug.log
 .env
 /public/images
 global.d.ts
+dump.rdb

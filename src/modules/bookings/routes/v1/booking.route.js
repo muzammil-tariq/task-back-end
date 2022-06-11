@@ -1,15 +1,18 @@
-router.post(
-  "/bookings",
-  validators.bookings.add,
-  middlewares.validation.request,
-  actions.bookings.create.booking
-);
-router.patch("/bookings/conclude", actions.bookings.customerVendor.status);
-router.patch(
-  "/bookings/dispute",
-  actions.bookings.disputeCustomerVendor.dispute
-);
+const { USER_ROLE } = constants;
 router
+  .post(
+    "/bookings",
+    validators.bookings.add,
+    middlewares.validation.request,
+    actions.bookings.create.booking
+  )
+  .post(
+    "/bookings/order",
+    middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
+    actions.bookings.createOrder
+  )
+  .patch("/bookings/conclude", actions.bookings.customerVendor.status)
+  .patch("/bookings/dispute", actions.bookings.disputeCustomerVendor.dispute)
   .get(
     "/bookings",
     validators.bookings.getList,

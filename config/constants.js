@@ -1,4 +1,5 @@
 const constants = {
+  PLATFORM_FEES: 0.15,
   SOCKET_EVENT: {
     MESSAGE: "message",
     INCREMENT_UNREAD_COUNT: "incrementUnreadCount",
@@ -24,6 +25,10 @@ const constants = {
     {
       methods: ["GET"],
       path: /^(.+)?\/public\/?(.+)?/,
+    },
+    {
+      methods: ["POST"],
+      path: /^(.+)?\/paypal\/webhook\/?(.+)?/,
     },
   ],
 };
