@@ -3,10 +3,13 @@ exports.add = {
   quote: async (req, res, next) => {
     try {
       const {
-        user: { _id: vendorId },
+        user: { _id: vendorId, paypalMerchantId },
         params: { id: eventId },
         body: payload,
       } = req;
+      if (!paypalMerchantId) {
+        throw createError(400, messages.paypalNotConnected);
+      }
       const event = await models.Events.findOne({
         _id: mongoose.Types.ObjectId(eventId),
       });
