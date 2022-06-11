@@ -79,6 +79,9 @@ let addEventPayload = [
     }),
 ];
 
+const getList = [...validators.common.pagination, ...validators.common.sort];
+
 module.exports = {
   addEventPayload,
+  getList,
 };

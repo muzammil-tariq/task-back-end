@@ -85,13 +85,15 @@ router
   )
   .get(
     "/vendors/:id",
-    validators.vendors.getById,
+    validators.common.getById,
     middlewares.validation.request,
     actions.vendors.get.byId
   )
   .get(
     "/vendors",
     middlewares.verifyUserRole(USER_ROLE.ADMIN),
+    validators.common.getList,
+    middlewares.validation.request,
     actions.vendors.get.list
   );
 

@@ -17,9 +17,14 @@ function bodyMongoId(name) {
   return [body(name).exists().isMongoId()];
 }
 
+const getById = [...paramMongoId()];
+const getList = [...pagination, ...sort];
+
 module.exports = {
   pagination,
   sort,
   paramMongoId,
   bodyMongoId,
+  getById,
+  getList,
 };

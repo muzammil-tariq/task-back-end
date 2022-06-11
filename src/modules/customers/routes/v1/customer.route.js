@@ -63,13 +63,15 @@ router
   .get(
     "/customers/:id",
     middlewares.verifyUserRole(USER_ROLE.ADMIN),
-    validators.customers.getById,
+    validators.common.getById,
     middlewares.validation.request,
     actions.customers.get.byId
   )
   .get(
     "/customers",
     middlewares.verifyUserRole(USER_ROLE.ADMIN),
+    validators.common.getList,
+    middlewares.validation.request,
     actions.customers.get.list
   );
 

@@ -16,7 +16,7 @@ router
   )
   .get(
     "/quotes/:id",
-    validators.quotes.getById,
+    validators.common.getById,
     middlewares.validation.request,
     actions.quotes.getById
   )

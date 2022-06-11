@@ -209,6 +209,7 @@ const update = [
 ];
 
 const getById = [...validators.common.paramMongoId()];
+const getList = [...validators.common.pagination, ...validators.common.sort];
 
 module.exports = {
   signUpPayloadValidation,
@@ -220,4 +221,5 @@ module.exports = {
   usernameAvailabilityValidation,
   update,
   getById,
+  getList,
 };

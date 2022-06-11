@@ -23,12 +23,10 @@ const getList = [
   ...validators.common.pagination,
   ...validators.common.sort,
 ];
-const getById = [...validators.common.paramMongoId()];
 const getEventQuotes = [...validators.common.paramMongoId("eventId")];
 
 module.exports = {
   add,
   getList,
-  getById,
   getEventQuotes,
 };
