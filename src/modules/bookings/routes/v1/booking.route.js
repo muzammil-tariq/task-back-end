@@ -11,6 +11,16 @@ router
     middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
     actions.bookings.createOrder
   )
+  .patch(
+    "/bookings/:id",
+    middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
+    actions.bookings.update
+  )
+  .delete(
+    "/bookings/:id",
+    middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
+    actions.bookings.delete
+  )
   .patch("/bookings/conclude", actions.bookings.customerVendor.status)
   .patch("/bookings/dispute", actions.bookings.disputeCustomerVendor.dispute)
   .get(

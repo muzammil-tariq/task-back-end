@@ -28,6 +28,7 @@ const BookingsSchema = new mongoose.Schema(
     paypalOrderId: {
       type: String,
     },
+    isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
