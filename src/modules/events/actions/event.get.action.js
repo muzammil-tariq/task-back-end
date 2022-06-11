@@ -16,25 +16,36 @@ exports.get = {
         user: {
           _id: userId,
           collection: { modelName },
+          location: { coordinates: userCoordinates } = {
+            coordinates: [],
+          },
         },
       } = req;
 
       const isVendor = modelName === USER_ROLE.VENDOR;
       const isAdmin = modelName === USER_ROLE.ADMIN;
+      const isCustomer = modelName === USER_ROLE.CUSTOMER;
       const where = {
         isDeleted: false,
-        $or: [
-          {
-            customerId: userId,
-          },
-          {
-            vendorIds: userId,
-          },
-        ],
       };
+
+      if (isVendor) {
+        where["location"] = {
+          $near: {
+            $geometry: {
+              type: "Point",
+              coordinates: userCoordinates,
+            },
+            $maxDistance: 1000,
+          },
+        };
+      } else if (isCustomer) {
+        where["customerId"] = userId;
+      }
       if (status) where["status"] = status;
       if (type) where["type"] = type;
       if (text) where["title"] = { $regex: text, $options: "i" };
+
       const data = await models.Events.find(!isAdmin ? where : {})
         .skip(limit * currentPage - limit)
         .limit(limit)
@@ -46,14 +57,12 @@ exports.get = {
           },
         })
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
-        .populate("vendorIds", ["fullName", "profilePhoto", "skills"])
         .populate({
           path: "quotes",
           match: {
             vendorId: userId, // so that we only show the quotes to vendor, and to show him only his quote
           },
-        })
-        .select(isVendor ? { vendorIds: 0 } : {});
+        });
       return res.json({
         status: 200,
         message: messages.success,
@@ -67,10 +76,42 @@ exports.get = {
     try {
       const {
         params: { id },
+        user: {
+          _id: userId,
+          collection: { modelName },
+          location: { coordinates: userCoordinates } = {
+            coordinates: [],
+          },
+        },
       } = req;
+
+      const isVendor = modelName === USER_ROLE.VENDOR;
+      const isAdmin = modelName === USER_ROLE.ADMIN;
+      const isCustomer = modelName === USER_ROLE.CUSTOMER;
+
+      const where = {
+        isDeleted: false,
+      };
+
+      const quote = await models.Quotes.findOne({
+        eventId: id,
+      });
+      if (isVendor && !quote) {
+        where["location"] = {
+          $near: {
+            $geometry: {
+              type: "Point",
+              coordinates: userCoordinates,
+            },
+            $maxDistance: 1000,
+          },
+        };
+      } else if (isCustomer) {
+        where["customerId"] = userId;
+      }
       const data = await models.Events.findOne({
         _id: id,
-        isDeleted: false,
+        ...(!isAdmin ? where : {}),
       }).populate({
         path: "subCategories",
         populate: {
