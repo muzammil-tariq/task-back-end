@@ -5,7 +5,8 @@ module.exports.createOrder = async (req, res, next) => {
   try {
     const {
       user: { _id: userId },
-      body: { bookingId, amount },
+      body: { amount },
+      params: { id: bookingId },
     } = req;
     const booking = await models.Bookings.findOne({
       _id: bookingId,

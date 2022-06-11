@@ -7,7 +7,7 @@ router
     actions.bookings.create.booking
   )
   .post(
-    "/bookings/order",
+    "/bookings/:id/order",
     middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
     actions.bookings.createOrder
   )
