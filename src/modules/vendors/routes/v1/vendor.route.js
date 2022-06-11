@@ -82,6 +82,17 @@ router
     validators.vendors.featurePayloadValidation,
     middlewares.validation.request,
     actions.vendors.featured.update
+  )
+  .get(
+    "/vendors/:id",
+    validators.vendors.getById,
+    middlewares.validation.request,
+    actions.vendors.get.byId
+  )
+  .get(
+    "/vendors",
+    middlewares.verifyUserRole(USER_ROLE.ADMIN),
+    actions.vendors.get.list
   );
 
 module.exports = { prefix: "vendors", router };

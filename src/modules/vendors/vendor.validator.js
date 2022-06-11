@@ -364,6 +364,8 @@ const update = [
     .optional(),
 ];
 
+const getById = [...validators.common.paramMongoId()];
+
 module.exports = {
   signUpPayloadValidation,
   signInPayloadValidation,
@@ -375,4 +377,5 @@ module.exports = {
   addressInfoValidation,
   update,
   featurePayloadValidation,
+  getById,
 };

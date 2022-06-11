@@ -28,7 +28,11 @@ const constants = {
     },
     {
       methods: ["POST"],
-      path: /^(.+)?\/paypal\/webhook\/?(.+)?/,
+      path: /^(.+)?\/paypal\/webhook\/?/,
+    },
+    {
+      methods: ["POST"],
+      path: /^\/vendors\/([0-9a-fA-F]{24})\/?$/,
     },
   ],
 };
