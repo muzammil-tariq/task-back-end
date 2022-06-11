@@ -11,7 +11,12 @@ router.post(
 router.patch(
   "/events/:id",
   middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
-  actions.events.update.event
+  actions.events.update
+);
+router.delete(
+  "/events/:id",
+  middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
+  actions.events.delete
 );
 router.get(
   "/events/upcomingEvent",

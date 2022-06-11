@@ -1,10 +1,8 @@
 const eventCrudService = new services.CrudService(models.Events);
-const strongParams = ["status", "location", "isDeleted"];
 
-exports.update = async (req, res, next) => {
+exports.delete = async (req, res, next) => {
   try {
     const {
-      body: payload,
       params: { id },
       user: { _id: customerId },
     } = req;
@@ -17,14 +15,14 @@ exports.update = async (req, res, next) => {
       throw createError(403, messages.eventNotForThisCustomer);
 
     const event = await eventCrudService.update(
-      _.omit(payload, strongParams),
+      { isDeleted: true },
       id,
       messages.notFound("Event")
     );
 
     return res.json({
       status: 200,
-      message: messages.updatedModel("Event"),
+      message: messages.success,
       data: event,
     });
   } catch (error) {
