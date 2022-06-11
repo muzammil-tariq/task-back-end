@@ -15,7 +15,7 @@ const EventSchema = new mongoose.Schema(
       },
     ],
     description: { type: String },
-    location: { type: String, enum: ["indoor", "outdoor", "virtual"] },
+    venue: { type: String, enum: ["indoor", "outdoor", "virtual"] },
     venueName: { type: String },
     venueAddress: { type: String },
     numberOfPeople: { type: Number },
@@ -26,12 +26,23 @@ const EventSchema = new mongoose.Schema(
       enum: ["upcoming", "canceled", "completed"],
       default: "upcoming",
     },
-    vendorIds: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Vendors",
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
       },
-    ],
+      coordinates: [
+        {
+          type: Number,
+        },
+      ],
+      address: { type: String, trim: true },
+      city: { type: String, trim: true },
+      state: { type: String, trim: true },
+      country: { type: String, trim: true },
+      postalCode: { type: String, trim: true },
+    },
     isDeleted: { type: Boolean, default: false },
   },
   {
@@ -40,6 +51,8 @@ const EventSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
+EventSchema.index({ location: "2dsphere" });
 
 EventSchema.virtual("quotes", {
   ref: "Quotes",
