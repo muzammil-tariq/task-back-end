@@ -7,56 +7,96 @@ const paypalClient = libs.axios.create({
 });
 
 module.exports = {
+  async getAuthToken() {
+    const res = await paypalClient.post(
+      "/v1/oauth2/token",
+      qs.stringify({
+        grant_type: "client_credentials",
+      }),
+      {
+        headers: {
+          Authorization: `Basic ${process.env.PAYPAL_AUTH_TOKEN}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+    return { Authorization: `Bearer ${res.access_token}` };
+  },
   async generateSignUpLink({ trackingId }) {
-    const res = await paypalClient.post("/v2/customer/partner-referrals", {
-      tracking_id: trackingId,
-      operations: [
-        {
-          operation: "API_INTEGRATION",
-          api_integration_preference: {
-            rest_api_integration: {
-              integration_method: "PAYPAL",
-              integration_type: "THIRD_PARTY",
-              third_party_details: {
-                features: [
-                  "PAYMENT",
-                  "REFUND",
-                  "PARTNER_FEE",
-                  "DELAY_FUNDS_DISBURSEMENT",
-                ],
+    const token = await this.getAuthToken();
+    const res = await paypalClient.post(
+      "/v2/customer/partner-referrals",
+      {
+        tracking_id: trackingId,
+        operations: [
+          {
+            operation: "API_INTEGRATION",
+            api_integration_preference: {
+              rest_api_integration: {
+                integration_method: "PAYPAL",
+                integration_type: "THIRD_PARTY",
+                third_party_details: {
+                  features: [
+                    "PAYMENT",
+                    "REFUND",
+                    "PARTNER_FEE",
+                    "DELAY_FUNDS_DISBURSEMENT",
+                  ],
+                },
               },
             },
           },
-        },
-      ],
-      products: ["EXPRESS_CHECKOUT"],
-      legal_consents: [
-        {
-          type: "SHARE_DATA_CONSENT",
-          granted: true,
-        },
-      ],
-    });
+        ],
+        products: ["EXPRESS_CHECKOUT"],
+        legal_consents: [
+          {
+            type: "SHARE_DATA_CONSENT",
+            granted: true,
+          },
+        ],
+      },
+      {
+        headers: token,
+      }
+    );
     return res;
   },
   async getSellerMerchantId({ trackingId }) {
+    const token = await this.getAuthToken();
     return await paypalClient.get(
-      `/v1/customer/partners/${PAYPAL_PARTNER_MERCHANT_ID}/merchant-integrations?tracking_id=${trackingId}`
+      `/v1/customer/partners/${PAYPAL_PARTNER_MERCHANT_ID}/merchant-integrations?tracking_id=${trackingId}`,
+      {
+        headers: token,
+      }
     );
   },
   async getSellerOnboardingStatus({ sellerMerchantId }) {
+    const token = await this.getAuthToken();
     return await paypalClient.get(
-      `/v1/customer/partners/${PAYPAL_PARTNER_MERCHANT_ID}/merchant-integrations/${sellerMerchantId}`
+      `/v1/customer/partners/${PAYPAL_PARTNER_MERCHANT_ID}/merchant-integrations/${sellerMerchantId}`,
+      {
+        headers: token,
+      }
     );
   },
   async disbureFunds({ referenceId }) {
-    return await paypalClient.post("/v1/payments/referenced-payouts-items", {
-      reference_id: referenceId,
-      reference_type: "TRANSACTION_ID",
-    });
+    const token = await this.getAuthToken();
+    return await paypalClient.post(
+      "/v1/payments/referenced-payouts-items",
+      {
+        reference_id: referenceId,
+        reference_type: "TRANSACTION_ID",
+      },
+      {
+        headers: token,
+      }
+    );
   },
   async getOrderDetails({ orderId }) {
-    return await paypalClient.get(`/v2/checkout/orders/${orderId}`);
+    const token = await this.getAuthToken();
+    return await paypalClient.get(`/v2/checkout/orders/${orderId}`, {
+      headers: token,
+    });
   },
   async verifyWebhookSignature({
     auth_algo,
@@ -67,6 +107,7 @@ module.exports = {
     webhook_id,
     webhook_event,
   }) {
+    const token = await this.getAuthToken();
     return await paypalClient.post(
       `/v1/notifications/verify-webhook-signature`,
       {
@@ -77,11 +118,17 @@ module.exports = {
         transmission_time: transmission_time,
         webhook_id: webhook_id,
         webhook_event: webhook_event,
+      },
+      {
+        headers: token,
       }
     );
   },
   async createOrder({ body }) {
-    return await paypalClient.post(`/v2/checkout/orders`, body);
+    const token = await this.getAuthToken();
+    return await paypalClient.post(`/v2/checkout/orders`, body, {
+      headers: token,
+    });
   },
 
   // WEBHOOK TRIGGERS

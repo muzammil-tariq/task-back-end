@@ -200,6 +200,9 @@ var text = `declare global {
   var axios: typeof import("axios").default;
   var s3: typeof import("@aws-sdk/client-s3");
   var s3RequestPresigner: typeof import("@aws-sdk/s3-request-presigner");
+  var redis: typeof import("redis");
+  var redisClient: ReturnType<typeof redis.createClient>;
+  var qs: typeof import("qs");
   
   //MIDDLEWARES
   var middlewares: ${convertToCode(types.middlewares)};
