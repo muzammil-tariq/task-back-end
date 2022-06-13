@@ -102,17 +102,14 @@ module.exports = {
   async paymentCaptureCompleted({ body, eventType }) {
     if (eventType === "PAYMENT.CAPTURE.COMPLETED") {
       var orderId = body.resource.supplementary_data.related_ids.order_id;
-      var amount = body.resource.amount.value;
     } else if (eventType === "CHECKOUT.ORDER.COMPLETED") {
       var orderId = body.resource.id;
-      var amount = body.resource.purchase_units[0].amount.value;
     }
     await models.Bookings.findOneAndUpdate(
       {
         paypalOrderId: orderId,
       },
       {
-        amount,
         status: "PAID",
       }
     );

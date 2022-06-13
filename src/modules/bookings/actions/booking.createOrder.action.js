@@ -5,7 +5,6 @@ module.exports.createOrder = async (req, res, next) => {
   try {
     const {
       user: { _id: userId },
-      body: { amount },
       params: { id: bookingId },
     } = req;
     const booking = await models.Bookings.findOne({
@@ -20,7 +19,7 @@ module.exports.createOrder = async (req, res, next) => {
     ) {
       throw createError(400, messages.alreadyPaid);
     }
-    if (booking.paypalOrderId && amount === booking.amount) {
+    if (booking.paypalOrderId && booking.status === "pending") {
       return res.json({
         status: 200,
         message: messages.success,
@@ -35,7 +34,7 @@ module.exports.createOrder = async (req, res, next) => {
           {
             amount: {
               currency_code: "USD",
-              value: amount,
+              value: booking.amount,
             },
             payee: {
               merchant_id: booking.vendorId.paypalMerchantId,
@@ -45,7 +44,7 @@ module.exports.createOrder = async (req, res, next) => {
               platform_fees: [
                 {
                   amount: {
-                    value: PLATFORM_FEES * amount,
+                    value: PLATFORM_FEES * booking.amount,
                     currency_code: "USD",
                   },
                   payee: {
@@ -67,7 +66,6 @@ module.exports.createOrder = async (req, res, next) => {
       },
       {
         paypalOrderId: order.id,
-        amount,
       }
     );
     return res.json({

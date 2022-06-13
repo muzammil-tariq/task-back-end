@@ -6,17 +6,10 @@ exports.create = {
         body: payload,
         user: { _id: userId },
       } = req;
-      const alreadyExists = await models.Bookings.findOne({
-        eventId: mongoose.Types.ObjectId(payload["eventId"]),
-        quoteId: mongoose.Types.ObjectId(payload["quoteId"]),
-      });
 
-      if (alreadyExists) {
-        throw createError(409, messages.alreadyExists("Booking"));
-      }
       const event = await models.Events.findOne({
-        _id: mongoose.Types.ObjectId(payload["eventId"]),
-        customerId: mongoose.Types.ObjectId(userId),
+        _id: payload["eventId"],
+        customerId: userId,
       });
       if (!event) {
         throw createError(404, messages.notFound("Event"));

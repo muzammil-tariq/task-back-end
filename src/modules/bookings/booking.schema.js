@@ -8,6 +8,23 @@ const BookingsSchema = new mongoose.Schema(
       ref: "Vendors",
     },
     customerId: { type: mongoose.Schema.Types.ObjectId, ref: "Customers" },
+    venue: {
+      type: String,
+      trim: true,
+    },
+    link: {
+      type: String,
+      trim: true,
+    },
+    people: [
+      {
+        type: String,
+      },
+    ],
+    timeZone: {
+      type: String,
+    },
+    startTime: { type: Date },
     status: {
       type: String,
       enum: ["pending", "paid", "disputed", "completed", "cancelled"],
@@ -27,6 +44,9 @@ const BookingsSchema = new mongoose.Schema(
     },
     paypalOrderId: {
       type: String,
+    },
+    amount: {
+      type: Number,
     },
     isDeleted: { type: Boolean, default: false },
   },
