@@ -100,7 +100,13 @@ let emailPayloadValidation = [
 ];
 
 let resetPasswordPayload = [
-  param("id").exists(),
+  body("email")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isEmail()
+    .withMessage(messages.invalidEmail),
   body("code")
     .exists()
     .withMessage(messages.notPresent)

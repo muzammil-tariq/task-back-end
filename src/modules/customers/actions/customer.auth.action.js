@@ -81,22 +81,13 @@ exports.auth = {
   },
   forgotPassword: async (req, res, next) => {
     try {
-      let { body: payload } = req;
-      let customer = await authService.verifyEmail(payload);
-      const verificationCode = utils.random.generateRandomNumber();
-      const codeExpiryTime = Date.now();
-      customer = await crudService.update(
-        { verificationCode, codeExpiryTime },
-        customer._id,
-        messages.userNotFound
-      );
-      await libs.email_service.sendEmail(customer);
-      // await AuthNotificationService.forgotPassword(customer, "Client", "email");
-      customer._doc["token"] = customer.getJWTToken();
+      const {
+        body: { email },
+      } = req;
+      await authService.forgotPassword({ email });
       return res.json({
         status: 200,
         message: messages.success,
-        data: customer,
       });
     } catch (err) {
       next(err);
@@ -105,37 +96,17 @@ exports.auth = {
   resetPassword: async (req, res, next) => {
     try {
       const {
-        body: { code, password },
-        params: { id },
+        body: { code, password, email },
       } = req;
       const verificationCode = parseInt(code);
-      let customer = await models.Customers.findById(id);
-      if (!customer) {
-        throw createError(400, messages.userNotFound);
-      }
-      const currentTime = Date.now();
-      // It will be empty when no request had been made for resetPassword
-      if (!customer.codeExpiryTime) {
-        throw createError(400, messages.invalidCode);
-      }
-      if (
-        currentTime - customer.codeExpiryTime >
-        dataConstraint.CODE_EXPIRY_TIME
-      ) {
-        throw createError(400, messages.codeExpried);
-      }
-      if (customer.verificationCode !== verificationCode) {
-        throw createError(400, messages.invalidCode);
-      }
-      customer = await crudService.update(
-        { password },
-        customer._id,
-        messages.userNotFound
-      );
+      await authService.resetPassword({
+        email,
+        password,
+        verificationCode,
+      });
       return res.json({
         status: 200,
         message: messages.updateAttr("Password"),
-        data: customer,
       });
     } catch (err) {
       next(err);

@@ -47,8 +47,7 @@ router
     actions.customers.auth.forgotPassword
   )
   .patch(
-    "/customers/auth/reset-password/:id",
-    middlewares.id_validation.validateId,
+    "/customers/auth/reset-password",
     validators.customers.resetPasswordPayload,
     middlewares.validation.request,
     actions.customers.auth.resetPassword

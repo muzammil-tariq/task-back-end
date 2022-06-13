@@ -81,22 +81,13 @@ exports.auth = {
   },
   forgotPassword: async (req, res, next) => {
     try {
-      let { body: payload } = req;
-      let vendor = await authService.verifyEmail(payload);
-      const verificationCode = utils.random.generateRandomNumber();
-      const codeExpiryTime = Date.now();
-      vendor = await crudService.update(
-        { verificationCode, codeExpiryTime },
-        vendor._id,
-        messages.userNotFound
-      );
-      await libs.email_service.sendEmail(vendor);
-      // await AuthNotificationService.forgotPassword(vendor, "Client", "email");
-      vendor._doc["token"] = vendor.getJWTToken();
+      const {
+        body: { email },
+      } = req;
+      await authService.forgotPassword({ email });
       return res.json({
         status: 200,
         message: messages.success,
-        data: vendor,
       });
     } catch (err) {
       next(err);
@@ -105,37 +96,18 @@ exports.auth = {
   resetPassword: async (req, res, next) => {
     try {
       const {
-        body: { code, password },
-        params: { id },
+        body: { code, password, email },
       } = req;
       const verificationCode = parseInt(code);
-      let vendor = await models.Vendors.findById(id);
-      if (!vendor) {
-        throw createError(400, messages.userNotFound);
-      }
-      const currentTime = Date.now();
-      // It will be empty when no request had been made for resetPassword
-      if (!vendor.codeExpiryTime) {
-        throw createError(400, messages.invalidCode);
-      }
-      if (
-        currentTime - vendor.codeExpiryTime >
-        dataConstraint.CODE_EXPIRY_TIME
-      ) {
-        throw createError(400, messages.codeExpried);
-      }
-      if (vendor.verificationCode !== verificationCode) {
-        throw createError(400, messages.invalidCode);
-      }
-      vendor = await crudService.update(
-        { password },
-        vendor._id,
-        messages.userNotFound
-      );
+      const vendor = await authService.verifyEmail({ email });
+      await authService.resetPassword({
+        email,
+        password,
+        verificationCode,
+      });
       return res.json({
         status: 200,
         message: messages.updateAttr("Password"),
-        data: vendor,
       });
     } catch (err) {
       next(err);

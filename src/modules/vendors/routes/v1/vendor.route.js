@@ -41,8 +41,7 @@ router
     actions.vendors.auth.forgotPassword
   )
   .patch(
-    "/vendors/auth/reset-password/:id",
-    middlewares.id_validation.validateId,
+    "/vendors/auth/reset-password",
     validators.vendors.resetPasswordPayload,
     middlewares.validation.request,
     actions.vendors.auth.resetPassword
