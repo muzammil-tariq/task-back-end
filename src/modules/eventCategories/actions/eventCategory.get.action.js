@@ -63,4 +63,32 @@ exports.get = {
       next(error);
     }
   },
+  vendorsBySubCategories: async (req, res, next) => {
+    try {
+      const {
+        params: { id },
+        query: {
+          limit = dataConstraint.PAGINATION_LIMIT,
+          currentPage = dataConstraint.CURRENT_PAGE,
+          sortBy = "createdAt",
+          sortDirection = -1,
+        },
+      } = req;
+      const data = await models.Vendors.find({
+        skills: id,
+      })
+        .skip(limit * currentPage - limit)
+        .limit(limit)
+        .sort({
+          [sortBy]: sortDirection,
+        });
+      return res.json({
+        status: 200,
+        message: messages.success,
+        data,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };

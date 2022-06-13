@@ -28,6 +28,13 @@ let addCategoryPayload = [
     .optional(),
 ];
 
+const getList = [
+  ...validators.common.getById,
+  ...validators.common.pagination,
+  ...validators.common.sort,
+];
+
 module.exports = {
   addCategoryPayload,
+  getList,
 };

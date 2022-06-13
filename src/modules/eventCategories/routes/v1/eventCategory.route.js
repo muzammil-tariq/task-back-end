@@ -20,6 +20,12 @@ router.get("/categories", actions.eventCategories.get.listCategories);
 router.get("/sub-categories", actions.eventCategories.get.listSubCategories);
 router.get("/categories/:id", actions.eventCategories.get.categoryById);
 router.get("/sub-categories/:id", actions.eventCategories.get.subCategoryById);
+router.get(
+  "/sub-categories/:id/vendors",
+  validators.eventCategories.getList,
+  middlewares.validation.request,
+  actions.eventCategories.get.vendorsBySubCategories
+);
 
 router.patch(
   "/categories/:id",
