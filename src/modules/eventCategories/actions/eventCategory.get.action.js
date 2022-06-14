@@ -82,15 +82,16 @@ exports.get = {
       const {
         params: { id },
         query: {
+          text = "",
           limit = dataConstraint.PAGINATION_LIMIT,
           currentPage = dataConstraint.CURRENT_PAGE,
           sortBy = "rating",
           sortDirection = -1,
         },
       } = req;
-      const data = await models.Vendors.find({
-        skills: id,
-      })
+      const where = { isDeleted: false, skills: id };
+      if (text) where["fullName"] = { $regex: text, $options: "i" };
+      const data = await models.Vendors.find(where)
         .skip(limit * currentPage - limit)
         .limit(limit)
         .sort({
