@@ -58,7 +58,7 @@ module.exports.get = {
         },
         query: {
           timestamp = Math.floor(Date.now() / 1000),
-          timePeriod = 60 * 60 * 24,
+          timePeriod = Math.floor(Date.now() / 1000),
         },
       } = req;
       const isAdmin = modelName === USER_ROLE.ADMIN;
