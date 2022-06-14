@@ -6,7 +6,6 @@ const strongParams = [
   "vendorId",
   "customerId",
   "status",
-  "endedBy",
   "disputeFilerId",
   "disputeFilerModel",
   "paypalOrderId",

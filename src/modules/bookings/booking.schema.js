@@ -27,12 +27,16 @@ const BookingsSchema = new mongoose.Schema(
     startTime: { type: Date },
     status: {
       type: String,
-      enum: ["pending", "paid", "disputed", "completed", "cancelled"],
+      enum: [
+        "pending",
+        "paid",
+        "disputed",
+        "completedByCustomer",
+        "completedByVendor",
+        "cancelled",
+        "completed",
+      ],
       default: "pending",
-    },
-    endedBy: {
-      customerEnded: { type: Boolean, default: false },
-      vendorEnded: { type: Boolean, default: false },
     },
     disputeFilerId: {
       type: mongoose.Schema.Types.ObjectId,
