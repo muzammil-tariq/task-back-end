@@ -13,6 +13,11 @@ router
     middlewares.verifyUserRole(USER_ROLE.VENDOR),
     actions.quotes.update
   )
+  .patch(
+    "/quotes/:id/decline",
+    middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
+    actions.quotes.decline
+  )
   .delete(
     "/quotes/:id",
     middlewares.verifyUserRole(USER_ROLE.VENDOR),
