@@ -11,7 +11,17 @@ router.post(
 router.patch(
   "/events/:id",
   middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
-  actions.events.update
+  actions.events.update.info
+);
+router.patch(
+  "/events/:id/cancel",
+  middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
+  actions.events.update.cancel
+);
+router.patch(
+  "/events/:id/complete",
+  middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
+  actions.events.update.complete
 );
 router.delete(
   "/events/:id",
