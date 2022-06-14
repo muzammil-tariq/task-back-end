@@ -56,9 +56,11 @@ module.exports.get = {
             coordinates: [],
           },
         },
-        query: { timePeriod = 60 * 60 * 24 },
+        query: {
+          timestamp = Math.floor(Date.now() / 1000),
+          timePeriod = 60 * 60 * 24,
+        },
       } = req;
-      const timestamp = Math.floor(Date.now() / 1000);
       const isAdmin = modelName === USER_ROLE.ADMIN;
       const vendorId = id ?? userId;
 
@@ -67,8 +69,15 @@ module.exports.get = {
         const vendor = await models.Vendors.findById(vendorId);
         userCoordinates = vendor?.location?.coordinates;
       }
+
+      const startDate = new Date((timestamp - timePeriod) * 1000);
+      const endDate = new Date(timestamp * 1000);
+      const dateRange = {
+        $gte: startDate,
+        $lte: endDate,
+      };
       const where = {
-        createdAt: { $gte: new Date((timestamp - timePeriod) * 1000) },
+        createdAt: dateRange,
         vendorId,
       };
       const eventWhere = {
@@ -94,19 +103,19 @@ module.exports.get = {
         models.Quotes.find(where).count(),
         models.Bookings.find({
           ...where,
-          startTime: { $lte: new Date() },
+          startTime: dateRange,
         }).count(),
         models.Bookings.find({
           ...where,
-          startTime: { $gt: new Date() },
+          startTime: { $gt: endDate },
         }).count(),
         models.Events.find({
           ...eventWhere,
-          startTime: { $lte: new Date() },
+          startTime: dateRange,
         }).count(),
         models.Events.find({
           ...eventWhere,
-          startTime: { $gt: new Date() },
+          startTime: { $gt: endDate },
         }).count(),
         models.Bookings.aggregate([
           {
