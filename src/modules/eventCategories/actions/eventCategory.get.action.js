@@ -13,16 +13,30 @@ exports.get = {
   },
   listSubCategories: async (req, res, next) => {
     try {
-      const data = await models.EventSubCategories.find({
-        isDeleted: false,
-      }).populate("category");
-      return res.json({
-        status: 200,
-        message: messages.success,
-        data: data,
-      });
-    } catch (error) {
-      next(error);
+      const {
+        query: {
+          zipCode,
+          text = "",
+          categoryId = "",
+          limit = dataConstraint.PAGINATION_LIMIT,
+          currentPage = dataConstraint.CURRENT_PAGE,
+          sortBy = "createdAt",
+          sortDirection = -1,
+        },
+      } = req;
+      const where = { isDeleted: false };
+      if (zipCode) where["zipCode"] = zipCode;
+      if (text) where["name"] = { $regex: text, $options: "i" };
+      if (categoryId) where["category"] = categoryId;
+      const data = await models.EventSubCategories.find(where)
+        .skip(limit * currentPage - limit)
+        .limit(limit)
+        .sort({ [sortBy]: sortDirection })
+        .populate("category");
+
+      return res.json({ status: 200, message: messages.success, data });
+    } catch (err) {
+      next(err);
     }
   },
   subCategoryById: async (req, res, next) => {

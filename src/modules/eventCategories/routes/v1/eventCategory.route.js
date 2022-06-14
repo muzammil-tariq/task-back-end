@@ -17,11 +17,11 @@ router.post(
 );
 
 router.get("/categories", actions.eventCategories.get.listCategories);
-router.get("/sub-categories", actions.eventCategories.get.listSubCategories);
+router.get("/subCategories", actions.eventCategories.get.listSubCategories);
 router.get("/categories/:id", actions.eventCategories.get.categoryById);
-router.get("/sub-categories/:id", actions.eventCategories.get.subCategoryById);
+router.get("/subCategories/:id", actions.eventCategories.get.subCategoryById);
 router.get(
-  "/sub-categories/:id/vendors",
+  "/subCategories/:id/vendors",
   validators.eventCategories.getList,
   middlewares.validation.request,
   actions.eventCategories.get.vendorsBySubCategories
@@ -33,11 +33,11 @@ router.patch(
   actions.eventCategories.update.category
 );
 router.patch(
-  "/categories/:id/sub-categories",
+  "/categories/:id/subCategories",
   actions.eventCategories.update.subCategoy
 );
 router.patch(
-  "/sub-categories/:id",
+  "/subCategories/:id",
   middlewares.verifyUserRole(USER_ROLE.ADMIN),
   middlewares.upload_local.uploadSingle,
   actions.eventCategories.update.subCategoryImage
