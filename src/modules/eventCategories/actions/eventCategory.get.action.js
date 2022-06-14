@@ -70,7 +70,7 @@ exports.get = {
         query: {
           limit = dataConstraint.PAGINATION_LIMIT,
           currentPage = dataConstraint.CURRENT_PAGE,
-          sortBy = "createdAt",
+          sortBy = "rating",
           sortDirection = -1,
         },
       } = req;
