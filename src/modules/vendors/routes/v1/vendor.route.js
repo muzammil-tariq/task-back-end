@@ -100,6 +100,27 @@ router
     actions.vendors.get.stats
   )
   .get(
+    "/vendors/favourited",
+    middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
+    validators.common.getList,
+    middlewares.validation.request,
+    actions.vendors.favourited.getList
+  )
+  .patch(
+    "/vendors/favourited/add",
+    middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
+    validators.vendors.favourited,
+    middlewares.validation.request,
+    actions.vendors.favourited.add
+  )
+  .patch(
+    "/vendors/favourited/remove",
+    middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
+    validators.vendors.favourited,
+    middlewares.validation.request,
+    actions.vendors.favourited.remove
+  )
+  .get(
     "/vendors/:id",
     validators.common.getById,
     middlewares.validation.request,

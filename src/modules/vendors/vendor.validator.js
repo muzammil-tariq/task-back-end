@@ -383,6 +383,8 @@ const update = [
     .optional(),
 ];
 
+const favourited = [...validators.common.bodyMongoId("vendorId")];
+
 module.exports = {
   signUpPayloadValidation,
   signInPayloadValidation,
@@ -393,5 +395,6 @@ module.exports = {
   businessInfoValidation,
   addressInfoValidation,
   update,
+  favourited,
   featurePayloadValidation,
 };
