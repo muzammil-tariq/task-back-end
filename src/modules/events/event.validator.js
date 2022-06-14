@@ -22,7 +22,7 @@ let addEventPayload = [
     .withMessage(messages.invalidDataType("String"))
     .optional(),
 
-  body("location")
+  body("venueType")
     .exists()
     .withMessage(messages.notPresent)
     .notEmpty()

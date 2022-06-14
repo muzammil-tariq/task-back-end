@@ -15,7 +15,7 @@ const EventSchema = new mongoose.Schema(
       },
     ],
     description: { type: String },
-    venue: { type: String, enum: ["indoor", "outdoor", "virtual"] },
+    venueType: { type: String, enum: ["indoor", "outdoor", "virtual"] },
     venueName: { type: String },
     venueAddress: { type: String },
     numberOfPeople: { type: Number },
