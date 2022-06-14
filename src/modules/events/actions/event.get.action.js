@@ -93,19 +93,21 @@ exports.get = {
         isDeleted: false,
       };
 
-      const quote = await models.Quotes.findOne({
-        eventId: id,
-      });
-      if (isVendor && !quote) {
-        where["location"] = {
-          $near: {
-            $geometry: {
-              type: "Point",
-              coordinates: userCoordinates,
+      if (isVendor) {
+        const quote = await models.Quotes.findOne({
+          eventId: id,
+        });
+        if (!quote) {
+          where["location"] = {
+            $near: {
+              $geometry: {
+                type: "Point",
+                coordinates: userCoordinates,
+              },
+              $maxDistance: EVENT_REQUEST_DISTANCE,
             },
-            $maxDistance: EVENT_REQUEST_DISTANCE,
-          },
-        };
+          };
+        }
       } else if (isCustomer) {
         where["customerId"] = userId;
       }
