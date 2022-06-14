@@ -28,6 +28,14 @@ const constants = {
       path: /^(.+)?\/public\/?(.+)?/,
     },
     {
+      methods: ["GET"],
+      path: /^(.+)?\/categories\/?(.+)?/,
+    },
+    {
+      methods: ["GET"],
+      path: /^(.+)?\/subCategories\/?(.+)?/,
+    },
+    {
       methods: ["POST"],
       path: /^(.+)?\/paypal\/webhook\/?/,
     },
