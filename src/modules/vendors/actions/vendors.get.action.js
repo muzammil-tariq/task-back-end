@@ -1,3 +1,5 @@
+const { USER_ROLE, EVENT_REQUEST_DISTANCE } = constants;
+
 module.exports.get = {
   list: async (req, res, next) => {
     try {
@@ -38,6 +40,101 @@ module.exports.get = {
         status: 200,
         message: messages.success,
         data: vendor,
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+  stats: async (req, res, next) => {
+    try {
+      const {
+        params: { id },
+        user: {
+          _id: userId,
+          collection: { modelName },
+          location: { coordinates } = {
+            coordinates: [],
+          },
+        },
+        query: { timePeriod = 60 * 60 * 24 },
+      } = req;
+      const timestamp = Math.floor(Date.now() / 1000);
+      const isAdmin = modelName === USER_ROLE.ADMIN;
+      const vendorId = id ?? userId;
+
+      let userCoordinates = coordinates;
+      if (isAdmin) {
+        const vendor = await models.Vendors.findById(vendorId);
+        userCoordinates = vendor?.location?.coordinates;
+      }
+      const where = {
+        createdAt: { $gte: new Date((timestamp - timePeriod) * 1000) },
+        vendorId,
+      };
+      const eventWhere = {
+        createdAt: where.createdAt,
+        location: {
+          $near: {
+            $geometry: {
+              type: "Point",
+              coordinates: userCoordinates,
+            },
+            $maxDistance: EVENT_REQUEST_DISTANCE,
+          },
+        },
+      };
+      const [
+        quotes,
+        bookings,
+        upcomingBookings,
+        events,
+        upcomingEvents,
+        revenue,
+      ] = await Promise.all([
+        models.Quotes.find(where).count(),
+        models.Bookings.find({
+          ...where,
+          startTime: { $lte: new Date() },
+        }).count(),
+        models.Bookings.find({
+          ...where,
+          startTime: { $gt: new Date() },
+        }).count(),
+        models.Events.find({
+          ...eventWhere,
+          startTime: { $lte: new Date() },
+        }).count(),
+        models.Events.find({
+          ...eventWhere,
+          startTime: { $gt: new Date() },
+        }).count(),
+        models.Bookings.aggregate([
+          {
+            $match: where,
+          },
+          {
+            $group: {
+              _id: {
+                vendorId: "$vendorId",
+              },
+              totalAmount: {
+                $sum: "$amount",
+              },
+            },
+          },
+        ]),
+      ]);
+      return res.json({
+        status: 200,
+        message: messages.success,
+        data: {
+          quotes,
+          bookings,
+          upcomingBookings,
+          events,
+          upcomingEvents,
+          revenue: revenue[0].totalAmount,
+        },
       });
     } catch (err) {
       next(err);

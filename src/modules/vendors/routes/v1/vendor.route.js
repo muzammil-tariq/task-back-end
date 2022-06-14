@@ -90,6 +90,16 @@ router
     actions.vendors.featured.update
   )
   .get(
+    "/vendors/stats",
+    middlewares.verifyUserRole(USER_ROLE.VENDOR),
+    actions.vendors.get.stats
+  )
+  .get(
+    "/vendors/stats/:id?",
+    middlewares.verifyUserRole(USER_ROLE.ADMIN),
+    actions.vendors.get.stats
+  )
+  .get(
     "/vendors/:id",
     validators.common.getById,
     middlewares.validation.request,
