@@ -1,5 +1,7 @@
 const bookingCrudService = new services.CrudService(models.Bookings);
 const strongParams = [
+  "createdAt",
+  "updatedAt",
   "eventId",
   "vendorId",
   "customerId",

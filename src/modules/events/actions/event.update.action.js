@@ -1,5 +1,12 @@
 const eventCrudService = new services.CrudService(models.Events);
-const strongParams = ["status", "location", "isDeleted", "customerId"];
+const strongParams = [
+  "createdAt",
+  "updatedAt",
+  "status",
+  "location",
+  "isDeleted",
+  "customerId",
+];
 
 exports.update = async (req, res, next) => {
   try {

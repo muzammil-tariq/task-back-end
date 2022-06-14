@@ -1,6 +1,8 @@
 const VendorCrudService = new services.CrudService(models.Vendors);
 
 const strongParams = [
+  "createdAt",
+  "updatedAt",
   "password",
   "email",
   "isVerified",

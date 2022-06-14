@@ -1,5 +1,7 @@
 const quoteCrudService = new services.CrudService(models.Quotes);
 const strongParams = [
+  "createdAt",
+  "updatedAt",
   "vendorId",
   "eventId",
   "customerId",
