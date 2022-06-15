@@ -3,7 +3,6 @@ const { USER_ROLE } = constants;
 router.post(
   "/categories",
   middlewares.verifyUserRole(USER_ROLE.ADMIN),
-  middlewares.upload_local.uploadSingle,
   validators.eventCategories.addCategoryPayload,
   middlewares.validation.request,
   actions.eventCategories.add.category
@@ -11,7 +10,7 @@ router.post(
 router.post(
   "/subCategories/:id",
   middlewares.verifyUserRole(USER_ROLE.ADMIN),
-  middlewares.upload_local.uploadSingle,
+  validators.eventCategories.addSubCategoryPayload,
   middlewares.validation.request,
   actions.eventCategories.add.subcategory
 );
@@ -29,17 +28,16 @@ router.get(
 
 router.patch(
   "/categories/:id",
-  middlewares.upload_local.uploadSingle,
+  middlewares.verifyUserRole(USER_ROLE.ADMIN),
+  validators.eventCategories.updateCategoryPayload,
+  middlewares.validation.request,
   actions.eventCategories.update.category
-);
-router.patch(
-  "/categories/:id/subCategories",
-  actions.eventCategories.update.subCategoy
 );
 router.patch(
   "/subCategories/:id",
   middlewares.verifyUserRole(USER_ROLE.ADMIN),
-  middlewares.upload_local.uploadSingle,
-  actions.eventCategories.update.subCategoryImage
+  validators.eventCategories.updateSubCategoryPayload,
+  middlewares.validation.request,
+  actions.eventCategories.update.subCategory
 );
 module.exports = { prefix: "categories", router };

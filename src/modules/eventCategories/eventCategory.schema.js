@@ -2,9 +2,9 @@
 
 const EventCategoriesSchema = new mongoose.Schema(
   {
-    category: { type: String, trim: true, set: (val) => val.toLowerCase() },
+    category: { type: String, trim: true },
     description: { type: String },
-    img: { type: String },
+    image: { type: String },
     isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
