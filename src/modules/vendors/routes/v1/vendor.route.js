@@ -51,12 +51,6 @@ router.get("/vendors/featured/public", actions.vendors.featured.getList);
 // Vendor authenticated routes
 router
   .patch(
-    "/vendors/profile-photo",
-    middlewares.verifyUserRole(USER_ROLE.VENDOR),
-    middlewares.upload_local.uploadSingle,
-    actions.vendors.update.profilePhoto
-  )
-  .patch(
     "/vendors",
     middlewares.verifyUserRole(USER_ROLE.VENDOR),
     validators.vendors.update,
