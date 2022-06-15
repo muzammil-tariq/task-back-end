@@ -15,15 +15,15 @@ router.post(
   actions.services.add.subService
 );
 
-router.get("/services", actions.services.get.listCategories);
-router.get("/subServices", actions.services.get.listSubCategories);
+router.get("/services", actions.services.get.listServices);
+router.get("/subServices", actions.services.get.listSubServices);
 router.get("/services/:id", actions.services.get.serviceById);
 router.get("/subServices/:id", actions.services.get.subServiceById);
 router.get(
   "/subServices/:id/vendors",
   validators.services.getList,
   middlewares.validation.request,
-  actions.services.get.vendorsBySubCategories
+  actions.services.get.vendorsBySubServices
 );
 
 router.patch(
@@ -40,4 +40,4 @@ router.patch(
   middlewares.validation.request,
   actions.services.update.subService
 );
-module.exports = { prefix: "categories", router };
+module.exports = { prefix: "services", router };

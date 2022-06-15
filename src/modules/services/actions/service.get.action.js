@@ -1,5 +1,5 @@
 exports.get = {
-  listCategories: async (req, res, next) => {
+  listServices: async (req, res, next) => {
     try {
       const data = await models.Services.find({ isDeleted: false });
       return res.json({
@@ -11,7 +11,7 @@ exports.get = {
       next(error);
     }
   },
-  listSubCategories: async (req, res, next) => {
+  listSubServices: async (req, res, next) => {
     try {
       const {
         query: {
@@ -77,7 +77,7 @@ exports.get = {
       next(error);
     }
   },
-  vendorsBySubCategories: async (req, res, next) => {
+  vendorsBySubServices: async (req, res, next) => {
     try {
       const {
         params: { id },
@@ -89,7 +89,7 @@ exports.get = {
           sortDirection = -1,
         },
       } = req;
-      const where = { isDeleted: false, skills: id };
+      const where = { skills: id };
       if (text) where["fullName"] = { $regex: text, $options: "i" };
       const data = await models.Vendors.find(where)
         .skip(limit * currentPage - limit)

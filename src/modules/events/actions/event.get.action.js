@@ -51,7 +51,7 @@ exports.get = {
         .limit(limit)
         .sort({ [sortBy]: sortDirection })
         .populate({
-          path: "subCategories",
+          path: "subServicesId",
           populate: {
             path: "serviceId",
           },
@@ -115,7 +115,7 @@ exports.get = {
         _id: id,
         ...(!isAdmin ? where : {}),
       }).populate({
-        path: "subCategories",
+        path: "subServicesId",
         populate: {
           path: "serviceId",
         },
@@ -145,7 +145,7 @@ exports.get = {
       })
         .sort({ scheduledDate: 1 })
         .populate({
-          path: "subCategories",
+          path: "subServicesId",
           populate: {
             path: "serviceId",
           },
@@ -200,7 +200,7 @@ exports.get = {
         .limit(limit)
         .sort({ [sortBy]: sortDirection })
         .populate({
-          path: "subCategories",
+          path: "subServicesId",
           populate: {
             path: "serviceId",
           },
@@ -249,7 +249,7 @@ exports.get = {
         .limit(limit)
         .sort({ [sortBy]: sortDirection })
         .populate({
-          path: "subCategories",
+          path: "subServicesId",
           populate: {
             path: "serviceId",
           },

@@ -8,10 +8,10 @@ const EventSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Customers",
     },
-    subCategories: [
+    subServicesId: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "EventSubCategories",
+        ref: "SubServices",
       },
     ],
     description: { type: String },

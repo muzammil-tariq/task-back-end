@@ -29,11 +29,11 @@ const constants = {
     },
     {
       methods: ["GET"],
-      path: /^(.+)?\/categories\/?(.+)?/,
+      path: /^(.+)?\/services\/?(.+)?/,
     },
     {
       methods: ["GET"],
-      path: /^(.+)?\/subCategories\/?(.+)?/,
+      path: /^(.+)?\/subServices\/?(.+)?/,
     },
     {
       methods: ["POST"],

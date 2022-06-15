@@ -9,7 +9,7 @@ exports.add = {
 
       return res.json({
         status: 201,
-        message: messages.created("Categories"),
+        message: messages.created("Service"),
         data,
       });
     } catch (error) {
