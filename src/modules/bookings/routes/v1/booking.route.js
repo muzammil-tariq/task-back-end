@@ -28,19 +28,35 @@ router
     "/bookings",
     validators.bookings.getList,
     middlewares.validation.request,
-    actions.bookings.getList
+    actions.bookings.get.list
+  )
+  .get(
+    "/bookings/vendors/:id",
+    middlewares.verifyUserRole(USER_ROLE.ADMIN),
+    validators.bookings.getList,
+    validators.common.getById,
+    middlewares.validation.request,
+    actions.bookings.get.listByVendorId
+  )
+  .get(
+    "/bookings/customers/:id",
+    middlewares.verifyUserRole(USER_ROLE.ADMIN),
+    validators.bookings.getList,
+    validators.common.getById,
+    middlewares.validation.request,
+    actions.bookings.get.listByCustomerId
   )
   .get(
     "/bookings/:id",
     validators.bookings.getById,
     middlewares.validation.request,
-    actions.bookings.getById
+    actions.bookings.get.byId
   )
   .get(
     "/events/:eventId/bookings",
     validators.bookings.getEventBookings,
     middlewares.validation.request,
-    actions.bookings.getEventBookings
+    actions.bookings.get.eventBookings
   );
 
 module.exports = { prefix: "booking", router };
