@@ -6,12 +6,8 @@ exports.update = {
       const {
         body: payload,
         file,
-        user: { _id: adminId },
         params: { id },
       } = req;
-
-      const admin = await models.Admin.findById({ _id: adminId });
-      if (!admin) throw createError(404, messages.notFound("Admin"));
 
       if (file) payload["img"] = `images/${file.filename}`;
 
@@ -34,12 +30,8 @@ exports.update = {
     try {
       const {
         body,
-        user: { _id: adminId },
         params: { id },
       } = req;
-
-      const admin = await models.Admin.findById({ _id: adminId });
-      if (!admin) throw createError(404, messages.notFound("Admin"));
 
       const category = await categoryCrudService.getModelById(
         id,
@@ -68,7 +60,6 @@ exports.update = {
     try {
       const {
         body: payload,
-        user: { _id: adminId },
         params: { id },
         file,
       } = req;
