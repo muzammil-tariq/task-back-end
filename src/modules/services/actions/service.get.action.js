@@ -1,7 +1,7 @@
 exports.get = {
   listCategories: async (req, res, next) => {
     try {
-      const data = await models.EventCategories.find({ isDeleted: false });
+      const data = await models.Services.find({ isDeleted: false });
       return res.json({
         status: 200,
         message: messages.success,
@@ -17,7 +17,7 @@ exports.get = {
         query: {
           zipCode,
           text = "",
-          categoryId = "",
+          serviceId = "",
           limit = dataConstraint.PAGINATION_LIMIT,
           currentPage = dataConstraint.CURRENT_PAGE,
           sortBy = "createdAt",
@@ -27,28 +27,28 @@ exports.get = {
       const where = { isDeleted: false };
       if (zipCode) where["zipCode"] = zipCode;
       if (text) where["name"] = { $regex: text, $options: "i" };
-      if (categoryId) where["category"] = categoryId;
-      const data = await models.EventSubCategories.find(where)
+      if (serviceId) where["serviceId"] = serviceId;
+      const data = await models.SubServices.find(where)
         .skip(limit * currentPage - limit)
         .limit(limit)
         .sort({ [sortBy]: sortDirection })
-        .populate("category");
+        .populate("serviceId");
 
       return res.json({ status: 200, message: messages.success, data });
     } catch (err) {
       next(err);
     }
   },
-  subCategoryById: async (req, res, next) => {
+  subServiceById: async (req, res, next) => {
     try {
       const {
         params: { id },
       } = req;
-      const data = await models.EventSubCategories.findOne({
+      const data = await models.SubServices.findOne({
         _id: id,
         isDeleted: false,
-      }).populate("category");
-      if (!data) throw createError(404, messages.notFound("SubCategory"));
+      }).populate("serviceId");
+      if (!data) throw createError(404, messages.notFound("SubService"));
       return res.json({
         status: 200,
         message: messages.success,
@@ -58,16 +58,16 @@ exports.get = {
       next(error);
     }
   },
-  categoryById: async (req, res, next) => {
+  serviceById: async (req, res, next) => {
     try {
       const {
         params: { id },
       } = req;
-      const data = await models.EventCategories.findOne({
+      const data = await models.Services.findOne({
         _id: id,
         isDeleted: false,
       });
-      if (!data) throw createError(404, messages.notFound("Category"));
+      if (!data) throw createError(404, messages.notFound("Service"));
       return res.json({
         status: 200,
         message: messages.success,

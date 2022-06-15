@@ -1,20 +1,19 @@
 //@ts-ignore
 
-const EventSubCategoriesSchema = new mongoose.Schema(
+const SubServicesSchema = new mongoose.Schema(
   {
     name: { type: String, trim: true },
     description: {
       type: String,
       trim: true,
     },
-    category: {
+    serviceId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "EventCategories",
+      ref: "Services",
     },
-    image: { type: String },
     isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("EventSubCategories", EventSubCategoriesSchema);
+module.exports = mongoose.model("SubServices", SubServicesSchema);
