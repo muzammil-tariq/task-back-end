@@ -1,7 +1,7 @@
 const { body } = expressValidator;
 
-let addCategoryPayload = [
-  body("category")
+let addServicePayload = [
+  body("name")
     .exists()
     .withMessage(messages.notPresent)
     .notEmpty()
@@ -20,7 +20,7 @@ let addCategoryPayload = [
     .isString()
     .withMessage(messages.invalidDataType("String")),
 ];
-let addSubCategoryPayload = [
+let addSubServicePayload = [
   body("name")
     .exists()
     .withMessage(messages.notPresent)
@@ -33,36 +33,9 @@ let addSubCategoryPayload = [
     .withMessage(messages.notEmpty)
     .isString()
     .withMessage(messages.invalidDataType("String")),
-  body("image")
-    .notEmpty()
-    .withMessage(messages.notEmpty)
-    .isString()
-    .withMessage(messages.invalidDataType("String")),
-  ...validators.common.bodyMongoId("category"),
+  ...validators.common.bodyMongoId("serviceId"),
 ];
-let updateCategoryPayload = [
-  body("category")
-    .exists()
-    .withMessage(messages.notPresent)
-    .notEmpty()
-    .withMessage(messages.notEmpty)
-    .isString()
-    .withMessage(messages.invalidDataType("String"))
-    .optional(),
-  body("description")
-    .notEmpty()
-    .withMessage(messages.notEmpty)
-    .isString()
-    .withMessage(messages.invalidDataType("String"))
-    .optional(),
-  body("image")
-    .notEmpty()
-    .withMessage(messages.notEmpty)
-    .isString()
-    .withMessage(messages.invalidDataType("String"))
-    .optional(),
-];
-let updateSubCategoryPayload = [
+let updateServicePayload = [
   body("name")
     .exists()
     .withMessage(messages.notPresent)
@@ -83,7 +56,23 @@ let updateSubCategoryPayload = [
     .isString()
     .withMessage(messages.invalidDataType("String"))
     .optional(),
-  validators.common.bodyMongoId("category")[0].optional(),
+];
+let updateSubServicePayload = [
+  body("name")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .optional(),
+  body("description")
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .optional(),
+  validators.common.bodyMongoId("serviceId")[0].optional(),
 ];
 
 const getList = [
@@ -93,9 +82,9 @@ const getList = [
 ];
 
 module.exports = {
-  addCategoryPayload,
-  addSubCategoryPayload,
-  updateCategoryPayload,
-  updateSubCategoryPayload,
+  addServicePayload,
+  addSubServicePayload,
+  updateServicePayload,
+  updateSubServicePayload,
   getList,
 };

@@ -53,7 +53,7 @@ exports.get = {
         .populate({
           path: "subCategories",
           populate: {
-            path: "category",
+            path: "serviceId",
           },
         })
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
@@ -117,7 +117,7 @@ exports.get = {
       }).populate({
         path: "subCategories",
         populate: {
-          path: "category",
+          path: "serviceId",
         },
       });
       if (!data) throw createError(404, messages.notFound("Event"));
@@ -147,7 +147,7 @@ exports.get = {
         .populate({
           path: "subCategories",
           populate: {
-            path: "category",
+            path: "serviceId",
           },
         });
       return res.json({
@@ -202,7 +202,7 @@ exports.get = {
         .populate({
           path: "subCategories",
           populate: {
-            path: "category",
+            path: "serviceId",
           },
         })
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
@@ -251,7 +251,7 @@ exports.get = {
         .populate({
           path: "subCategories",
           populate: {
-            path: "category",
+            path: "serviceId",
           },
         })
         .populate("customerId", ["firstName", "lastName", "profilePhoto"]);

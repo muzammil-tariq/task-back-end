@@ -25,7 +25,7 @@ exports.featured = {
         isFeatured: true,
       }).populate({
         path: "skills",
-        populate: { path: "category", select: "category" },
+        populate: { path: "serviceId", select: "name" },
       });
       return res.status(200).json({
         status: 200,

@@ -34,7 +34,7 @@ module.exports.get = {
       } = req;
       const vendor = await models.Vendors.findById(id).populate({
         path: "skills",
-        populate: { path: "category", select: "category" },
+        populate: { path: "serviceId", select: "name" },
       });
       return res.json({
         status: 200,
