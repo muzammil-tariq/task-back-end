@@ -5,29 +5,8 @@ const subCategoryCrudService = new services.CrudService(
 exports.add = {
   category: async (req, res, next) => {
     try {
-      const {
-        body,
-        file,
-        user: { _id: adminId },
-      } = req;
-
-      if (!file) throw createError(404, messages.notFound("Image"));
-
-      const categoryPayload = {
-        category: body.category,
-        description: body.description,
-        img: `images/${file.filename}`,
-      };
-      const category = await categoryCrudService.add(categoryPayload);
-
-      const { subCategories } = body;
-
-      if (subCategories.length) {
-        const subCategoriesPayload = subCategories.map((item) => {
-          return { subCategory: item, category: category._id };
-        });
-        await models.EventSubCategories.insertMany(subCategoriesPayload);
-      }
+      const { body } = req;
+      const category = await categoryCrudService.add(body);
 
       return res.json({
         status: 201,
@@ -42,22 +21,21 @@ exports.add = {
     try {
       const {
         body: payload,
-        user: { _id: adminId },
         params: { id },
-        file,
       } = req;
 
-      if (!file) throw createError(404, messages.notFound("Image"));
       const category = await models.EventCategories.findById({ _id: id });
+      if (!category) {
+        throw createError(404, messages.notFound("Category"));
+      }
 
-      payload["image"] = `images/${file.filename}`;
       payload["category"] = id;
-      const records = await subCategoryCrudService.add(payload);
+      const data = await subCategoryCrudService.add(payload);
 
       return res.json({
         status: 200,
         message: messages.updatedModel("SubCategory"),
-        data: records,
+        data,
       });
     } catch (error) {
       next(error);
