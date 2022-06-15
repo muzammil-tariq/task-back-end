@@ -159,4 +159,109 @@ exports.get = {
       next(error);
     }
   },
+  listByVendorId: async (req, res, next) => {
+    try {
+      const {
+        query: {
+          status,
+          type,
+          text = "",
+          limit = dataConstraint.PAGINATION_LIMIT,
+          currentPage = dataConstraint.CURRENT_PAGE,
+          sortBy = "createdAt",
+          sortDirection = -1,
+        },
+        params: { id: vendorId },
+      } = req;
+
+      const vendor = await models.Vendors.findById(vendorId);
+
+      if (!vendor) {
+        throw createError(404, messages.notFound("Vendor"));
+      }
+
+      const where = {
+        location: {
+          $near: {
+            $geometry: {
+              type: "Point",
+              coordinates: vendor.location.coordinates,
+            },
+            $maxDistance: EVENT_REQUEST_DISTANCE,
+          },
+        },
+      };
+      if (status) where["status"] = status;
+      if (type) where["type"] = type;
+      if (text) where["title"] = { $regex: text, $options: "i" };
+
+      const data = await models.Events.find(where)
+        .skip(limit * currentPage - limit)
+        .limit(limit)
+        .sort({ [sortBy]: sortDirection })
+        .populate({
+          path: "subCategories",
+          populate: {
+            path: "category",
+          },
+        })
+        .populate("customerId", ["firstName", "lastName", "profilePhoto"])
+        .populate({
+          path: "quotes",
+          match: {
+            vendorId,
+          },
+        });
+      return res.json({
+        status: 200,
+        message: messages.success,
+        data,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  listByCustomerId: async (req, res, next) => {
+    try {
+      const {
+        query: {
+          status,
+          type,
+          text = "",
+          limit = dataConstraint.PAGINATION_LIMIT,
+          currentPage = dataConstraint.CURRENT_PAGE,
+          sortBy = "createdAt",
+          sortDirection = -1,
+        },
+        params: { id: customerId },
+      } = req;
+
+      const where = {
+        customerId,
+      };
+
+      if (status) where["status"] = status;
+      if (type) where["type"] = type;
+      if (text) where["title"] = { $regex: text, $options: "i" };
+
+      const data = await models.Events.find(where)
+        .skip(limit * currentPage - limit)
+        .limit(limit)
+        .sort({ [sortBy]: sortDirection })
+        .populate({
+          path: "subCategories",
+          populate: {
+            path: "category",
+          },
+        })
+        .populate("customerId", ["firstName", "lastName", "profilePhoto"]);
+      return res.json({
+        status: 200,
+        message: messages.success,
+        data,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };

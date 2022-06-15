@@ -40,6 +40,22 @@ router.get(
   actions.events.get.list
 );
 router.get(
+  "/events/vendors/:id",
+  middlewares.verifyUserRole(USER_ROLE.ADMIN),
+  validators.common.getList,
+  validators.common.getById,
+  middlewares.validation.request,
+  actions.events.get.listByVendorId
+);
+router.get(
+  "/events/customers/:id",
+  middlewares.verifyUserRole(USER_ROLE.ADMIN),
+  validators.common.getList,
+  validators.common.getById,
+  middlewares.validation.request,
+  actions.events.get.listByCustomerId
+);
+router.get(
   "/events/:id",
   validators.common.getById,
   middlewares.validation.request,
