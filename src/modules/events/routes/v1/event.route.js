@@ -61,5 +61,21 @@ router.get(
   middlewares.validation.request,
   actions.events.get.byId
 );
+router
+  .post(
+    "/events/types",
+    middlewares.verifyUserRole(USER_ROLE.ADMIN),
+    validators.events.addEventTypePayload,
+    middlewares.validation.request,
+    actions.events.add.eventType
+  )
+  .patch(
+    "/events/types/:id",
+    middlewares.verifyUserRole(USER_ROLE.ADMIN),
+    validators.events.updateEventTypePayload,
+    middlewares.validation.request,
+    actions.events.update.eventType
+  )
+  .get("/events/types", actions.events.get.eventTypes);
 
 module.exports = { prefix: "events", router };

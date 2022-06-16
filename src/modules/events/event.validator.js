@@ -12,9 +12,15 @@ let addEventPayload = [
     .exists()
     .withMessage(messages.notPresent)
     .notEmpty()
+    .withMessage(messages.notEmpty),
+  body("type.name")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
     .withMessage(messages.notEmpty)
     .isString()
     .withMessage(messages.invalidDataType("String")),
+  ...validators.common.bodyMongoId("type.eventTypeId"),
   body("description")
     .notEmpty()
     .withMessage(messages.notEmpty)
@@ -81,7 +87,45 @@ let addEventPayload = [
 
 const getList = [...validators.common.pagination, ...validators.common.sort];
 
+const addEventTypePayload = [
+  body("name")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String")),
+  body("image")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String")),
+];
+const updateEventTypePayload = [
+  ...validators.common.paramMongoId(),
+  body("name")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .optional(),
+  body("image")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .optional(),
+];
+
 module.exports = {
   addEventPayload,
   getList,
+  addEventTypePayload,
+  updateEventTypePayload,
 };

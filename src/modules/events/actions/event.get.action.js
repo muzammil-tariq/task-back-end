@@ -264,4 +264,16 @@ exports.get = {
       next(error);
     }
   },
+  eventTypes: async (req, res, next) => {
+    try {
+      const data = await models.EventTypes.find({ isDeleted: false });
+      return res.json({
+        status: 200,
+        message: messages.success,
+        data,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
