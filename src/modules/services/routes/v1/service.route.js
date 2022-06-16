@@ -20,6 +20,12 @@ router.get("/subServices", actions.services.get.listSubServices);
 router.get("/services/:id", actions.services.get.serviceById);
 router.get("/subServices/:id", actions.services.get.subServiceById);
 router.get(
+  "/services/:id/vendors",
+  validators.services.getList,
+  middlewares.validation.request,
+  actions.services.get.vendorsByServices
+);
+router.get(
   "/subServices/:id/vendors",
   validators.services.getList,
   middlewares.validation.request,

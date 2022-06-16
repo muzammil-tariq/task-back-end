@@ -82,6 +82,38 @@ exports.get = {
       next(error);
     }
   },
+  vendorsByServices: async (req, res, next) => {
+    try {
+      const {
+        params: { id },
+        query: {
+          text = "",
+          limit = dataConstraint.PAGINATION_LIMIT,
+          currentPage = dataConstraint.CURRENT_PAGE,
+          sortBy = "rating",
+          sortDirection = -1,
+        },
+      } = req;
+      const subServices = await models.SubServices.find({
+        serviceId: id,
+      }).select("_id");
+      const subServicesId = subServices.map((subService) => subService._id);
+      const where = { skills: { $in: subServicesId } };
+      const data = await models.Vendors.find(where)
+        .skip(limit * currentPage - limit)
+        .limit(limit)
+        .sort({
+          [sortBy]: sortDirection,
+        });
+      return res.json({
+        status: 200,
+        message: messages.success,
+        data,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
   vendorsBySubServices: async (req, res, next) => {
     try {
       const {
