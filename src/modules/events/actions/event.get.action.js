@@ -19,6 +19,7 @@ exports.get = {
           location: { coordinates: userCoordinates } = {
             coordinates: [],
           },
+          skills = [],
         },
       } = req;
 
@@ -38,6 +39,9 @@ exports.get = {
             },
             $maxDistance: EVENT_REQUEST_DISTANCE,
           },
+        };
+        where["skills"] = {
+          $in: skills,
         };
       } else if (isCustomer) {
         where["customerId"] = userId;
@@ -83,6 +87,7 @@ exports.get = {
           location: { coordinates: userCoordinates } = {
             coordinates: [],
           },
+          skills = [],
         },
       } = req;
 
@@ -107,6 +112,9 @@ exports.get = {
               },
               $maxDistance: EVENT_REQUEST_DISTANCE,
             },
+          };
+          where["skills"] = {
+            $in: skills,
           };
         }
       } else if (isCustomer) {
@@ -193,6 +201,9 @@ exports.get = {
             },
             $maxDistance: EVENT_REQUEST_DISTANCE,
           },
+        },
+        skills: {
+          $in: vendor.skills,
         },
       };
       if (status) where["status"] = status;

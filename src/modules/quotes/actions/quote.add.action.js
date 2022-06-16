@@ -9,6 +9,7 @@ exports.add = {
           _id: vendorId,
           paypalMerchantId,
           location: { coordinates },
+          skills = [],
         },
         params: { id: eventId },
         body: payload,
@@ -32,6 +33,9 @@ exports.add = {
               coordinates,
             },
             $maxDistance: EVENT_REQUEST_DISTANCE,
+          },
+          skills: {
+            $in: skills,
           },
         },
       });
