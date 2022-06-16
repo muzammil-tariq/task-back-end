@@ -1,7 +1,12 @@
 exports.get = {
   listServices: async (req, res, next) => {
     try {
-      const data = await models.Services.find({ isDeleted: false });
+      const {
+        query: { text = "" },
+      } = req;
+      const where = { isDeleted: false };
+      if (text) where["name"] = { $regex: text, $options: "i" };
+      const data = await models.Services.find(where);
       return res.json({
         status: 200,
         message: messages.success,
