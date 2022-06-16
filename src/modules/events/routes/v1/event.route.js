@@ -55,12 +55,6 @@ router.get(
   middlewares.validation.request,
   actions.events.get.listByCustomerId
 );
-router.get(
-  "/events/:id",
-  validators.common.getById,
-  middlewares.validation.request,
-  actions.events.get.byId
-);
 router
   .post(
     "/events/types",
@@ -78,4 +72,10 @@ router
   )
   .get("/events/types", actions.events.get.eventTypes);
 
+router.get(
+  "/events/:id",
+  validators.common.getById,
+  middlewares.validation.request,
+  actions.events.get.byId
+);
 module.exports = { prefix: "events", router };
