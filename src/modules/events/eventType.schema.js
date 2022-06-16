@@ -1,9 +1,11 @@
 const EventTypesSchema = new mongoose.Schema(
   {
     name: { type: String, trim: true },
-    image: {
-      type: String,
-    },
+    images: [
+      {
+        type: String,
+      },
+    ],
     isDeleted: { type: Boolean, default: false },
   },
   {

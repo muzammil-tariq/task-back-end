@@ -50,6 +50,7 @@ exports.get = {
         .skip(limit * currentPage - limit)
         .limit(limit)
         .sort({ [sortBy]: sortDirection })
+        .populate("type.eventTypeId", ["name", "images"])
         .populate({
           path: "subServicesId",
           populate: {
@@ -114,12 +115,14 @@ exports.get = {
       const data = await models.Events.findOne({
         _id: id,
         ...(!isAdmin ? where : {}),
-      }).populate({
-        path: "subServicesId",
-        populate: {
-          path: "serviceId",
-        },
-      });
+      })
+        .populate("type.eventTypeId", ["name", "images"])
+        .populate({
+          path: "subServicesId",
+          populate: {
+            path: "serviceId",
+          },
+        });
       if (!data) throw createError(404, messages.notFound("Event"));
       return res.json({
         status: 200,
@@ -144,6 +147,7 @@ exports.get = {
         },
       })
         .sort({ scheduledDate: 1 })
+        .populate("type.eventTypeId", ["name", "images"])
         .populate({
           path: "subServicesId",
           populate: {
@@ -199,6 +203,7 @@ exports.get = {
         .skip(limit * currentPage - limit)
         .limit(limit)
         .sort({ [sortBy]: sortDirection })
+        .populate("type.eventTypeId", ["name", "images"])
         .populate({
           path: "subServicesId",
           populate: {
@@ -248,6 +253,7 @@ exports.get = {
         .skip(limit * currentPage - limit)
         .limit(limit)
         .sort({ [sortBy]: sortDirection })
+        .populate("type.eventTypeId", ["name", "images"])
         .populate({
           path: "subServicesId",
           populate: {

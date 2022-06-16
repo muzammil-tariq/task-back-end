@@ -95,13 +95,13 @@ const addEventTypePayload = [
     .withMessage(messages.notEmpty)
     .isString()
     .withMessage(messages.invalidDataType("String")),
-  body("image")
+  body("images")
     .exists()
     .withMessage(messages.notPresent)
     .notEmpty()
     .withMessage(messages.notEmpty)
-    .isString()
-    .withMessage(messages.invalidDataType("String")),
+    .isArray()
+    .withMessage(messages.invalidDataType("Array")),
 ];
 const updateEventTypePayload = [
   ...validators.common.paramMongoId(),
@@ -113,13 +113,13 @@ const updateEventTypePayload = [
     .isString()
     .withMessage(messages.invalidDataType("String"))
     .optional(),
-  body("image")
+  body("images")
     .exists()
     .withMessage(messages.notPresent)
     .notEmpty()
     .withMessage(messages.notEmpty)
-    .isString()
-    .withMessage(messages.invalidDataType("String"))
+    .isArray()
+    .withMessage(messages.invalidDataType("Array"))
     .optional(),
 ];
 
