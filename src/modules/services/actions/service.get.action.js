@@ -94,9 +94,11 @@ exports.get = {
           sortDirection = -1,
         },
       } = req;
-      const subServices = await models.SubServices.find({
-        serviceId: id,
-      }).select("_id");
+      const serviceWhere = { serviceId: id };
+      if (text) serviceWhere["name"] = { $regex: text, $options: "i" };
+      const subServices = await models.SubServices.find(serviceWhere).select(
+        "_id"
+      );
       const servicesId = subServices.map((subService) => subService._id);
       const where = { skills: { $in: servicesId } };
       const data = await models.Vendors.find(where)
