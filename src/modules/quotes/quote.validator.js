@@ -9,6 +9,14 @@ const add = [
     .isString()
     .withMessage(messages.invalidDataType("String")),
   body("price").exists().notEmpty().withMessage(messages.notEmpty),
+  body("servicesId")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isArray()
+    .withMessage(messages.invalidDataType("Array")),
+  ...validators.common.bodyMongoId("servicesId.*"),
 ];
 const getListPayload = [
   body("eventId")

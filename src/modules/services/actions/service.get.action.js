@@ -97,8 +97,8 @@ exports.get = {
       const subServices = await models.SubServices.find({
         serviceId: id,
       }).select("_id");
-      const subServicesId = subServices.map((subService) => subService._id);
-      const where = { skills: { $in: subServicesId } };
+      const servicesId = subServices.map((subService) => subService._id);
+      const where = { skills: { $in: servicesId } };
       const data = await models.Vendors.find(where)
         .skip(limit * currentPage - limit)
         .limit(limit)

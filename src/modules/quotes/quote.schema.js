@@ -5,6 +5,12 @@ const QuotesSchema = new mongoose.Schema(
       trim: true,
     },
     price: Number,
+    servicesId: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "SubServices",
+      },
+    ],
     eventId: { type: mongoose.Types.ObjectId, ref: "Events" },
     vendorId: {
       type: mongoose.Types.ObjectId,
