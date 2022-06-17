@@ -9,7 +9,13 @@ exports.delete = async (req, res, next) => {
 
     const booking = await bookingCrudService.findOneAndUpdate(
       { isDeleted: true },
-      { _id: id, customerId },
+      {
+        _id: id,
+        customerId,
+        status: {
+          $nin: ["completedByCustomer", "completedByVendor", "completed"],
+        },
+      },
       messages.notFound("Booking")
     );
 
