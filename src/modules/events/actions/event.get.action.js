@@ -281,6 +281,50 @@ exports.get = {
       next(error);
     }
   },
+  completed: async (req, res, next) => {
+    try {
+      const {
+        query: {
+          limit = dataConstraint.PAGINATION_LIMIT,
+          currentPage = dataConstraint.CURRENT_PAGE,
+          sortBy = "createdAt",
+          sortDirection = -1,
+        },
+        user: { _id: userId },
+      } = req;
+
+      const bookings = await models.Bookings.find({
+        status: "completed",
+        or: [
+          {
+            vendorId: userId,
+          },
+          {
+            customerId: userId,
+          },
+        ],
+      })
+        .select("eventId")
+        .skip(limit * currentPage - limit)
+        .limit(limit)
+        .sort({
+          [sortBy]: sortDirection,
+        });
+      const eventIds = bookings.map((booking) => booking.eventId);
+      const data = await models.Events.find({
+        _id: {
+          $in: eventIds,
+        },
+      });
+      return res.json({
+        status: 200,
+        message: messages.success,
+        data,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
   eventTypes: async (req, res, next) => {
     try {
       const data = await models.EventTypes.find({ isDeleted: false });

@@ -40,6 +40,12 @@ router.get(
   actions.events.get.list
 );
 router.get(
+  "/events/completed",
+  validators.common.getList,
+  middlewares.validation.request,
+  actions.events.get.completed
+);
+router.get(
   "/events/vendors/:id",
   middlewares.verifyUserRole(USER_ROLE.ADMIN),
   validators.common.getList,
