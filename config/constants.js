@@ -36,6 +36,10 @@ const constants = {
       path: /^(.+)?\/subServices\/?(.+)?/,
     },
     {
+      methods: ["GET"],
+      path: /^(.+)?\/events\/types\/?(.+)?/,
+    },
+    {
       methods: ["POST"],
       path: /^(.+)?\/paypal\/webhook\/?/,
     },
