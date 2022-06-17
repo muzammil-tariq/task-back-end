@@ -57,6 +57,14 @@ let addEventPayload = [
     .withMessage(messages.notEmpty)
     .isInt()
     .withMessage(messages.invalidDataType("Integer")),
+  body("servicesId")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isArray()
+    .withMessage(messages.invalidDataType("Array")),
+  ...validators.common.bodyMongoId("servicesId.*"),
   body("startTime")
     .exists()
     .withMessage(messages.notPresent)
