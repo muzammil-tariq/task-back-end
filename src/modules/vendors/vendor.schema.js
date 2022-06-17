@@ -80,6 +80,11 @@ const VendorSchema = new mongoose.Schema(
     felonyDescription: { type: String },
     minorityEligibility: { type: [String] },
     businessAddress: { type: String },
+    gallery: [
+      {
+        type: String,
+      },
+    ],
     location: {
       type: {
         type: String,
