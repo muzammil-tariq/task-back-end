@@ -56,7 +56,7 @@ exports.get = {
         .sort({ [sortBy]: sortDirection })
         .populate("type.eventTypeId", ["name", "images"])
         .populate({
-          path: "subServicesId",
+          path: "servicesId",
           populate: {
             path: "serviceId",
           },
@@ -126,7 +126,7 @@ exports.get = {
       })
         .populate("type.eventTypeId", ["name", "images"])
         .populate({
-          path: "subServicesId",
+          path: "servicesId",
           populate: {
             path: "serviceId",
           },
@@ -157,7 +157,7 @@ exports.get = {
         .sort({ scheduledDate: 1 })
         .populate("type.eventTypeId", ["name", "images"])
         .populate({
-          path: "subServicesId",
+          path: "servicesId",
           populate: {
             path: "serviceId",
           },
@@ -216,7 +216,7 @@ exports.get = {
         .sort({ [sortBy]: sortDirection })
         .populate("type.eventTypeId", ["name", "images"])
         .populate({
-          path: "subServicesId",
+          path: "servicesId",
           populate: {
             path: "serviceId",
           },
@@ -266,7 +266,7 @@ exports.get = {
         .sort({ [sortBy]: sortDirection })
         .populate("type.eventTypeId", ["name", "images"])
         .populate({
-          path: "subServicesId",
+          path: "servicesId",
           populate: {
             path: "serviceId",
           },

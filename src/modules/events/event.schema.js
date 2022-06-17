@@ -11,7 +11,7 @@ const EventSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Customers",
     },
-    subServicesId: [
+    servicesId: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "SubServices",
