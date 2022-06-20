@@ -8,6 +8,8 @@ exports.getUserProfile = async (req, res, next) => {
       data = await models.Customers.findOne({ _id: user.id });
     } else if (modelName == USER_ROLE.VENDOR) {
       data = await models.Vendors.findOne({ _id: user.id });
+    } else if (modelName == USER_ROLE.ADMIN) {
+      data = await models.Admin.findOne({ _id: user.id });
     } else {
       throw createError(400, messages.invalidModel);
     }
