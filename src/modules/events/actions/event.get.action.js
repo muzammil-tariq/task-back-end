@@ -30,6 +30,9 @@ exports.get = {
         isDeleted: false,
       };
 
+      if (!isAdmin) {
+        where["isDeleted"] = false;
+      }
       if (isVendor) {
         where["location"] = {
           $near: {
@@ -48,9 +51,9 @@ exports.get = {
       }
       if (status) where["status"] = status;
       if (type) where["type"] = type;
-      if (text) where["title"] = { $regex: text, $options: "i" };
+      if (text) where["$or"] = search(text);
 
-      const data = await models.Events.find(!isAdmin ? where : {})
+      const data = await models.Events.find(where)
         .skip(limit * currentPage - limit)
         .limit(limit)
         .sort({ [sortBy]: sortDirection })
@@ -208,7 +211,7 @@ exports.get = {
       };
       if (status) where["status"] = status;
       if (type) where["type"] = type;
-      if (text) where["title"] = { $regex: text, $options: "i" };
+      if (text) where["$or"] = search(text);
 
       const data = await models.Events.find(where)
         .skip(limit * currentPage - limit)
@@ -258,7 +261,7 @@ exports.get = {
 
       if (status) where["status"] = status;
       if (type) where["type"] = type;
-      if (text) where["title"] = { $regex: text, $options: "i" };
+      if (text) where["$or"] = search(text);
 
       const data = await models.Events.find(where)
         .skip(limit * currentPage - limit)
@@ -338,3 +341,20 @@ exports.get = {
     }
   },
 };
+
+function search(text) {
+  return [
+    {
+      title: {
+        $regex: text,
+        $options: "i",
+      },
+    },
+    {
+      description: {
+        $regex: text,
+        $options: "i",
+      },
+    },
+  ];
+}
