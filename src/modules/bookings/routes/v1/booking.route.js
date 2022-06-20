@@ -22,8 +22,8 @@ router
     middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
     actions.bookings.delete
   )
-  .patch("/bookings/conclude", actions.bookings.conclude)
-  .patch("/bookings/dispute", actions.bookings.dispute)
+  .patch("/bookings/:id/conclude", actions.bookings.conclude)
+  .patch("/bookings/:id/dispute", actions.bookings.dispute)
   .get(
     "/bookings",
     validators.bookings.getList,

@@ -5,14 +5,14 @@ const completedByOneSide = ["completedByCustomer", "completedByVendor"];
 exports.conclude = async (req, res, next) => {
   try {
     const {
-      body: payload,
+      params: { id: bookingId },
       user: {
         _id: userId,
         collection: { modelName },
       },
     } = req;
     const booking = await models.Bookings.findOne({
-      _id: payload.bookingId,
+      _id: bookingId,
       $or: [
         {
           customerId: userId,
@@ -24,7 +24,7 @@ exports.conclude = async (req, res, next) => {
     });
     const data = await models.Bookings.findOneAndUpdate(
       {
-        _id: payload.bookingId,
+        _id: bookingId,
       },
       {
         status: completedByOneSide.includes(booking.status)

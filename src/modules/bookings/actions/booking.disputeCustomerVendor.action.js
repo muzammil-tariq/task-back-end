@@ -1,9 +1,12 @@
 exports.dispute = async (req, res, next) => {
   try {
-    const { user, body: payload } = req;
+    const {
+      user,
+      params: { id: bookingId },
+    } = req;
     const modelName = user.collection.modelName;
     let data = await models.Bookings.findOneAndUpdate(
-      { _id: payload.bookingId },
+      { _id: bookingId },
       {
         disputeFilerId: user._id,
         disputeFilerModel: modelName,
