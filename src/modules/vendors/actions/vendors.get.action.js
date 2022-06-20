@@ -9,9 +9,12 @@ module.exports.get = {
           currentPage = dataConstraint.CURRENT_PAGE,
           sortBy = "createdAt",
           sortDirection = -1,
+          text = "",
         },
       } = req;
-      const vendors = await models.Vendors.find({})
+      const where = {};
+      if (text) where["$or"] = search(text);
+      const vendors = await models.Vendors.find(where)
         .skip(limit * currentPage - limit)
         .limit(limit)
         .sort({
@@ -150,3 +153,26 @@ module.exports.get = {
     }
   },
 };
+
+function search(text) {
+  return [
+    {
+      fullName: {
+        $regex: text,
+        $options: "i",
+      },
+    },
+    {
+      email: {
+        $regex: text,
+        $options: "i",
+      },
+    },
+    {
+      phone: {
+        $regex: text,
+        $options: "i",
+      },
+    },
+  ];
+}
