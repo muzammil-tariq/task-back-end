@@ -6,7 +6,7 @@ exports.get = {
       } = req;
       const where = { isDeleted: false };
       if (text) where["name"] = { $regex: text, $options: "i" };
-      const data = await models.Services.find(where);
+      const data = await models.Services.find(where).populate("subServices");
       return res.json({
         status: 200,
         message: messages.success,

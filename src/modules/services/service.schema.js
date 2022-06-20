@@ -7,7 +7,13 @@ const ServicesSchema = new mongoose.Schema(
     image: { type: String },
     isDeleted: { type: Boolean, default: false },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+ServicesSchema.virtual("subServices", {
+  ref: "SubServices",
+  localField: "_id",
+  foreignField: "serviceId",
+});
 
 module.exports = mongoose.model("Services", ServicesSchema);
