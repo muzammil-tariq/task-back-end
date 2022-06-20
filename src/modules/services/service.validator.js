@@ -33,7 +33,7 @@ let addSubServicePayload = [
     .withMessage(messages.notEmpty)
     .isString()
     .withMessage(messages.invalidDataType("String")),
-  ...validators.common.paramMongoId("serviceId"),
+  ...validators.common.paramMongoId(),
 ];
 let updateServicePayload = [
   body("name")
