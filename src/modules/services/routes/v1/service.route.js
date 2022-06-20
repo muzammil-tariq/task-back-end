@@ -15,7 +15,11 @@ router.post(
   actions.services.add.subService
 );
 
-router.get("/services", actions.services.get.listServices);
+router.get(
+  "/services",
+  validators.common.getList,
+  actions.services.get.listServices
+);
 router.get("/subServices", actions.services.get.listSubServices);
 router.get("/services/:id", actions.services.get.serviceById);
 router.get("/subServices/:id", actions.services.get.subServiceById);
