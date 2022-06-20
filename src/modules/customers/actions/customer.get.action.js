@@ -7,9 +7,12 @@ module.exports.get = {
           currentPage = dataConstraint.CURRENT_PAGE,
           sortBy = "createdAt",
           sortDirection = -1,
+          text = "",
         },
       } = req;
-      const customers = await models.Customers.find({})
+      const where = {};
+      if (text) where["$or"] = search(text);
+      const customers = await models.Customers.find(where)
         .skip(limit * currentPage - limit)
         .limit(limit)
         .sort({
@@ -40,3 +43,32 @@ module.exports.get = {
     }
   },
 };
+
+function search(text) {
+  return [
+    {
+      firstName: {
+        $regex: text,
+        $options: "i",
+      },
+    },
+    {
+      lastName: {
+        $regex: text,
+        $options: "i",
+      },
+    },
+    {
+      email: {
+        $regex: text,
+        $options: "i",
+      },
+    },
+    {
+      phone: {
+        $regex: text,
+        $options: "i",
+      },
+    },
+  ];
+}
