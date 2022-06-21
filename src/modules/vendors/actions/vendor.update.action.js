@@ -8,6 +8,7 @@ const strongParams = [
   "username",
   "email",
   "rating",
+  "paypalMerchantId",
 ];
 
 exports.update = {
