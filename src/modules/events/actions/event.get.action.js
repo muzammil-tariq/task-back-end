@@ -213,7 +213,7 @@ exports.get = {
             $maxDistance: EVENT_REQUEST_DISTANCE,
           },
         },
-        skills: {
+        servicesId: {
           $in: vendor.skills,
         },
       };
