@@ -54,7 +54,6 @@ const CustomerSchema = new mongoose.Schema(
       country: { type: String, trim: true },
       postalCode: { type: String, trim: true },
     },
-    country: { type: String },
     languages: [
       {
         type: String,

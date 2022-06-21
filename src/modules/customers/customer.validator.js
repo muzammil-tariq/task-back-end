@@ -44,13 +44,6 @@ let signUpPayloadValidation = [
     .withMessage(messages.invalidLength)
     .isString()
     .withMessage(messages.invalidDataType("String")),
-  body("country")
-    .exists()
-    .withMessage(messages.notPresent)
-    .notEmpty()
-    .withMessage(messages.notEmpty)
-    .isString()
-    .withMessage(messages.invalidDataType("String")),
   body("location").notEmpty().withMessage(messages.notEmpty),
   body("location.coordinates")
     .exists()
