@@ -150,7 +150,7 @@ exports.get = {
         user: { _id: customerId },
       } = req;
 
-      const data = await models.Events.findOne({
+      const data = await models.Events.find({
         customerId,
         isDeleted: false,
         startTime: {
@@ -168,7 +168,7 @@ exports.get = {
       return res.json({
         status: 200,
         message: messages.success,
-        data: data,
+        data,
       });
     } catch (error) {
       next(error);
