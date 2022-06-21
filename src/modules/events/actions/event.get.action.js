@@ -43,7 +43,7 @@ exports.get = {
             $maxDistance: EVENT_REQUEST_DISTANCE,
           },
         };
-        where["skills"] = {
+        where["servicesId"] = {
           $in: skills,
         };
       } else if (isCustomer) {
