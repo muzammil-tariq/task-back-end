@@ -10,14 +10,16 @@ let add = [
     .notEmpty()
     .withMessage(messages.notEmpty)
     .isString()
-    .withMessage(messages.invalidDataType("String")),
+    .withMessage(messages.invalidDataType("String"))
+    .optional(),
   body("description")
     .exists()
     .withMessage(messages.notPresent)
     .notEmpty()
     .withMessage(messages.notEmpty)
     .isString()
-    .withMessage(messages.invalidDataType("String")),
+    .withMessage(messages.invalidDataType("String"))
+    .optional(),
   body("venue")
     .exists()
     .withMessage(messages.notPresent)
@@ -40,7 +42,8 @@ let add = [
     .notEmpty()
     .withMessage(messages.notEmpty)
     .isString()
-    .withMessage(messages.invalidDataType("String")),
+    .withMessage(messages.invalidDataType("String"))
+    .optional(),
   body("startTime")
     .exists()
     .withMessage(messages.notPresent)
@@ -53,7 +56,8 @@ let add = [
         throw new Error(messages.pastDate);
       }
       return true;
-    }),
+    })
+    .optional(),
   body("amount")
     .exists()
     .withMessage(messages.notPresent)
