@@ -4,7 +4,7 @@ const { USER_ROLE } = constants;
 const VendorSchema = new mongoose.Schema(
   {
     fullName: { type: String, trim: true },
-    email: { type: String, trim: true },
+    email: { type: String, trim: true, lowercase: true },
     password: {
       type: String,
       set: (val) => utils.hash.makeHashValue(val),
