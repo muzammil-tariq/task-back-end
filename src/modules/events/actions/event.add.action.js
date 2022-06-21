@@ -6,10 +6,9 @@ exports.add = {
     try {
       const {
         body: payload,
-        user: { _id: customerId, location },
+        user: { _id: customerId },
       } = req;
 
-      payload["location"] = location;
       payload["customerId"] = customerId;
 
       const event = await EventCrudService.add(payload);
