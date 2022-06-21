@@ -8,7 +8,7 @@ const QuotesSchema = new mongoose.Schema(
     servicesId: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "SubServices",
+        ref: "Services",
       },
     ],
     eventId: { type: mongoose.Types.ObjectId, ref: "Events" },

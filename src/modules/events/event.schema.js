@@ -11,10 +11,13 @@ const EventSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Customers",
     },
-    servicesId: [
+    services: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "SubServices",
+        serviceId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Services",
+        },
+        info: Object,
       },
     ],
     description: { type: String },

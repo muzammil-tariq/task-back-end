@@ -105,7 +105,7 @@ const VendorSchema = new mongoose.Schema(
     skills: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "SubServices",
+        ref: "Services",
       },
     ],
     rating: {
