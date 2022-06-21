@@ -33,10 +33,6 @@ const constants = {
     },
     {
       methods: ["GET"],
-      path: /^(.+)?\/subServices\/?(.+)?/,
-    },
-    {
-      methods: ["GET"],
       path: /^(.+)?\/events\/types\/?(.+)?/,
     },
     {

@@ -35,7 +35,7 @@ exports.add = {
             $maxDistance: EVENT_REQUEST_DISTANCE,
           },
         },
-        servicesId: {
+        "services.serviceId": {
           $in: skills,
         },
       });

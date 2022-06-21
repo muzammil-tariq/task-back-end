@@ -43,7 +43,7 @@ exports.get = {
             $maxDistance: EVENT_REQUEST_DISTANCE,
           },
         };
-        where["servicesId"] = {
+        where["services.serviceId"] = {
           $in: skills,
         };
       } else if (isCustomer) {
@@ -58,12 +58,7 @@ exports.get = {
         .limit(limit)
         .sort({ [sortBy]: sortDirection })
         .populate("type.eventTypeId", ["name", "images"])
-        .populate({
-          path: "servicesId",
-          populate: {
-            path: "serviceId",
-          },
-        })
+        .populate("services.serviceId")
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
         .populate({
           path: "quotes",
@@ -116,7 +111,7 @@ exports.get = {
               $maxDistance: EVENT_REQUEST_DISTANCE,
             },
           };
-          where["servicesId"] = {
+          where["services.serviceId"] = {
             $in: skills,
           };
         }
@@ -128,12 +123,7 @@ exports.get = {
         ...(!isAdmin ? where : {}),
       })
         .populate("type.eventTypeId", ["name", "images"])
-        .populate({
-          path: "servicesId",
-          populate: {
-            path: "serviceId",
-          },
-        });
+        .populate("services.serviceId");
       if (!data) throw createError(404, messages.notFound("Event"));
       return res.json({
         status: 200,
@@ -167,12 +157,7 @@ exports.get = {
         .limit(limit)
         .sort({ [sortBy]: sortDirection })
         .populate("type.eventTypeId", ["name", "images"])
-        .populate({
-          path: "servicesId",
-          populate: {
-            path: "serviceId",
-          },
-        });
+        .populate("services.serviceId");
       return res.json({
         status: 200,
         message: messages.success,
@@ -213,7 +198,7 @@ exports.get = {
             $maxDistance: EVENT_REQUEST_DISTANCE,
           },
         },
-        servicesId: {
+        "services.serviceId": {
           $in: vendor.skills,
         },
       };
@@ -226,12 +211,7 @@ exports.get = {
         .limit(limit)
         .sort({ [sortBy]: sortDirection })
         .populate("type.eventTypeId", ["name", "images"])
-        .populate({
-          path: "servicesId",
-          populate: {
-            path: "serviceId",
-          },
-        })
+        .populate("services.serviceId")
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
         .populate({
           path: "quotes",
@@ -276,12 +256,7 @@ exports.get = {
         .limit(limit)
         .sort({ [sortBy]: sortDirection })
         .populate("type.eventTypeId", ["name", "images"])
-        .populate({
-          path: "servicesId",
-          populate: {
-            path: "serviceId",
-          },
-        })
+        .populate("services.serviceId")
         .populate("customerId", ["firstName", "lastName", "profilePhoto"]);
       return res.json({
         status: 200,
