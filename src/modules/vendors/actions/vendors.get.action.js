@@ -145,7 +145,7 @@ module.exports.get = {
           upcomingBookings,
           events,
           upcomingEvents,
-          revenue: revenue[0].totalAmount,
+          revenue: revenue[0]?.totalAmount,
         },
       });
     } catch (err) {

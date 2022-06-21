@@ -43,7 +43,7 @@ module.exports.get = {
           events,
           vendors,
           customers,
-          revenue: revenue[0].totalAmount,
+          revenue: revenue[0]?.totalAmount,
         },
       });
     } catch (err) {
