@@ -311,13 +311,6 @@ let addressInfoValidation = [
     .withMessage(messages.notEmpty)
     .isString()
     .withMessage(messages.invalidDataType("String")),
-  body("country")
-    .exists()
-    .withMessage(messages.notPresent)
-    .notEmpty()
-    .withMessage(messages.notEmpty)
-    .isString()
-    .withMessage(messages.invalidDataType("String")),
 ];
 
 const update = [

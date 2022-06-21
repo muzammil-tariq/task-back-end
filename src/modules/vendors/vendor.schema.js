@@ -102,7 +102,6 @@ const VendorSchema = new mongoose.Schema(
       country: { type: String, trim: true },
       postalCode: { type: String, trim: true },
     },
-    country: { type: String },
     skills: [
       {
         type: mongoose.Schema.Types.ObjectId,
