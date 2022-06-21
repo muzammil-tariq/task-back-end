@@ -147,6 +147,12 @@ exports.get = {
   upcomingEvent: async (req, res, next) => {
     try {
       const {
+        query: {
+          limit = dataConstraint.PAGINATION_LIMIT,
+          currentPage = dataConstraint.CURRENT_PAGE,
+          sortBy = "scheduledDate",
+          sortDirection = 1,
+        },
         user: { _id: customerId },
       } = req;
 
@@ -157,7 +163,9 @@ exports.get = {
           $gte: moment().toISOString(),
         },
       })
-        .sort({ scheduledDate: 1 })
+        .skip(limit * currentPage - limit)
+        .limit(limit)
+        .sort({ [sortBy]: sortDirection })
         .populate("type.eventTypeId", ["name", "images"])
         .populate({
           path: "servicesId",

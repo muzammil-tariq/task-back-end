@@ -31,6 +31,8 @@ router.delete(
 router.get(
   "/events/upcomingEvent",
   middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
+  validators.common.getList,
+  middlewares.validation.request,
   actions.events.get.upcomingEvent
 );
 router.get(
