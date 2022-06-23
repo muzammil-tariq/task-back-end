@@ -67,6 +67,7 @@ module.exports = {
   eventAlreadyExists: "Event already scheduled at this time. Try another slot!",
   eventNotForThisCustomer: "Event does not belong to this customer",
   pastDate: "Past date is not allowed!",
+  futureDate: "Future date is not allowed!",
   timeLessThanOrEqual: (date) => `Should not be less than or equal to ${date}`,
   forbidden: "You do not have enough privileges to perform this action",
   paypalNotConnected: "Paypal is not connected",
