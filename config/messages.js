@@ -64,6 +64,7 @@ module.exports = {
   alreadyExists: (attr) => {
     return `${attr} already exists!`;
   },
+  usernameAlreadyInUse: "This username is already in use",
   eventAlreadyExists: "Event already scheduled at this time. Try another slot!",
   eventNotForThisCustomer: "Event does not belong to this customer",
   pastDate: "Past date is not allowed!",
