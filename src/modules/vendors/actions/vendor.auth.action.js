@@ -7,11 +7,15 @@ exports.auth = {
     const { body: payload } = req;
     try {
       payload["informationSteps"] = "business";
-      const data = await authService.signUp(payload);
+      const vendor = await authService.signUp(payload);
+      libs.emailService.vendorSignup({
+        user: vendor,
+        verificationCode: vendor.verificationCode,
+      });
       return res.json({
         status: 200,
-        message: messages.created("Vendors"),
-        data: data,
+        message: messages.created("Vendor"),
+        data: vendor,
       });
     } catch (err) {
       next(err);

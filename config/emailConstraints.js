@@ -7,12 +7,21 @@ module.exports = {
     SUBJECT: "ThePartyStarter Verification Code",
     html: "Your Verification code is " + verificationCode,
   }),
+  forgotPassword: ({ user, verificationCode }) => ({
+    to: user.email,
+    from: EMAIL_FROM,
+    SUBJECT: "ThePartyStarter password reset request",
+    html: `We received a password reset request for your account. 
+    If you initiated this request then enter this code to continue to process. If this request was not initiated by you then you can ignore this message.
+    
+    Your Verification code is ${verificationCode}`,
+  }),
   signUp: ({ user, verificationCode }) => ({
     to: user.email,
     from: EMAIL_FROM,
-    SUBJECT: `Hello ${user.name}, Welcome to ThePartyStarter!`,
+    SUBJECT: `Hello ${user.fullName}, Welcome to ThePartyStarter!`,
     html: `
-    Hello ${user.name},
+    Hello ${user.fullName},
     You want the best of the best, we get that. As you are already off to a great start by signing up 
     with ThePartyStarter. We make your celebrations as simple as ABC – by helping you organize, 
     review, and securely book amazing event vendors. All to make your dream event a reality!🎉
@@ -45,7 +54,7 @@ module.exports = {
     from: EMAIL_FROM,
     SUBJECT: `ThePartyStarter | Congratulations on your upcomming event!`,
     html: `
-    Hi ${user.name},
+    Hi ${user.fullName},
     Excited about your upcoming event? We are too!🎉
     This is why we will leave no stone unturned to make this event a success. Our top 
     vendors are reviewing your event details and will send a quote within 24 hours.🎉
@@ -66,7 +75,7 @@ module.exports = {
     from: EMAIL_FROM,
     SUBJECT: `ThePartyStarter | Your Event is BOOKED!`,
     html: `
-    Hi ${user.name},
+    Hi ${user.fullName},
     Congratulations on booking your event on ThePartyStarter!🎉
     To remind you again – and we love doing so because we take immense pride in it – our 
     PartyPooper Policy™ guarantees vetted vendors, full refunds for no-shows, and ultra-secure 
@@ -89,7 +98,7 @@ module.exports = {
     from: EMAIL_FROM,
     SUBJECT: `ThePartyStarter | Thank you for signing up🎉`,
     html: `
-    Hi ${user.name},
+    Hi ${user.fullName},
     Do you also want to get more client inquiries to grow your business? Get excited, you have 
     signed up on the right platform.🎉
     We are eager to have you on board and showcase your talent to potential clients. But before 
@@ -109,12 +118,12 @@ module.exports = {
 
     Best of luck. We are eager to kick off our potential partnership with you. 🎉`,
   }),
-  vendorApproval: ({ user, verificationCode }) => ({
+  vendorApproval: ({ user }) => ({
     to: user.email,
     from: EMAIL_FROM,
     SUBJECT: `Welcome to the ThePartyStarter Vendor’s Club! 🎉`,
     html: `
-    Hi ${user.name},
+    Hi ${user.fullName},
     Congratulations, you did it! Your business has been approved as a ThePartyStarter vendor.🎉
     What's next?🎉
     1: Keep your portfolio up to date with your latest photos and videos.🎉
@@ -135,13 +144,13 @@ module.exports = {
     ALL THE BEST!🎉
     Cheers 🎉`,
   }),
-  vendorReceivingQuotes: ({ user }) => ({
+  vendorReceivingQuotes: ({ user, link }) => ({
     to: user.email,
     from: EMAIL_FROM,
     SUBJECT: `ThePartyStarter | You have a new quote!`,
     html: `
-    Hi ${user.name},
-    You just received a request for a quote from a party planner! Check out the quote HERE [link] 
+    Hi ${user.fullName},
+    You just received a request for a quote from a party planner! Check out the quote HERE ${link} 
     and make sure you review the details to submit your best offer. As a reminder, please keep all 
     communication and payments on ThePartyStarter.com’s website. We aren't responsible for
     payment transactions or agreements off ThePartyStarter.com since we don’t troubleshoot offline
@@ -154,7 +163,7 @@ module.exports = {
     from: EMAIL_FROM,
     SUBJECT: `ThePartyStarter | You are booked!✅`,
     html: `
-    Hi ${user.name},
+    Hi ${user.fullName},
     Congratulations, another exciting opportunity has come knocking at your door! You are booked 
     for an upcoming event🎉. View the event details below.🎉 Now, it’s time to make memories – not 
     just for your clients but for yourself as well.🎉

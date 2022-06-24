@@ -29,7 +29,10 @@ class SettingsService {
         user._id,
         messages.userNotFound
       );
-      libs.email_service.sendEmail(updatedUser);
+      libs.emailService.verificationCode({
+        user: updatedUser,
+        verificationCode: updatedUser.verificationCode,
+      });
       return user;
     }
   }
