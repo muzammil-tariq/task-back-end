@@ -39,10 +39,64 @@ module.exports.get = {
         path: "skills",
         populate: { path: "serviceId", select: "name" },
       });
+      const reviews = await models.Reviews.aggregate([
+        {
+          $match: {
+            vendorId: mongoose.Types.ObjectId(id),
+          },
+        },
+        {
+          $group: {
+            _id: {
+              vendorId: "$vendorId",
+            },
+            rating: {
+              $sum: "$rating",
+            },
+            count: {
+              $sum: 1,
+            },
+          },
+        },
+      ]);
+      vendor._doc["rating"] = (
+        reviews[0]?.rating ? reviews[0]?.rating / reviews[0]?.count : 0
+      ).toFixed(2);
       return res.json({
         status: 200,
         message: messages.success,
         data: vendor,
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+  reviews: async (req, res, next) => {
+    try {
+      const {
+        query: {
+          limit = dataConstraint.PAGINATION_LIMIT,
+          currentPage = dataConstraint.CURRENT_PAGE,
+          sortBy = "createdAt",
+          sortDirection = -1,
+        },
+        params: { id },
+        user,
+      } = req;
+      const isAdmin = user?.collection?.modelName === USER_ROLE.ADMIN;
+      const data = await models.Reviews.find({
+        vendorId: id,
+        ...(isAdmin ? {} : { isDeleted: false }),
+      })
+        .skip(limit * currentPage - limit)
+        .limit(limit)
+        .sort({
+          [sortBy]: sortDirection,
+        });
+      return res.json({
+        status: 200,
+        message: messages.success,
+        data,
       });
     } catch (err) {
       next(err);
@@ -65,7 +119,7 @@ module.exports.get = {
         },
       } = req;
       const isAdmin = modelName === USER_ROLE.ADMIN;
-      const vendorId = id ?? userId;
+      const vendorId = mongoose.Types.ObjectId(id) ?? userId;
 
       let userCoordinates = coordinates;
       if (isAdmin) {
