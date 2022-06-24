@@ -29,13 +29,18 @@ const BookingsSchema = new mongoose.Schema(
       type: String,
       enum: [
         "pending",
-        "paid",
+        "inProgress",
         "disputed",
         "completedByCustomer",
         "completedByVendor",
         "cancelled",
         "completed",
       ],
+      default: "pending",
+    },
+    paymentStatus: {
+      type: String,
+      enum: ["pending", "paid", "returned"],
       default: "pending",
     },
     disputeFilerId: {

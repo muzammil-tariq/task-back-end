@@ -40,10 +40,7 @@ exports.info = {
       } = req;
 
       if (!informationSteps || informationSteps !== "address")
-        throw createError(
-          400,
-          messages.missingInfoStep("Business Information")
-        );
+        throw createError(400, messages.missingStep("Business Information"));
 
       payload["informationSteps"] = "completed";
       const data = await VendorCrudService.update(

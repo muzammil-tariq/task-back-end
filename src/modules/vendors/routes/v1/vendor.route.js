@@ -121,6 +121,13 @@ router
     actions.vendors.get.byId
   )
   .get(
+    "/vendors/:id/reviews",
+    validators.common.getList,
+    validators.common.getById,
+    middlewares.validation.request,
+    actions.vendors.get.reviews
+  )
+  .get(
     "/vendors",
     middlewares.verifyUserRole(USER_ROLE.ADMIN),
     validators.common.getList,

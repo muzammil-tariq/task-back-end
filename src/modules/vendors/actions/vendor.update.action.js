@@ -1,4 +1,3 @@
-const VendorCrudService = new services.CrudService(models.Vendors);
 const settingsService = new services.SettingsService(models.Vendors);
 
 const strongParams = [
@@ -9,6 +8,7 @@ const strongParams = [
   "email",
   "rating",
   "paypalMerchantId",
+  "isFeatured",
 ];
 
 exports.update = {
@@ -27,9 +27,6 @@ exports.update = {
           password: payload.existingPassword,
           user,
         });
-      }
-      if (payload.email) {
-        await settingsService.changeEmail({ email: payload.email, user });
       }
       return res.json({
         status: 200,

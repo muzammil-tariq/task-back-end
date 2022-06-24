@@ -37,12 +37,26 @@ let signUpPayloadValidation = [
     .withMessage(messages.notEmpty)
     .isDate()
     .withMessage(messages.invalidDataType("Date"))
+    .custom((value) => {
+      const date = new Date();
+      if (new Date(value) > date) {
+        throw new Error(messages.futureDate);
+      }
+      return true;
+    })
     .optional(),
   body("birthDate")
     .notEmpty()
     .withMessage(messages.notEmpty)
     .isDate()
     .withMessage(messages.invalidDataType("Date"))
+    .custom((value) => {
+      const date = new Date();
+      if (new Date(value) > date) {
+        throw new Error(messages.futureDate);
+      }
+      return true;
+    })
     .optional(),
   body("businessName")
     .notEmpty()

@@ -6,12 +6,18 @@ exports.auth = {
   signUp: async (req, res, next) => {
     const { body: payload } = req;
     try {
-      let Customers = await authService.signUp(payload);
+      const userNameInUse = await models.Customers.findOne({
+        username: payload.username,
+      });
+      if (userNameInUse) {
+        throw createError(400, messages.usernameAlreadyInUse);
+      }
+      const customers = await authService.signUp(payload);
 
       return res.json({
         status: 200,
         message: messages.created("Customers"),
-        data: Customers,
+        data: customers,
       });
     } catch (err) {
       next(err);
