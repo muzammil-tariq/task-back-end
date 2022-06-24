@@ -17,6 +17,13 @@ router
     middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
     actions.bookings.update
   )
+  .post(
+    "/bookings/:id/review",
+    middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
+    validators.bookings.addReview,
+    middlewares.validation.request,
+    actions.bookings.addReview
+  )
   .delete(
     "/bookings/:id",
     middlewares.verifyUserRole(USER_ROLE.CUSTOMER),

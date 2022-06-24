@@ -157,7 +157,8 @@ module.exports = {
         paypalOrderId: orderId,
       },
       {
-        status: "paid",
+        paymentStatus: "paid",
+        status: "inProgress",
       }
     );
   },

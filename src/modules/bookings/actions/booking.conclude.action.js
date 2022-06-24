@@ -11,6 +11,8 @@ exports.conclude = async (req, res, next) => {
         collection: { modelName },
       },
     } = req;
+    const isCustomer = modelName === USER_ROLE.CUSTOMER;
+    const isVendor = modelName === USER_ROLE.VENDOR;
     const booking = await models.Bookings.findOne({
       _id: bookingId,
       $or: [
@@ -22,6 +24,22 @@ exports.conclude = async (req, res, next) => {
         },
       ],
     });
+    if (!booking) {
+      throw createError(404, messages.notFound("Booking"));
+    }
+    if (booking.paymentStatus !== "paid") {
+      throw createError(400, messages.bookingNotCompleted);
+    }
+    if (
+      (booking.status === "completedByCustomer" && isCustomer) ||
+      (booking.status === "completedByVendor" && isVendor)
+    ) {
+      return res.json({
+        status: 200,
+        message: messages.success,
+        data: booking,
+      });
+    }
     const data = await models.Bookings.findOneAndUpdate(
       {
         _id: bookingId,
@@ -29,7 +47,7 @@ exports.conclude = async (req, res, next) => {
       {
         status: completedByOneSide.includes(booking.status)
           ? "completed"
-          : modelName == USER_ROLE.CUSTOMER
+          : isCustomer
           ? "completedByCustomer"
           : "completedByVendor",
       },

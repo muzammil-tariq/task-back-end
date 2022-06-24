@@ -58,12 +58,15 @@ module.exports = {
   missingAttr: (attr) => {
     return `${attr} is missing in the payload`;
   },
-  missingInfoStep: (step) => {
+  missingStep: (step) => {
     return `Complete ${step} first to continue!`;
   },
   alreadyExists: (attr) => {
     return `${attr} already exists!`;
   },
+  bookingNotCompleted: "Can't mark booking as completed yet",
+  cantAddReview:
+    "You can't add review without paying the amount and completing the booking",
   usernameAlreadyInUse: "This username is already in use",
   eventAlreadyExists: "Event already scheduled at this time. Try another slot!",
   eventNotForThisCustomer: "Event does not belong to this customer",

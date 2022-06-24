@@ -13,10 +13,7 @@ module.exports.createOrder = async (req, res, next) => {
     if (!booking) {
       throw createError(404, messages.notFound("Booking"));
     }
-    if (
-      booking.paypalOrderId &&
-      (booking.status === "paid" || booking.status === "completed")
-    ) {
+    if (booking.paypalOrderId && booking.paymentStatus === "paid") {
       throw createError(400, messages.alreadyPaid);
     }
     if (booking.paypalOrderId && booking.status === "pending") {

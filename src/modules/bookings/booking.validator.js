@@ -77,8 +77,32 @@ const getList = [...common.pagination, ...common.sort];
 const getById = [...common.paramMongoId()];
 const getEventBookings = [...common.paramMongoId("eventId")];
 
+let addReview = [
+  body("description")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String")),
+  body("rating")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isNumeric()
+    .withMessage(messages.invalidDataType("Number"))
+    .custom((value) => {
+      if (Number(value) < 1 || Number(value) > 5) {
+        throw new Error(messages.invalidPayload);
+      }
+      return true;
+    }),
+];
+
 module.exports = {
   add,
+  addReview,
   getList,
   getById,
   getEventBookings,
