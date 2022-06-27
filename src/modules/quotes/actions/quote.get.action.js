@@ -113,7 +113,16 @@ module.exports = {
         .populate({
           path: "vendorId",
           select: ["fullName", "profilePhoto", "skills", "rating"],
-          populate: { path: "skills" },
+          populate: [
+            { path: "skills" },
+            {
+              path: "threads",
+              select: "_id",
+              match: {
+                "users.0.user": userId,
+              },
+            },
+          ],
         })
 
         .select(
