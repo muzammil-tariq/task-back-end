@@ -147,6 +147,7 @@ VendorSchema.virtual("threads", {
   ref: "Thread",
   localField: "_id",
   foreignField: "users.1.user",
+  justOne: true,
 });
 
 VendorSchema.statics.excludedAttributes = [

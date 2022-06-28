@@ -59,10 +59,11 @@ module.exports = {
           select: ["fullName", "profilePhoto", "skills", "rating"],
           populate: {
             path: "threads",
-            select: "_id",
             match: {
               "users.0.user": userId,
             },
+            select:
+              "-users._id -users.isDeleted -users.showNotifications -users.unreadCount -users.userModel -createdAt -updatedAt",
           },
         })
         .select(
@@ -117,10 +118,11 @@ module.exports = {
             { path: "skills" },
             {
               path: "threads",
-              select: "_id",
               match: {
                 "users.0.user": userId,
               },
+              select:
+                "-users._id -users.isDeleted -users.showNotifications -users.unreadCount -users.userModel -createdAt -updatedAt",
             },
           ],
         })
