@@ -39,29 +39,6 @@ module.exports.get = {
         path: "skills",
         populate: { path: "serviceId", select: "name" },
       });
-      const reviews = await models.Reviews.aggregate([
-        {
-          $match: {
-            vendorId: mongoose.Types.ObjectId(id),
-          },
-        },
-        {
-          $group: {
-            _id: {
-              vendorId: "$vendorId",
-            },
-            rating: {
-              $sum: "$rating",
-            },
-            count: {
-              $sum: 1,
-            },
-          },
-        },
-      ]);
-      vendor._doc["rating"] = (
-        reviews[0]?.rating ? reviews[0]?.rating / reviews[0]?.count : 0
-      ).toFixed(2);
       return res.json({
         status: 200,
         message: messages.success,
