@@ -84,7 +84,8 @@ let addReview = [
     .notEmpty()
     .withMessage(messages.notEmpty)
     .isString()
-    .withMessage(messages.invalidDataType("String")),
+    .withMessage(messages.invalidDataType("String"))
+    .optional(),
   body("rating")
     .exists()
     .withMessage(messages.notPresent)
