@@ -69,7 +69,7 @@ const CustomerSchema = new mongoose.Schema(
       type: String,
     },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
 CustomerSchema.index({ location: "2dsphere" });
@@ -90,6 +90,10 @@ CustomerSchema.methods.getJWTToken = function () {
     expiresIn: process.env.TOKEN_EXPIRY,
   });
 };
+
+CustomerSchema.virtual("fullName").get(function () {
+  return this.firstName + " " + this.lastName;
+});
 
 CustomerSchema.statics.excludedAttributes = [
   "password",

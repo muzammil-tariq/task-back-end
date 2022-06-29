@@ -1,5 +1,7 @@
 const EventCrudService = new services.CrudService(models.Events);
 const EventTypeCrudService = new services.CrudService(models.EventTypes);
+const { EVENT_REQUEST_DISTANCE } = constants;
+const { VENDOR_DASHBOARD_URL, VENDOR_DASHBOARD_EVENT_PAGE } = process.env;
 
 exports.add = {
   event: async (req, res, next) => {
@@ -7,12 +9,17 @@ exports.add = {
       const {
         body: payload,
         user: { _id: customerId },
+        user,
       } = req;
 
       payload["customerId"] = customerId;
 
       const event = await EventCrudService.add(payload);
 
+      libs.emailService.customerEventSubmittal({
+        user,
+      });
+      sendMailToVendors({ event });
       return res.json({
         status: 201,
         message: messages.created("Event"),
@@ -38,3 +45,29 @@ exports.add = {
     }
   },
 };
+
+async function sendMailToVendors({ event }) {
+  const where = {
+    location: {
+      $near: {
+        $geometry: {
+          type: "Point",
+          coordinates: event.location.coordinates,
+        },
+        $maxDistance: EVENT_REQUEST_DISTANCE,
+      },
+    },
+    skills: {
+      $in: event.services.map((item) => item.serviceId),
+    },
+  };
+  const vendors = await models.Vendors.find(where);
+  const link =
+    VENDOR_DASHBOARD_URL + VENDOR_DASHBOARD_EVENT_PAGE + "/" + event._id;
+  for (let vendor of vendors) {
+    libs.emailService.vendorReceivingQuotes({
+      user: vendor,
+      link,
+    });
+  }
+}

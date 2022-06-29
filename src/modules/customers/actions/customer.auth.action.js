@@ -1,6 +1,4 @@
 const authService = new services.AuthService(models.Customers);
-const crudService = new services.CrudService(models.Customers);
-const { FRONTEND_URL } = process.env;
 
 exports.auth = {
   signUp: async (req, res, next) => {
@@ -12,12 +10,15 @@ exports.auth = {
       if (userNameInUse) {
         throw createError(400, messages.usernameAlreadyInUse);
       }
-      const customers = await authService.signUp(payload);
-
+      const customer = await authService.signUp(payload);
+      libs.emailService.customerSignup({
+        user: customer,
+        verificationCode: customer.verificationCode,
+      });
       return res.json({
         status: 200,
-        message: messages.created("Customers"),
-        data: customers,
+        message: messages.created("Customer"),
+        data: customer,
       });
     } catch (err) {
       next(err);
