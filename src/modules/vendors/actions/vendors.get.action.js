@@ -99,9 +99,11 @@ module.exports.get = {
       const vendorId = mongoose.Types.ObjectId(id) ?? userId;
 
       let userCoordinates = coordinates;
+      let userSkills = skills;
       if (isAdmin) {
         const vendor = await models.Vendors.findById(vendorId);
         userCoordinates = vendor?.location?.coordinates;
+        userSkills = vendor?.skills;
       }
 
       const startDate = new Date((timestamp - timePeriod) * 1000);
@@ -124,6 +126,9 @@ module.exports.get = {
             },
             $maxDistance: EVENT_REQUEST_DISTANCE,
           },
+        },
+        "services.serviceId": {
+          $in: skills,
         },
       };
       const [
