@@ -28,6 +28,7 @@ module.exports.addReview = async (req, res, next) => {
       vendorId: booking.vendorId,
       customerId,
     });
+    updateVendorRating({ vendorId: booking.vendorId });
     return res.json({
       status: 200,
       message: messages.success,
@@ -37,3 +38,30 @@ module.exports.addReview = async (req, res, next) => {
     next(err);
   }
 };
+
+async function updateVendorRating({ vendorId }) {
+  const reviews = await models.Reviews.aggregate([
+    {
+      $match: {
+        vendorId: mongoose.Types.ObjectId(vendorId),
+      },
+    },
+    {
+      $group: {
+        _id: {
+          vendorId: "$vendorId",
+        },
+        rating: {
+          $sum: "$rating",
+        },
+        count: {
+          $sum: 1,
+        },
+      },
+    },
+  ]);
+  const rating = (
+    reviews[0]?.rating ? reviews[0]?.rating / reviews[0]?.count : 0
+  ).toFixed(2);
+  await models.Vendors.updateOne({ _id: vendorId }, { rating });
+}
