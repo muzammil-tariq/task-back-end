@@ -129,7 +129,6 @@ router
   )
   .get(
     "/vendors",
-    middlewares.verifyUserRole(USER_ROLE.ADMIN),
     validators.common.getList,
     middlewares.validation.request,
     actions.vendors.get.list
