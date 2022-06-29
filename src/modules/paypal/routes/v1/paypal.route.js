@@ -13,7 +13,7 @@ router
   )
   .get(
     "/paypal/order/:orderId",
-    middlewares.verifyUserRole(USER_ROLE.VENDOR),
+    middlewares.verifyUserRole(USER_ROLE.ADMIN),
     actions.paypal.get.orderDetails
   )
   .post("/paypal/webhook", actions.paypal.webhook);
