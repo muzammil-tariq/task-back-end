@@ -89,6 +89,7 @@ module.exports.get = {
           location: { coordinates } = {
             coordinates: [],
           },
+          skills,
         },
         query: {
           timestamp = Math.floor(Date.now() / 1000),
@@ -128,7 +129,7 @@ module.exports.get = {
           },
         },
         "services.serviceId": {
-          $in: skills,
+          $in: userSkills,
         },
       };
       const [
