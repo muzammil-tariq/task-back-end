@@ -39,6 +39,10 @@ module.exports.get = {
         path: "skills",
         populate: { path: "serviceId", select: "name" },
       });
+      const reviewsCount = await models.Reviews.countDocuments({
+        vendorId: vendor._id,
+      });
+      vendor._doc["reviewsCount"] = reviewsCount;
       return res.json({
         status: 200,
         message: messages.success,
