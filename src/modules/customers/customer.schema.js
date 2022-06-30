@@ -68,6 +68,10 @@ const CustomerSchema = new mongoose.Schema(
     websiteUrl: {
       type: String,
     },
+    gender: {
+      type: String,
+      enum: ["male", "female", "non-binary", "prefer-not-to-answer"],
+    },
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
