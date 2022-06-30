@@ -55,6 +55,7 @@ router
   .patch(
     "/customers",
     middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
+    middlewares.removeNullishValuesFromBody,
     validators.customers.update,
     middlewares.validation.request,
     actions.customers.update.profile

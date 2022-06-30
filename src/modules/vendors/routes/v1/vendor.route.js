@@ -53,6 +53,7 @@ router
   .patch(
     "/vendors",
     middlewares.verifyUserRole(USER_ROLE.VENDOR),
+    middlewares.removeNullishValuesFromBody,
     validators.vendors.update,
     middlewares.validation.request,
     actions.vendors.update.profile
