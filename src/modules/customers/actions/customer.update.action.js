@@ -18,8 +18,8 @@ module.exports.update = {
       );
       if (payload.password && payload.existingPassword) {
         await settingsService.changePassword({
-          existingPassword: payload.password,
-          password: payload.existingPassword,
+          existingPassword: payload.existingPassword,
+          password: payload.password,
           user,
         });
       }
