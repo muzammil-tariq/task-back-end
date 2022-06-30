@@ -9,6 +9,7 @@ app.use(cors());
 
 global.messages = require("../config/messages");
 global.dataConstraint = require("../config/data_constraints");
+global.emailConstraints = require("../config/emailConstraints");
 
 /**
  * Add module globally icludes action and routes

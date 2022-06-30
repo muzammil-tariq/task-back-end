@@ -14,7 +14,6 @@ class AuthService {
     }
     payload["verificationCode"] = utils.random.generateRandomNumber();
     user = await this.model.create(payload);
-    await libs.email_service.sendEmail(user);
     var token = user.getJWTToken();
     user._doc["token"] = token;
     return user;
@@ -70,7 +69,10 @@ class AuthService {
       throw createError(400, messages.alreadyVerified);
     }
 
-    await libs.email_service.sendEmail(user);
+    await libs.emailService.verificationCode({
+      user,
+      verificationCode: user.verificationCode,
+    });
 
     return user;
   }
@@ -85,7 +87,10 @@ class AuthService {
       user._id,
       messages.userNotFound
     );
-    await libs.email_service.sendEmail(user);
+    await libs.emailService.forgotPassword({
+      user,
+      verificationCode: user.verificationCode,
+    });
   }
   async resetPassword({ email, password, verificationCode }) {
     const user = await this.verifyEmail({

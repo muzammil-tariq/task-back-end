@@ -5,12 +5,17 @@ exports.create = {
       const {
         body: payload,
         user: { _id: userId },
+        user,
       } = req;
 
       const event = await models.Events.findOne({
         _id: payload["eventId"],
         customerId: userId,
       });
+      const vendor = await models.Vendors.findById(payload.vendorId);
+      if (!vendor) {
+        throw createError(404, messages.notFound("Vendor"));
+      }
       if (!event) {
         throw createError(404, messages.notFound("Event"));
       }
@@ -19,6 +24,13 @@ exports.create = {
       const booking = await BookingCrudService.add(
         _.omit(payload, ["paypalOrderId", "status"])
       );
+
+      libs.emailService.customerBooking({
+        user,
+      });
+      libs.emailService.vendorBooking({
+        user: vendor,
+      });
 
       return res.status(201).json({
         status: 201,
