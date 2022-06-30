@@ -36,11 +36,20 @@ class CrudService {
     return model;
   }
 
-  async getList(attr) {
-    if (attr) {
-      return await this.model.find({}).sort(attr);
-    }
-    return await this.model.find({});
+  getList({
+    where = {},
+    limit = dataConstraint.PAGINATION_LIMIT,
+    currentPage = dataConstraint.CURRENT_PAGE,
+    sortBy = "createdAt",
+    sortDirection = -1,
+  }) {
+    return this.model
+      .find(where)
+      .skip(limit * currentPage - limit)
+      .limit(limit)
+      .sort({
+        [sortBy]: sortDirection,
+      });
   }
   async deleteById(id) {
     return await this.model.findByIdAndDelete(id);
