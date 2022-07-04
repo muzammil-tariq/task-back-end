@@ -29,7 +29,15 @@ const constants = {
     },
     {
       methods: ["GET"],
-      path: /^(.+)?\/services\/?(.+)?/,
+      path: /^(.+)?\/services\/?$/,
+    },
+    {
+      methods: ["GET"],
+      path: /^(.+)?\/services\/([0-9a-fA-F]{24})\/?$/,
+    },
+    {
+      methods: ["GET"],
+      path: /^(.+)?\/services\/([0-9a-fA-F]{24})\/vendors\/?$/,
     },
     {
       methods: ["GET"],
