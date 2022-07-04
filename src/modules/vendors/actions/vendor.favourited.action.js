@@ -23,7 +23,7 @@ module.exports.favourited = {
       return res.json({
         status: 200,
         message: messages.success,
-        data,
+        data: data?.vendorIds,
       });
     } catch (err) {
       next(err);
