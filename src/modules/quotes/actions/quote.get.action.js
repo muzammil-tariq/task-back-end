@@ -126,7 +126,6 @@ module.exports = {
             },
           ],
         })
-
         .select(
           !isAdmin
             ? isVendor
@@ -136,10 +135,45 @@ module.exports = {
                 }
             : {}
         );
+      let jsonData = null;
+      if (data) {
+        const pastEvents = await models.Bookings.aggregate([
+          {
+            $match: {
+              vendorId: mongoose.Types.ObjectId(data.vendorId._id),
+              status: {
+                $in: ["completedByCustomer", "completedByVendor", "completed"],
+              },
+            },
+          },
+          {
+            $group: {
+              _id: {
+                eventId: "$eventId",
+              },
+              count: {
+                $sum: 1,
+              },
+            },
+          },
+          {
+            $group: {
+              _id: null,
+              count: {
+                $sum: "$count",
+              },
+            },
+          },
+        ]);
+        jsonData = data.toJSON();
+        jsonData.vendorId.pastEventsCount = pastEvents[0]
+          ? pastEvents[0].count
+          : 0;
+      }
       return res.json({
         status: 200,
         message: messages.success,
-        data,
+        data: jsonData,
       });
     } catch (err) {
       next(err);
