@@ -54,10 +54,10 @@ exports.get = {
         },
       } = req;
       const serviceWhere = { _id: id };
-      if (text) serviceWhere["name"] = { $regex: text, $options: "i" };
       const services = await models.Services.find(serviceWhere).select("_id");
-      const servicesId = services.map((subService) => subService._id);
+      const servicesId = services.map((service) => service._id);
       const where = { skills: { $in: servicesId } };
+      if (text) where["fullName"] = { $regex: text, $options: "i" };
       const data = await models.Vendors.find(where)
         .skip(limit * currentPage - limit)
         .limit(limit)
@@ -68,6 +68,46 @@ exports.get = {
         status: 200,
         message: messages.success,
         data,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  favouritedVendorsByServices: async (req, res, next) => {
+    try {
+      const {
+        params: { id },
+        query: {
+          text = "",
+          limit = dataConstraint.PAGINATION_LIMIT,
+          currentPage = dataConstraint.CURRENT_PAGE,
+          sortBy = "rating",
+          sortDirection = -1,
+        },
+        user: { _id: customerId },
+      } = req;
+      const serviceWhere = { _id: id };
+      const services = await models.Services.find(serviceWhere).select("_id");
+      const servicesId = services.map((service) => service._id);
+      const vendorWhere = {
+        skills: { $in: servicesId },
+      };
+      if (text) vendorWhere["fullName"] = { $regex: text, $options: "i" };
+      const data = await models.FavouritedVendors.findOne({
+        customerId,
+      }).populate({
+        path: "vendorIds",
+        match: vendorWhere,
+        options: {
+          skip: limit * currentPage - limit,
+          limit,
+          sort: { [sortBy]: sortDirection },
+        },
+      });
+      return res.json({
+        status: 200,
+        message: messages.success,
+        data: data?.vendorIds,
       });
     } catch (error) {
       next(error);

@@ -19,6 +19,12 @@ router.get(
   middlewares.validation.request,
   actions.services.get.vendorsByServices
 );
+router.get(
+  "/services/:id/vendors/favourited",
+  validators.services.getList,
+  middlewares.validation.request,
+  actions.services.get.favouritedVendorsByServices
+);
 
 router.patch(
   "/services/:id",
