@@ -145,7 +145,7 @@ let signInPayloadValidation = [
     .notEmpty()
     .withMessage(messages.notEmpty)
     .isLength({ min: dataConstraint.PASSWORD_MIN_LENGTH })
-    .withMessage(messages.invalidLength)
+    .withMessage(messages.invalidLogin)
     .isString()
     .withMessage(messages.invalidDataType("String")),
 ];
