@@ -393,8 +393,8 @@ const update = [
     .withMessage(messages.notPresent)
     .notEmpty()
     .withMessage(messages.notEmpty)
-    .isInt()
-    .withMessage(messages.invalidDataType("Integer"))
+    .isArray()
+    .withMessage(messages.invalidDataType("Array"))
     .optional(),
   body("birthDate")
     .notEmpty()
