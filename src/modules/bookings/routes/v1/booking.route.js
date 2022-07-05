@@ -62,6 +62,7 @@ router
   .get(
     "/events/:eventId/bookings",
     validators.bookings.getEventBookings,
+    validators.bookings.getList,
     middlewares.validation.request,
     actions.bookings.get.eventBookings
   );
