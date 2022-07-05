@@ -38,6 +38,7 @@ router
   .get(
     "/events/:eventId/quotes",
     validators.quotes.getEventQuotes,
+    validators.common.getList,
     middlewares.validation.request,
     actions.quotes.getEventQuotes
   );
