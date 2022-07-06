@@ -18,7 +18,8 @@ let addServicePayload = [
     .notEmpty()
     .withMessage(messages.notEmpty)
     .isString()
-    .withMessage(messages.invalidDataType("String")),
+    .withMessage(messages.invalidDataType("String"))
+    .optional(),
 ];
 let updateServicePayload = [
   body("name")
