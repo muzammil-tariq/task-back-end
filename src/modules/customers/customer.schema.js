@@ -99,13 +99,27 @@ CustomerSchema.virtual("fullName").get(function () {
   return this.firstName + " " + this.lastName;
 });
 
+// attributes to be excluded from the response
 CustomerSchema.statics.privateAttributes = [
   "password",
   "accessToken",
   "verificationCode",
-  "isVerified",
   "codeExpiryTime",
   "uId",
+  "provider",
+];
+
+CustomerSchema.statics.createForbiddenAttributes = [
+  ..._.without(CustomerSchema.statics.privateAttributes, "password"),
+  "createdAt",
+  "updatedAt",
+  "isVerified",
+];
+CustomerSchema.statics.updateForbiddenAttributes = [
+  ...CustomerSchema.statics.createForbiddenAttributes,
+  "password",
+  "username",
+  "email",
 ];
 
 CustomerSchema.methods.toJSON = function () {
