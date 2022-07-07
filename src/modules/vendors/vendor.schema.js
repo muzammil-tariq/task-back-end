@@ -1,6 +1,13 @@
 //@ts-ignore
 const { USER_ROLE } = constants;
 
+const status = {
+  PENDING: "pending",
+  REJECTED: "rejected",
+  APPROVED: "approved",
+  SUSPENDED: "suspended",
+};
+
 const VendorSchema = new mongoose.Schema(
   {
     fullName: { type: String, trim: true },
@@ -23,9 +30,10 @@ const VendorSchema = new mongoose.Schema(
       default: 0,
     },
     codeExpiryTime: { type: Date },
-    isApproved: {
-      type: Boolean,
-      default: false,
+    status: {
+      type: String,
+      enum: Object.values(status),
+      default: status.PENDING,
     },
     isVerified: {
       type: Boolean,
@@ -155,15 +163,34 @@ VendorSchema.virtual("threads", {
   justOne: true,
 });
 
+// attributes to be excluded from the response
 VendorSchema.statics.privateAttributes = [
   "password",
   "accessToken",
   "verificationCode",
-  "isVerified",
-  "isApproved",
   "codeExpiryTime",
   "uId",
+  "provider",
 ];
+
+VendorSchema.statics.createForbiddenAttributes = [
+  ..._.without(VendorSchema.statics.privateAttributes, "password"),
+  "createdAt",
+  "updatedAt",
+  "rating",
+  "paypalMerchantId",
+  "isFeatured",
+  "isVerified",
+  "status",
+];
+VendorSchema.statics.updateForbiddenAttributes = [
+  ...VendorSchema.statics.createForbiddenAttributes,
+  "password",
+  "username",
+  "email",
+];
+
+VendorSchema.statics.status = status;
 
 VendorSchema.methods.toJSON = function () {
   const obj = this.toObject();

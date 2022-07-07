@@ -418,6 +418,16 @@ const update = [
 
 const favourited = [...validators.common.bodyMongoId("vendorId")];
 
+let updateAccountStatus = [
+  param("id").exists(),
+  body("status")
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .isIn(Object.values(models.Vendors.status)),
+];
+
 module.exports = {
   signUpPayloadValidation,
   signInPayloadValidation,
@@ -430,4 +440,5 @@ module.exports = {
   update,
   favourited,
   featurePayloadValidation,
+  updateAccountStatus,
 };

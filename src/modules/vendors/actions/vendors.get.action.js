@@ -10,9 +10,13 @@ module.exports.get = {
           sortBy = "createdAt",
           sortDirection = -1,
           text = "",
+          status = "",
         },
+        user,
       } = req;
+      const isAdmin = user?.collection?.modelName === USER_ROLE.ADMIN;
       const where = {};
+      if (isAdmin && status) where["status"] = status;
       if (text) where["$or"] = search(text);
       const vendors = await models.Vendors.find(where)
         .skip(limit * currentPage - limit)

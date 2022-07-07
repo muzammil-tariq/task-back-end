@@ -10,7 +10,9 @@ exports.auth = {
       if (userNameInUse) {
         throw createError(400, messages.usernameAlreadyInUse);
       }
-      const customer = await authService.signUp(payload);
+      const customer = await authService.signUp(
+        _.omit(payload, models.Customers.createForbiddenAttributes)
+      );
       libs.emailService.customerSignup({
         user: customer,
         verificationCode: customer.verificationCode,
