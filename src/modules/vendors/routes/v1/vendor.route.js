@@ -59,6 +59,14 @@ router
     actions.vendors.update.profile
   )
   .patch(
+    "/vendors/status/:id",
+    middlewares.verifyUserRole(USER_ROLE.ADMIN),
+    middlewares.removeNullishValuesFromBody,
+    validators.vendors.updateAccountStatus,
+    middlewares.validation.request,
+    actions.vendors.update.status
+  )
+  .patch(
     "/vendors/business-info",
     middlewares.verifyUserRole(USER_ROLE.VENDOR),
     validators.vendors.businessInfoValidation,

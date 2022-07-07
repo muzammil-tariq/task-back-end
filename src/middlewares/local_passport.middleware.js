@@ -7,8 +7,8 @@ exports.authenticate = async (req, res, next) => {
       if (err || !user) {
         next(createError(401, info.message));
       } else {
+        // Vendor account status checks
         if (user.collection.modelName === USER_ROLE.VENDOR) {
-          // Vendor account status checks
           if (user.status === models.Vendors.status.APPROVED) {
             next();
           } else if (user.status === models.Vendors.status.PENDING) {
