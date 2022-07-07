@@ -1,3 +1,5 @@
+const { USER_ROLE } = constants;
+
 exports.authenticate = async (req, res, next) => {
   passport.authenticate(
     "local",
