@@ -1,7 +1,7 @@
 const settingsService = new services.SettingsService(models.Vendors);
 
 const strongParams = [
-  ...models.Vendors.excludedAttributes,
+  ...models.Vendors.privateAttributes,
   "createdAt",
   "updatedAt",
   "username",

@@ -23,6 +23,10 @@ const VendorSchema = new mongoose.Schema(
       default: 0,
     },
     codeExpiryTime: { type: Date },
+    isApproved: {
+      type: Boolean,
+      default: false,
+    },
     isVerified: {
       type: Boolean,
       default: false,
@@ -151,18 +155,19 @@ VendorSchema.virtual("threads", {
   justOne: true,
 });
 
-VendorSchema.statics.excludedAttributes = [
+VendorSchema.statics.privateAttributes = [
   "password",
   "accessToken",
   "verificationCode",
   "isVerified",
+  "isApproved",
   "codeExpiryTime",
   "uId",
 ];
 
 VendorSchema.methods.toJSON = function () {
   const obj = this.toObject();
-  return _.omit(obj, VendorSchema.statics.excludedAttributes);
+  return _.omit(obj, VendorSchema.statics.privateAttributes);
 };
 
 module.exports = mongoose.model("Vendors", VendorSchema);

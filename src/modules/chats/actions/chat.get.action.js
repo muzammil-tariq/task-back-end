@@ -93,7 +93,7 @@ module.exports.get = {
         {
           $project: {
             users: {
-              ...models.Customers.excludedAttributes.reduce(
+              ...models.Customers.privateAttributes.reduce(
                 (acc, cur) => ({ ...acc, [cur]: 0 }),
                 {}
               ),

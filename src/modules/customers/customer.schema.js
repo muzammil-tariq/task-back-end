@@ -99,7 +99,7 @@ CustomerSchema.virtual("fullName").get(function () {
   return this.firstName + " " + this.lastName;
 });
 
-CustomerSchema.statics.excludedAttributes = [
+CustomerSchema.statics.privateAttributes = [
   "password",
   "accessToken",
   "verificationCode",
@@ -110,7 +110,7 @@ CustomerSchema.statics.excludedAttributes = [
 
 CustomerSchema.methods.toJSON = function () {
   const obj = this.toObject();
-  return _.omit(obj, CustomerSchema.statics.excludedAttributes);
+  return _.omit(obj, CustomerSchema.statics.privateAttributes);
 };
 
 module.exports = mongoose.model("Customers", CustomerSchema);

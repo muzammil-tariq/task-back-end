@@ -1,5 +1,5 @@
 const updateCustomerStrongParams = [
-  ...models.Customers.excludedAttributes,
+  ...models.Customers.privateAttributes,
   "username",
   "email",
 ];
