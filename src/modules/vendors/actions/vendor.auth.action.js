@@ -7,7 +7,9 @@ exports.auth = {
     const { body: payload } = req;
     try {
       payload["informationSteps"] = "business";
-      const vendor = await authService.signUp(payload);
+      const vendor = await authService.signUp(
+        _.omit(payload, models.Vendors.createForbiddenAttributes)
+      );
       libs.emailService.vendorSignup({
         user: vendor,
         verificationCode: vendor.verificationCode,

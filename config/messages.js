@@ -77,4 +77,7 @@ module.exports = {
   paypalNotConnected: "Paypal is not connected",
   paypalAlreadyConnected: "Paypal is already connected",
   alreadyPaid: "You have already paid for this booking",
+  vendorRequestPending: "Your request is pending",
+  vendorRequestRejected: "Your request has been rejected",
+  vendorRequestSuspended: "Your request has been suspended",
 };
