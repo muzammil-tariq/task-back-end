@@ -30,7 +30,7 @@ router.delete(
 );
 router.get(
   "/events/upcomingEvent",
-  middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
+  middlewares.verifyUserRole(USER_ROLE.CUSTOMER, USER_ROLE.VENDOR),
   validators.common.getList,
   middlewares.validation.request,
   actions.events.get.upcomingEvent

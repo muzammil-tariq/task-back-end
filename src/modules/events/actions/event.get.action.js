@@ -143,21 +143,26 @@ exports.get = {
           sortBy = "scheduledDate",
           sortDirection = 1,
         },
-        user: { _id: customerId },
+        user: {
+          _id: userId,
+          collection: { modelName },
+        },
       } = req;
 
-      const data = await models.Events.find({
-        customerId,
-        isDeleted: false,
-        startTime: {
-          $gte: moment().toISOString(),
-        },
-      })
-        .skip(limit * currentPage - limit)
-        .limit(limit)
-        .sort({ [sortBy]: sortDirection })
-        .populate("type.eventTypeId", ["name", "images"])
-        .populate("services.serviceId");
+      const isCustomer = modelName === USER_ROLE.CUSTOMER;
+
+      const getUpcomingEvents = isCustomer
+        ? helpers.event.customerUpcomingEvents
+        : helpers.event.vendorUpcomingEvents;
+
+      const data = await getUpcomingEvents({
+        userId,
+        limit,
+        currentPage,
+        sortBy,
+        sortDirection,
+      });
+
       return res.json({
         status: 200,
         message: messages.success,
