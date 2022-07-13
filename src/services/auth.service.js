@@ -4,7 +4,7 @@ class AuthService {
     this.crudService = new services.CrudService(model);
   }
 
-  async signUp(payload) {
+  async signUp(payload, appendToken = true) {
     let user = await this.model.findOne({
       email: payload.email,
     });
@@ -14,8 +14,10 @@ class AuthService {
     }
     payload["verificationCode"] = utils.random.generateRandomNumber();
     user = await this.model.create(payload);
-    var token = user.getJWTToken();
-    user._doc["token"] = token;
+    if (appendToken) {
+      const token = user.getJWTToken();
+      user._doc["token"] = token;
+    }
     return user;
   }
 

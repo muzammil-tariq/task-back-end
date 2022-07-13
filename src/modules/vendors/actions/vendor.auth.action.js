@@ -8,7 +8,8 @@ exports.auth = {
     try {
       payload["informationSteps"] = "business";
       const vendor = await authService.signUp(
-        _.omit(payload, models.Vendors.createForbiddenAttributes)
+        _.omit(payload, models.Vendors.createForbiddenAttributes),
+        false
       );
       libs.emailService.vendorSignup({
         user: vendor,
