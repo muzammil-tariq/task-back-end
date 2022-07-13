@@ -33,6 +33,22 @@ let createMessagePayloadValidation = [
     .notEmpty()
     .withMessage(messages.notEmpty)
     .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .optional(true),
+  body("attachments")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isArray()
+    .withMessage(messages.invalidDataType("Array"))
+    .optional(true),
+  body("attachments.*")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
     .withMessage(messages.invalidDataType("String")),
 ];
 module.exports = {

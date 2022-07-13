@@ -78,6 +78,9 @@ module.exports.post = {
         user: { _id: userId },
         params: { id: threadId },
       } = req;
+      if (!content && !attachments.length) {
+        throw createError(messages.invalidPayload);
+      }
       const thread = await models.Thread.findOne({
         _id: threadId,
         "users.user": userId,
