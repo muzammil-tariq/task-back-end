@@ -8,6 +8,8 @@ module.exports.get = {
           currentPage = dataConstraint.CURRENT_PAGE,
           sortBy = "createdAt",
           sortDirection = -1,
+          text = "",
+          status = "",
         },
         user: {
           _id: userId,
@@ -26,6 +28,23 @@ module.exports.get = {
           },
         ],
       };
+      if (text)
+        where["$or"] = [
+          {
+            title: {
+              $regex: text,
+              $options: "i",
+            },
+          },
+          {
+            description: {
+              $regex: text,
+              $options: "i",
+            },
+          },
+        ];
+      if (status) where["status"] = status;
+
       const data = await models.Bookings.find(!isAdmin ? where : {})
         .skip(limit * currentPage - limit)
         .limit(limit)
