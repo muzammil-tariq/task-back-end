@@ -32,24 +32,7 @@ exports.update = {
         params: { id },
         body: { status },
       } = req;
-      const data = await models.Vendors.findById(id);
-      if (
-        data?.status !== status &&
-        statusStateChart[data?.status].includes(status)
-      ) {
-        const old = data?.status;
-        data.status = status;
-        await data.save();
-
-        if (
-          status === models.Vendors.status.APPROVED &&
-          old !== models.Vendors.status.SUSPENDED
-        ) {
-          libs.emailService.vendorApproval({
-            user: data,
-          });
-        }
-      }
+      const data = await updateVendorStatus({ id, status });
       return res.json({
         status: 200,
         message: messages.success,
@@ -59,7 +42,45 @@ exports.update = {
       next(err);
     }
   },
+  statusBulk: async (req, res, next) => {
+    try {
+      const {
+        body: { status, ids },
+      } = req;
+      for (let id of ids) {
+        await updateVendorStatus({ id, status });
+      }
+      return res.json({
+        status: 200,
+        message: messages.success,
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
 };
+
+async function updateVendorStatus({ id, status }) {
+  const data = await models.Vendors.findById(id);
+  if (
+    data?.status !== status &&
+    statusStateChart[data?.status].includes(status)
+  ) {
+    const old = data?.status;
+    data.status = status;
+    await data.save();
+
+    if (
+      status === models.Vendors.status.APPROVED &&
+      old !== models.Vendors.status.SUSPENDED
+    ) {
+      libs.emailService.vendorApproval({
+        user: data,
+      });
+    }
+  }
+  return data;
+}
 
 // State chart for vendor status
 const statusStateChart = {

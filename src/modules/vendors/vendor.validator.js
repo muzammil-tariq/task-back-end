@@ -419,7 +419,21 @@ const update = [
 const favourited = [...validators.common.bodyMongoId("vendorId")];
 
 let updateAccountStatus = [
-  param("id").exists(),
+  validators.common.paramMongoId(),
+  body("status")
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .isIn(Object.values(models.Vendors.status)),
+];
+let updateAccountStatusBulk = [
+  body("ids")
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isArray()
+    .withMessage(messages.invalidDataType("Array")),
+  ...validators.common.bodyMongoId("ids.*"),
   body("status")
     .notEmpty()
     .withMessage(messages.notEmpty)
@@ -441,4 +455,5 @@ module.exports = {
   favourited,
   featurePayloadValidation,
   updateAccountStatus,
+  updateAccountStatusBulk,
 };

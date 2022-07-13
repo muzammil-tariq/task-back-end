@@ -67,6 +67,14 @@ router
     actions.vendors.update.status
   )
   .patch(
+    "/vendors/status",
+    middlewares.verifyUserRole(USER_ROLE.ADMIN),
+    middlewares.removeNullishValuesFromBody,
+    validators.vendors.updateAccountStatusBulk,
+    middlewares.validation.request,
+    actions.vendors.update.statusBulk
+  )
+  .patch(
     "/vendors/business-info",
     middlewares.verifyUserRole(USER_ROLE.VENDOR),
     validators.vendors.businessInfoValidation,
