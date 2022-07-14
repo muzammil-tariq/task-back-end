@@ -50,6 +50,7 @@ exports.get = {
           limit = dataConstraint.PAGINATION_LIMIT,
           currentPage = dataConstraint.CURRENT_PAGE,
           sortBy = "rating",
+          minorityEligibility,
           sortDirection = -1,
         },
       } = req;
@@ -58,6 +59,10 @@ exports.get = {
       const servicesId = services.map((service) => service._id);
       const where = { skills: { $in: servicesId } };
       if (text) where["fullName"] = { $regex: text, $options: "i" };
+      if (minorityEligibility)
+        where.minorityEligibility = {
+          $in: minorityEligibility,
+        };
       const data = await models.Vendors.find(where)
         .skip(limit * currentPage - limit)
         .limit(limit)
