@@ -74,13 +74,10 @@ module.exports.post = {
   newMessage: async (req, res, next) => {
     try {
       const {
-        body: { content, attachments = [] },
+        body: { content, attachments },
         user: { _id: userId },
         params: { id: threadId },
       } = req;
-      if (!content && !attachments.length) {
-        throw createError(messages.invalidPayload);
-      }
       const thread = await models.Thread.findOne({
         _id: threadId,
         "users.user": userId,
