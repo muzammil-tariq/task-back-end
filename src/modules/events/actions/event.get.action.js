@@ -281,11 +281,25 @@ exports.get = {
           sortBy = "createdAt",
           sortDirection = -1,
         },
-        user: { _id: userId },
+        user: {
+          _id: userId,
+          collection: { modelName },
+        },
       } = req;
 
+      const isCustomer = modelName === USER_ROLE.CUSTOMER;
+      const isVendor = modelName === USER_ROLE.VENDOR;
+      let status;
+      if (isCustomer)
+        status = {
+          $in: ["completedByCustomer", "completed"],
+        };
+      if (isVendor)
+        status = {
+          $in: ["completedByVendor", "completed"],
+        };
       const bookings = await models.Bookings.find({
-        status: "completed",
+        status,
         or: [
           {
             vendorId: userId,
@@ -307,6 +321,42 @@ exports.get = {
           $in: eventIds,
         },
       });
+      return res.json({
+        status: 200,
+        message: messages.success,
+        data,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  getVendorCompletedEventsById: async (req, res, next) => {
+    try {
+      const {
+        query: {
+          limit = dataConstraint.PAGINATION_LIMIT,
+          currentPage = dataConstraint.CURRENT_PAGE,
+          sortBy = "createdAt",
+          sortDirection = -1,
+        },
+        params: { id: vendorId },
+      } = req;
+      const bookings = await models.Bookings.find({
+        status: ["completedByVendor", "completed"],
+        vendorId,
+      })
+        .select("eventId")
+        .skip(limit * currentPage - limit)
+        .limit(limit)
+        .sort({
+          [sortBy]: sortDirection,
+        });
+      const eventIds = bookings.map((booking) => booking.eventId);
+      const data = await models.Events.find({
+        _id: {
+          $in: eventIds,
+        },
+      }).populate("type.eventTypeId", ["name", "images"]);
       return res.json({
         status: 200,
         message: messages.success,

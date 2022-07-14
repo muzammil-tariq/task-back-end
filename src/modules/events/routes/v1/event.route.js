@@ -48,6 +48,13 @@ router.get(
   actions.events.get.completed
 );
 router.get(
+  "/events/vendors/:id/completed",
+  validators.common.getList,
+  middlewares.validation.request,
+  middlewares.verifyUserRole(USER_ROLE.CUSTOMER, USER_ROLE.ADMIN),
+  actions.events.get.getVendorCompletedEventsById
+);
+router.get(
   "/events/vendors/:id",
   middlewares.verifyUserRole(USER_ROLE.ADMIN),
   validators.common.getList,
