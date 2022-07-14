@@ -74,7 +74,7 @@ module.exports.post = {
   newMessage: async (req, res, next) => {
     try {
       const {
-        body: { content, attachments },
+        body: { content, attachments = [] },
         user: { _id: userId },
         params: { id: threadId },
       } = req;
