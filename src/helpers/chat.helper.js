@@ -3,7 +3,9 @@ module.exports = {
   verifySenderAndSendMessage: async function ({ socket, data }) {
     const threadExists = await models.Thread.findOne({
       _id: data.thread,
-      "users.user": data.receiver,
+      "users.user": {
+        $all: [data.receiver, data.sender],
+      },
     });
     if (!threadExists || String(data.sender) !== String(socket.user._id)) {
       return;
