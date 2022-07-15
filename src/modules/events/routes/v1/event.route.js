@@ -50,9 +50,9 @@ router.get(
 router.get(
   "/events/vendors/:id/completed",
   validators.common.getList,
-  middlewares.validation.request,
   middlewares.verifyUserRole(USER_ROLE.CUSTOMER, USER_ROLE.ADMIN),
-  actions.events.get.getVendorCompletedEventsById
+  middlewares.validation.request,
+  actions.events.get.completedListByVendorId
 );
 router.get(
   "/events/vendors/:id",

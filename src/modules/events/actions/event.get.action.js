@@ -330,7 +330,7 @@ exports.get = {
       next(error);
     }
   },
-  getVendorCompletedEventsById: async (req, res, next) => {
+  completedListByVendorId: async (req, res, next) => {
     try {
       const {
         query: {
