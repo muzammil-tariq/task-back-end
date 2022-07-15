@@ -57,14 +57,17 @@ module.exports = {
         .populate({
           path: "vendorId",
           select: ["fullName", "profilePhoto", "skills", "rating"],
-          populate: {
-            path: "threads",
-            match: {
-              "users.0.user": userId,
+          populate: [
+            { path: "skills" },
+            {
+              path: "threads",
+              match: {
+                "users.0.user": userId,
+              },
+              select:
+                "-users._id -users.isDeleted -users.showNotifications -users.unreadCount -users.userModel -createdAt -updatedAt",
             },
-            select:
-              "-users._id -users.isDeleted -users.showNotifications -users.unreadCount -users.userModel -createdAt -updatedAt",
-          },
+          ],
         })
         .select(
           !isAdmin
