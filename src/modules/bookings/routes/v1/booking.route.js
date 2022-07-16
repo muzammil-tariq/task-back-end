@@ -2,6 +2,7 @@ const { USER_ROLE } = constants;
 router
   .post(
     "/bookings",
+    middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
     middlewares.removeNullishValuesFromBody,
     validators.bookings.add,
     middlewares.validation.request,
