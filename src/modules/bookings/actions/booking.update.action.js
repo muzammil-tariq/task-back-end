@@ -4,6 +4,7 @@ const strongParams = [
   "updatedAt",
   "eventId",
   "vendorId",
+  "meetingId",
   "customerId",
   "status",
   "disputeFilerId",

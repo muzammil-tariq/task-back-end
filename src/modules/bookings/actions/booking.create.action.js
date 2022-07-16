@@ -12,12 +12,22 @@ exports.create = {
         _id: payload["eventId"],
         customerId: userId,
       });
+      if (!event) {
+        throw createError(404, messages.notFound("Event"));
+      }
       const vendor = await models.Vendors.findById(payload.vendorId);
       if (!vendor) {
         throw createError(404, messages.notFound("Vendor"));
       }
-      if (!event) {
-        throw createError(404, messages.notFound("Event"));
+      if (payload.meetingId) {
+        const meeting = await models.Meetings.findOne({
+          _id: payload["meetingId"],
+          customerId: userId,
+          isDeleted: false,
+        });
+        if (!meeting) {
+          throw createError(404, messages.notFound("Meeting"));
+        }
       }
       payload["customerId"] = userId;
 

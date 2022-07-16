@@ -2,62 +2,9 @@ const { body } = expressValidator;
 const common = require("../common/common.validator");
 
 let add = [
-  ...common.bodyMongoId("eventId"),
-  ...common.bodyMongoId("vendorId"),
-  body("title")
-    .exists()
-    .withMessage(messages.notPresent)
-    .notEmpty()
-    .withMessage(messages.notEmpty)
-    .isString()
-    .withMessage(messages.invalidDataType("String"))
-    .optional(),
-  body("description")
-    .exists()
-    .withMessage(messages.notPresent)
-    .notEmpty()
-    .withMessage(messages.notEmpty)
-    .isString()
-    .withMessage(messages.invalidDataType("String"))
-    .optional(),
-  body("venue")
-    .exists()
-    .withMessage(messages.notPresent)
-    .notEmpty()
-    .withMessage(messages.notEmpty)
-    .isString()
-    .withMessage(messages.invalidDataType("String"))
-    .optional(),
-  body("link")
-    .exists()
-    .withMessage(messages.notPresent)
-    .notEmpty()
-    .withMessage(messages.notEmpty)
-    .isURL()
-    .withMessage(messages.invalidDataType("URL"))
-    .optional(),
-  body("timeZone")
-    .exists()
-    .withMessage(messages.notPresent)
-    .notEmpty()
-    .withMessage(messages.notEmpty)
-    .isString()
-    .withMessage(messages.invalidDataType("String"))
-    .optional(),
-  body("startTime")
-    .exists()
-    .withMessage(messages.notPresent)
-    .notEmpty()
-    .withMessage(messages.notEmpty)
-    .withMessage(messages.invalidDataType("Date"))
-    .custom((value) => {
-      const date = new Date();
-      if (new Date(value) < date) {
-        throw new Error(messages.pastDate);
-      }
-      return true;
-    })
-    .optional(),
+  common.bodyMongoId("meetingId")[0].optional(),
+  common.bodyMongoId("eventId")[0],
+  common.bodyMongoId("vendorId")[0],
   body("amount")
     .exists()
     .withMessage(messages.notPresent)
