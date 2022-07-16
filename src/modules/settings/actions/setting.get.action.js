@@ -1,11 +1,6 @@
 module.exports.get = async (req, res, next) => {
   try {
-    const data = await models.Settings.findOne().select([
-      "-createdAt",
-      "-updatedAt",
-      "-_id",
-      "-__v",
-    ]);
+    const data = await helpers.setting.get();
     return res.json({
       status: 200,
       message: messages.success,

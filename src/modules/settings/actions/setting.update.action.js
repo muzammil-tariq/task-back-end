@@ -6,6 +6,7 @@ module.exports.update = async (req, res, next) => {
       _.omit(payload, ["createdAt", "updatedAt"]),
       { new: true }
     );
+    helpers.setting.update(data);
     return res.json({
       status: 200,
       message: messages.success,
