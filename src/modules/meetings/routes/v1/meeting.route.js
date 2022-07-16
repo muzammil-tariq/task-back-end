@@ -2,6 +2,7 @@ const { USER_ROLE } = constants;
 router
   .post(
     "/meetings",
+    middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
     middlewares.removeNullishValuesFromBody,
     validators.meetings.add,
     middlewares.validation.request,
