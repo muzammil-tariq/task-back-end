@@ -9,7 +9,6 @@ module.exports = {
           sortBy = "createdAt",
           eventId,
           status = "",
-          price = "",
           sortDirection = -1,
           search = "",
         },
@@ -46,11 +45,6 @@ module.exports = {
         .limit(limit)
         .sort({
           [sortBy]: sortDirection,
-          ...(price
-            ? {
-                [price]: Boolean(price),
-              }
-            : null),
         })
         .populate("eventId")
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
