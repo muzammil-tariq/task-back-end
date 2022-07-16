@@ -65,4 +65,11 @@ EventSchema.virtual("quotes", {
   foreignField: "eventId",
 });
 
+EventSchema.virtual("quotesCount", {
+  ref: "Quotes",
+  localField: "_id",
+  foreignField: "eventId",
+  count: true,
+});
+
 module.exports = mongoose.model("Events", EventSchema);

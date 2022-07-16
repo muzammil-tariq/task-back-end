@@ -50,7 +50,7 @@ exports.get = {
         where["customerId"] = userId;
       }
       if (status) where["status"] = status;
-      if (type) where["type"] = type;
+      if (type) where["type.name"] = type;
       if (text) where["$or"] = search(text);
 
       const data = await models.Events.find(where)
@@ -65,7 +65,9 @@ exports.get = {
           match: {
             vendorId: userId, // so that we only show the quotes to vendor, and to show him only his quote
           },
-        });
+        })
+        .populate({ path: "quotesCount" })
+        .select(isVendor ? { quotesCount: 0 } : { quotes: 0 });
       return res.json({
         status: 200,
         message: messages.success,
