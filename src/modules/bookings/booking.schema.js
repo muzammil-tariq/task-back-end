@@ -9,6 +9,10 @@ const BookingsSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Vendors",
     },
+    customerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Customers",
+    },
     status: {
       type: String,
       enum: [
