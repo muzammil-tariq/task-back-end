@@ -36,6 +36,7 @@ module.exports.get = {
           [sortBy]: sortDirection,
         })
         .populate("eventId")
+        .populate("meetingId")
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
         .populate("vendorId", ["fullName", "profilePhoto", "skills", "rating"])
         .select(
@@ -82,6 +83,7 @@ module.exports.get = {
         ...(!isAdmin ? where : {}),
       })
         .populate("eventId")
+        .populate("meetingId")
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
         .populate("vendorId", ["fullName", "profilePhoto", "skills", "rating"])
         .select(
@@ -167,6 +169,7 @@ module.exports.get = {
           [sortBy]: sortDirection,
         })
         .populate("eventId")
+        .populate("meetingId")
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
         .populate("vendorId", ["fullName", "profilePhoto", "skills", "rating"]);
       return res.json({
@@ -199,6 +202,7 @@ module.exports.get = {
           [sortBy]: sortDirection,
         })
         .populate("eventId")
+        .populate("meetingId")
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
         .populate("vendorId", ["fullName", "profilePhoto", "skills", "rating"]);
       return res.json({
