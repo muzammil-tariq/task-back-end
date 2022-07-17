@@ -1,5 +1,4 @@
 const { PLATFORM_PAYPAL_ACCOUNT } = process.env;
-const { PLATFORM_FEES } = constants;
 
 module.exports.createOrder = async (req, res, next) => {
   try {
@@ -25,6 +24,7 @@ module.exports.createOrder = async (req, res, next) => {
         },
       });
     }
+    const { platformCommission } = await helpers.setting.get();
     const order = await libs.paypal.createOrder({
       body: {
         purchase_units: [
@@ -41,7 +41,7 @@ module.exports.createOrder = async (req, res, next) => {
               platform_fees: [
                 {
                   amount: {
-                    value: PLATFORM_FEES * booking.amount,
+                    value: platformCommission * booking.amount,
                     currency_code: "USD",
                   },
                   payee: {

@@ -1,6 +1,5 @@
 const EventCrudService = new services.CrudService(models.Events);
 const EventTypeCrudService = new services.CrudService(models.EventTypes);
-const { EVENT_REQUEST_DISTANCE } = constants;
 const { VENDOR_DASHBOARD_URL, VENDOR_DASHBOARD_EVENT_PAGE } = process.env;
 
 exports.add = {
@@ -47,6 +46,7 @@ exports.add = {
 };
 
 async function sendMailToVendors({ event }) {
+  const { eventRequestDistance } = await helpers.setting.get();
   const where = {
     location: {
       $near: {
@@ -54,7 +54,7 @@ async function sendMailToVendors({ event }) {
           type: "Point",
           coordinates: event.location.coordinates,
         },
-        $maxDistance: EVENT_REQUEST_DISTANCE,
+        $maxDistance: eventRequestDistance,
       },
     },
     skills: {
