@@ -1,4 +1,4 @@
-const { USER_ROLE, EVENT_REQUEST_DISTANCE } = constants;
+const { USER_ROLE } = constants;
 
 module.exports.get = {
   list: async (req, res, next) => {
@@ -115,6 +115,7 @@ module.exports.get = {
         userSkills = vendor?.skills;
       }
 
+      const { eventRequestDistance } = await helpers.setting.get();
       const startDate = new Date((timestamp - timePeriod) * 1000);
       const endDate = new Date(timestamp * 1000);
       const dateRange = {
@@ -133,7 +134,7 @@ module.exports.get = {
               type: "Point",
               coordinates: userCoordinates,
             },
-            $maxDistance: EVENT_REQUEST_DISTANCE,
+            $maxDistance: eventRequestDistance,
           },
         },
         "services.serviceId": {

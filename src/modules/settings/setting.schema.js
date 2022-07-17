@@ -2,8 +2,8 @@
 
 const SettingSchema = new mongoose.Schema(
   {
-    platformCommission: { type: Number, min: 0 },
-    eventRequestDistance: { type: Number, min: 0 },
+    platformCommission: { type: Number, min: 0 }, // in percentage
+    eventRequestDistance: { type: Number, min: 0 }, // in meters
   },
   {
     timestamps: true,

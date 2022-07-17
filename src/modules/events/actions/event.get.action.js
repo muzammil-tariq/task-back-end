@@ -1,4 +1,4 @@
-const { USER_ROLE, EVENT_REQUEST_DISTANCE } = constants;
+const { USER_ROLE } = constants;
 
 exports.get = {
   list: async (req, res, next) => {
@@ -34,13 +34,14 @@ exports.get = {
         where["isDeleted"] = false;
       }
       if (isVendor) {
+        const { eventRequestDistance } = await helpers.setting.get();
         where["location"] = {
           $near: {
             $geometry: {
               type: "Point",
               coordinates: userCoordinates,
             },
-            $maxDistance: EVENT_REQUEST_DISTANCE,
+            $maxDistance: eventRequestDistance,
           },
         };
         where["services.serviceId"] = {
@@ -104,13 +105,14 @@ exports.get = {
           eventId: id,
         });
         if (!quote) {
+          const { eventRequestDistance } = await helpers.setting.get();
           where["location"] = {
             $near: {
               $geometry: {
                 type: "Point",
                 coordinates: userCoordinates,
               },
-              $maxDistance: EVENT_REQUEST_DISTANCE,
+              $maxDistance: eventRequestDistance,
             },
           };
           where["services.serviceId"] = {
@@ -194,7 +196,7 @@ exports.get = {
       if (!vendor) {
         throw createError(404, messages.notFound("Vendor"));
       }
-
+      const { eventRequestDistance } = await helpers.setting.get();
       const where = {
         location: {
           $near: {
@@ -202,7 +204,7 @@ exports.get = {
               type: "Point",
               coordinates: vendor.location.coordinates,
             },
-            $maxDistance: EVENT_REQUEST_DISTANCE,
+            $maxDistance: eventRequestDistance,
           },
         },
         "services.serviceId": {
