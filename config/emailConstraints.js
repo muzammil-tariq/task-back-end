@@ -173,7 +173,7 @@ module.exports = {
     Wishing you all the best!
     Cheers 🎉`,
   }),
-  vendorBooking: ({ user }) => ({
+  vendorBooking: ({ user, event }) => ({
     to: user.email,
     from: EMAIL_FROM,
     SUBJECT: `ThePartyStarter | You are booked!✅`,
@@ -187,7 +187,11 @@ module.exports = {
     With that said, we would like to give you a friendly reminder to keep all communication and 
     payments on ThePartyStarter.com’s website. We aren't responsible for payment transactions
     or agreements off ThePartyStarter.com since we don’t troubleshoot offline activity.⚠ 
-    [details of event]
+    
+    Title: ${event.title}
+    Description: ${event.description}
+    Address: ${event.location.address}
+
     Wishing you a wonderful event!
     Cheers 🎉`,
   }),

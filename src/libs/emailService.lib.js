@@ -36,8 +36,8 @@ exports.vendorReceivingQuotes = async function ({ user, link }) {
   await sendEmail(emailConstraints.vendorReceivingQuotes({ user, link }));
 };
 
-exports.vendorBooking = async function ({ user }) {
-  await sendEmail(emailConstraints.vendorBooking({ user }));
+exports.vendorBooking = async function ({ user, event }) {
+  await sendEmail(emailConstraints.vendorBooking({ user, event }));
 };
 
 exports.verificationCode = async function ({ user, verificationCode }) {

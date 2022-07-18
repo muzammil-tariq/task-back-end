@@ -40,6 +40,7 @@ exports.create = {
       });
       libs.emailService.vendorBooking({
         user: vendor,
+        event,
       });
 
       return res.status(201).json({
