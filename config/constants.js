@@ -1,6 +1,4 @@
 const constants = {
-  PLATFORM_FEES: 0.15,
-  EVENT_REQUEST_DISTANCE: 80467, // in meters, 80467 is about 50 miles
   SOCKET_EVENT: {
     MESSAGE: "message",
     INCREMENT_UNREAD_COUNT: "incrementUnreadCount",

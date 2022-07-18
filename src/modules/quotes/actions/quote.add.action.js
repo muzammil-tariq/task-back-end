@@ -1,5 +1,4 @@
 const QuoteCrudService = new services.CrudService(models.Quotes);
-const { EVENT_REQUEST_DISTANCE } = constants;
 
 exports.add = {
   quote: async (req, res, next) => {
@@ -24,6 +23,7 @@ exports.add = {
       if (alreadyExists) {
         throw createError(409, messages.alreadyExists("Quote"));
       }
+      const { eventRequestDistance } = await helpers.setting.get();
       const event = await models.Events.findOne({
         _id: eventId,
         location: {
@@ -32,7 +32,7 @@ exports.add = {
               type: "Point",
               coordinates,
             },
-            $maxDistance: EVENT_REQUEST_DISTANCE,
+            $maxDistance: eventRequestDistance,
           },
         },
         "services.serviceId": {
