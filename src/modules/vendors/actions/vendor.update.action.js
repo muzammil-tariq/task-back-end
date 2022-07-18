@@ -77,6 +77,10 @@ async function updateVendorStatus({ id, status }) {
       libs.emailService.vendorApproval({
         user: data,
       });
+    } else if (status === models.Vendors.status.REJECTED) {
+      libs.emailService.vendorNonApproval({
+        user: data,
+      });
     }
   }
   return data;

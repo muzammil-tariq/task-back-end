@@ -28,6 +28,10 @@ exports.vendorApproval = async function ({ user }) {
   await sendEmail(emailConstraints.vendorApproval({ user }));
 };
 
+exports.vendorNonApproval = async function ({ user }) {
+  await sendEmail(emailConstraints.vendorNonApproval({ user }));
+};
+
 exports.vendorReceivingQuotes = async function ({ user, link }) {
   await sendEmail(emailConstraints.vendorReceivingQuotes({ user, link }));
 };

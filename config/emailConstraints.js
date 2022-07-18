@@ -144,6 +144,21 @@ module.exports = {
     ALL THE BEST!🎉
     Cheers 🎉`,
   }),
+  vendorNonApproval: ({ user }) => ({
+    to: user.email,
+    from: EMAIL_FROM,
+    SUBJECT: `Sorry, we are not a good fit at the moment.`,
+    html: `
+    Hi ${user.fullName},
+    Thank you for taking the time to consider ThePartyStarter.
+    Our Business Development team has reviewed your profile and determined that your business
+    will not advance to the next round as an event vendor for ThePartyStarter.
+    In our selection process, we assess event vendors based on several criteria factors —
+    relevancy, professionalism, reputation, etc. We wish you the best of luck on your endeavors and
+    encourage you to reapply in the future.
+    Best,
+    ThePartyStarter Team`,
+  }),
   vendorReceivingQuotes: ({ user, link }) => ({
     to: user.email,
     from: EMAIL_FROM,
