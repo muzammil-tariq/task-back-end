@@ -18,30 +18,36 @@ module.exports.get = {
       const isVendor = modelName === USER_ROLE.VENDOR;
       const isAdmin = modelName === USER_ROLE.ADMIN;
       const where = {
-        $or: [
+        $and: [
           {
-            vendorId: userId,
-          },
-          {
-            customerId: userId,
+            $or: [
+              {
+                vendorId: userId,
+              },
+              {
+                customerId: userId,
+              },
+            ],
           },
         ],
       };
       if (text)
-        where["$or"] = [
-          {
-            title: {
-              $regex: text,
-              $options: "i",
+        where.$and.push({
+          $or: [
+            {
+              title: {
+                $regex: text,
+                $options: "i",
+              },
             },
-          },
-          {
-            description: {
-              $regex: text,
-              $options: "i",
+            {
+              description: {
+                $regex: text,
+                $options: "i",
+              },
             },
-          },
-        ];
+          ],
+        });
 
       const data = await models.Meetings.find(!isAdmin ? where : {})
         .skip(limit * currentPage - limit)
