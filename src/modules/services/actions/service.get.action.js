@@ -47,6 +47,7 @@ exports.get = {
         params: { id },
         query: {
           text = "",
+          coordinates,
           limit = dataConstraint.PAGINATION_LIMIT,
           currentPage = dataConstraint.CURRENT_PAGE,
           sortBy = "rating",
@@ -59,6 +60,19 @@ exports.get = {
       const servicesId = services.map((service) => service._id);
       const where = { skills: { $in: servicesId } };
       if (text) where["fullName"] = { $regex: text, $options: "i" };
+      if (coordinates?.length && coordinates?.length === 2) {
+        const { eventRequestDistance } = await helpers.setting.get();
+        where["location"] = {
+          $near: {
+            $geometry: {
+              type: "Point",
+              coordinates,
+            },
+            $maxDistance: eventRequestDistance,
+          },
+        };
+      }
+
       if (minorityEligibility)
         where.minorityEligibility = {
           $in: minorityEligibility,

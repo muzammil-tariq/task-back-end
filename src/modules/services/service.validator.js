@@ -1,4 +1,4 @@
-const { body } = expressValidator;
+const { body, query } = expressValidator;
 
 let addServicePayload = [
   body("name")
@@ -47,6 +47,11 @@ const getList = [
   ...validators.common.getById,
   ...validators.common.pagination,
   ...validators.common.sort,
+  query("coordinates")
+    .customSanitizer((value) => {
+      return JSON.parse(value);
+    })
+    .optional(),
 ];
 
 module.exports = {
