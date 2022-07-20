@@ -8,7 +8,7 @@ app.use(passport.initialize());
 app.use(cors());
 
 global.messages = require("../config/messages");
-global.dataConstraint = require("../config/data_constraints");
+global.dataConstraint = require("../config/dataConstraints");
 global.emailConstraints = require("../config/emailConstraints");
 
 /**
