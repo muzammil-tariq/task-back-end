@@ -4,7 +4,7 @@ require("dotenv").config();
 /**
  * Add packages globally
  */
-require("./src/global-package");
+require("./src/globalPackage");
 require("./config/constants");
 /**
  * Add Util globally
