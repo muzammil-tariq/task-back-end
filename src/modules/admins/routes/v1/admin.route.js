@@ -4,7 +4,7 @@ router
     "/admins/auth/login",
     validators.admins.signInPayloadValidation,
     middlewares.validation.request,
-    middlewares.local_passport.authenticate,
+    middlewares.localPassport.authenticate,
     actions.admins.auth.signIn
   )
   .get(

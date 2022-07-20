@@ -11,7 +11,7 @@ router
     "/customers/auth/login",
     validators.customers.signInPayloadValidation,
     middlewares.validation.request,
-    middlewares.local_passport.authenticate,
+    middlewares.localPassport.authenticate,
     actions.customers.auth.signIn
   )
   .post(
