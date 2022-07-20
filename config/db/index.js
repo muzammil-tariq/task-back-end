@@ -1,4 +1,4 @@
-require("./db-connection");
+require("./dbConnection");
 
 /**
  *  Initailize all schema
