@@ -4,7 +4,7 @@ require("dotenv").config();
 /**
  * Add packages globally
  */
-require("./src/global-package");
+require("./src/globalPackage");
 /**
  * Add Helper globally
  */
@@ -224,7 +224,7 @@ var text = `declare global {
   var helpers: ${convertToCode(types.helpers)};
   
   var messages: typeof import("./config/messages");
-  var dataConstraint: typeof import("./config/data_constraints");
+  var dataConstraint: typeof import("./config/dataConstraints");
   var emailConstraints: typeof import("./config/emailConstraints");
   var constants: typeof import("./config/constants");
   var digitOceanUrl: typeof import("../config/digital_ocean");
