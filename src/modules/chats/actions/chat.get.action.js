@@ -197,4 +197,20 @@ module.exports.get = {
       next(err);
     }
   },
+  onlineStatus: async (req, res, next) => {
+    try {
+      const {
+        params: { userId },
+      } = req;
+      const get = await util.promisify(redisClient.get).bind(redisClient);
+      const isOnline = await get(userId);
+      return res.json({
+        status: 200,
+        message: messages.success,
+        data: Boolean(isOnline),
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
 };

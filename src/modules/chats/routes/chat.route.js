@@ -8,6 +8,7 @@ router
     actions.chats.post.newThread
   )
   .get("/chats", actions.chats.get.getThreads)
+  .get("/chats/status/:userId", actions.chats.get.onlineStatus)
   .post(
     "/chats/:id",
     middlewares.id_validation.validateId,
