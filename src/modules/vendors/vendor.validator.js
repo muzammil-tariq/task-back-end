@@ -37,12 +37,26 @@ let signUpPayloadValidation = [
     .withMessage(messages.notEmpty)
     .isDate()
     .withMessage(messages.invalidDataType("Date"))
+    .custom((value) => {
+      const date = new Date();
+      if (new Date(value) > date) {
+        throw new Error(messages.futureDate);
+      }
+      return true;
+    })
     .optional(),
   body("birthDate")
     .notEmpty()
     .withMessage(messages.notEmpty)
     .isDate()
     .withMessage(messages.invalidDataType("Date"))
+    .custom((value) => {
+      const date = new Date();
+      if (new Date(value) > date) {
+        throw new Error(messages.futureDate);
+      }
+      return true;
+    })
     .optional(),
   body("businessName")
     .notEmpty()
@@ -71,6 +85,52 @@ let signUpPayloadValidation = [
     .isArray()
     .withMessage(messages.invalidDataType("Array"))
     .optional(),
+  body("location").notEmpty().withMessage(messages.notEmpty),
+  body("location.coordinates")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isArray()
+    .withMessage(messages.invalidDataType("Array"))
+    .custom((value) => {
+      if (!value?.length) {
+        throw createError(
+          400,
+          messages.invalidDataType("location.coordinates")
+        );
+      }
+      if (value?.length !== 2) {
+        throw createError(400, messages.invalidFormat("coordinates"));
+      }
+      value.forEach((item) => {
+        if (typeof item !== "number") {
+          throw createError(400, messages.invalidFormat("coordinates"));
+        }
+      });
+      return true;
+    }),
+  body("location.address")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String")),
+  body("location.state")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String")),
+  body("location.country")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String")),
 ];
 
 let signInPayloadValidation = [
@@ -85,7 +145,7 @@ let signInPayloadValidation = [
     .notEmpty()
     .withMessage(messages.notEmpty)
     .isLength({ min: dataConstraint.PASSWORD_MIN_LENGTH })
-    .withMessage(messages.invalidLength)
+    .withMessage(messages.invalidLogin)
     .isString()
     .withMessage(messages.invalidDataType("String")),
 ];
@@ -100,7 +160,13 @@ let emailPayloadValidation = [
 ];
 
 let resetPasswordPayload = [
-  param("id").exists(),
+  body("email")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isEmail()
+    .withMessage(messages.invalidEmail),
   body("code")
     .exists()
     .withMessage(messages.notPresent)
@@ -130,7 +196,15 @@ let verifyCodePayloadValidation = [
 ];
 
 let resendCodePayloadValidation = [param("id").exists()];
-
+let featurePayloadValidation = [
+  param("id").exists(),
+  body("isFeatured")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .isBoolean()
+    .withMessage(messages.invalidDataType("Boolean")),
+];
 let businessInfoValidation = [
   body("facebookUrl")
     .notEmpty()
@@ -251,20 +325,6 @@ let addressInfoValidation = [
     .withMessage(messages.notEmpty)
     .isString()
     .withMessage(messages.invalidDataType("String")),
-  body("country")
-    .exists()
-    .withMessage(messages.notPresent)
-    .notEmpty()
-    .withMessage(messages.notEmpty)
-    .isString()
-    .withMessage(messages.invalidDataType("String")),
-  body("zipCode")
-    .exists()
-    .withMessage(messages.notPresent)
-    .notEmpty()
-    .withMessage(messages.notEmpty)
-    .isInt()
-    .withMessage(messages.invalidDataType("Integer")),
 ];
 
 const update = [
@@ -333,8 +393,8 @@ const update = [
     .withMessage(messages.notPresent)
     .notEmpty()
     .withMessage(messages.notEmpty)
-    .isInt()
-    .withMessage(messages.invalidDataType("Integer"))
+    .isArray()
+    .withMessage(messages.invalidDataType("Array"))
     .optional(),
   body("birthDate")
     .notEmpty()
@@ -356,6 +416,32 @@ const update = [
     .optional(),
 ];
 
+const favourited = [...validators.common.bodyMongoId("vendorId")];
+
+let updateAccountStatus = [
+  validators.common.paramMongoId(),
+  body("status")
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .isIn(Object.values(models.Vendors.status)),
+];
+let updateAccountStatusBulk = [
+  body("ids")
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isArray()
+    .withMessage(messages.invalidDataType("Array")),
+  ...validators.common.bodyMongoId("ids.*"),
+  body("status")
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String"))
+    .isIn(Object.values(models.Vendors.status)),
+];
+
 module.exports = {
   signUpPayloadValidation,
   signInPayloadValidation,
@@ -366,4 +452,8 @@ module.exports = {
   businessInfoValidation,
   addressInfoValidation,
   update,
+  favourited,
+  featurePayloadValidation,
+  updateAccountStatus,
+  updateAccountStatusBulk,
 };

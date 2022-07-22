@@ -2,23 +2,51 @@ const BookingCrudService = new services.CrudService(models.Bookings);
 exports.create = {
   booking: async (req, res, next) => {
     try {
-      const { body: payload, user } = req;
-      const alreadyExists = await models.Bookings.findOne({
-        eventId: mongoose.Types.ObjectId(payload["eventId"]),
-        quoteId: mongoose.Types.ObjectId(payload["quoteId"]),
+      const {
+        body: payload,
+        user: { _id: userId },
+        user,
+      } = req;
+
+      const event = await models.Events.findOne({
+        _id: payload["eventId"],
+        customerId: userId,
       });
-
-      if (alreadyExists) {
-        throw createError(409, messages.alreadyExists("Booking"));
+      if (!event) {
+        throw createError(404, messages.notFound("Event"));
       }
-      payload["customerId"] = user.id;
+      const vendor = await models.Vendors.findById(payload.vendorId);
+      if (!vendor) {
+        throw createError(404, messages.notFound("Vendor"));
+      }
+      if (payload.meetingId) {
+        const meeting = await models.Meetings.findOne({
+          _id: payload["meetingId"],
+          customerId: userId,
+          isDeleted: false,
+        });
+        if (!meeting) {
+          throw createError(404, messages.notFound("Meeting"));
+        }
+      }
+      payload["customerId"] = userId;
 
-      await BookingCrudService.add(payload);
+      const booking = await BookingCrudService.add(
+        _.omit(payload, ["paypalOrderId", "status"])
+      );
+
+      libs.emailService.customerBooking({
+        user,
+      });
+      libs.emailService.vendorBooking({
+        user: vendor,
+        event,
+      });
 
       return res.status(201).json({
         status: 201,
         message: messages.success,
-        data: payload,
+        data: booking,
       });
     } catch (err) {
       next(err);

@@ -7,7 +7,10 @@ module.exports = {
           limit = dataConstraint.PAGINATION_LIMIT,
           currentPage = dataConstraint.CURRENT_PAGE,
           sortBy = "createdAt",
+          eventId,
+          status = "",
           sortDirection = -1,
+          search = "",
         },
         user: {
           _id: userId,
@@ -17,6 +20,16 @@ module.exports = {
       const isVendor = modelName === USER_ROLE.VENDOR;
       const isAdmin = modelName === USER_ROLE.ADMIN;
       const where = {
+        ...(search
+          ? {
+              title: { $regex: search, $options: "i" },
+            }
+          : null),
+        ...(eventId
+          ? {
+              eventId,
+            }
+          : null),
         $or: [
           {
             vendorId: userId,
@@ -26,34 +39,37 @@ module.exports = {
           },
         ],
       };
+      if (status) where["status"] = status;
       const data = await models.Quotes.find(!isAdmin ? where : {})
         .skip(limit * currentPage - limit)
         .limit(limit)
         .sort({
           [sortBy]: sortDirection,
         })
-        .populate("eventId", {
-          vendorIds: 0,
-        })
+        .populate("eventId")
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
         .populate({
           path: "vendorId",
           select: ["fullName", "profilePhoto", "skills", "rating"],
-          populate: {
-            path: "threads",
-            select: "_id",
-            match: {
-              "users.0.user": userId,
+          populate: [
+            { path: "skills" },
+            {
+              path: "threads",
+              match: {
+                "users.0.user": userId,
+              },
+              select:
+                "-users._id -users.isDeleted -users.showNotifications -users.unreadCount -users.userModel -createdAt -updatedAt",
             },
-          },
+          ],
         })
         .select(
-          isVendor
-            ? { vendorId: 0 }
-            : !isAdmin
-            ? {
-                customerId: 0,
-              }
+          !isAdmin
+            ? isVendor
+              ? { vendorId: 0 }
+              : {
+                  customerId: 0,
+                }
             : {}
         );
       return res.json({
@@ -90,29 +106,71 @@ module.exports = {
         _id: id,
         ...(!isAdmin ? where : {}),
       })
-        .populate("eventId", {
-          vendorIds: 0,
-        })
+        .populate("eventId")
         .populate("customerId", ["firstName", "lastName", "profilePhoto"])
         .populate({
           path: "vendorId",
           select: ["fullName", "profilePhoto", "skills", "rating"],
-          populate: { path: "skills" },
+          populate: [
+            { path: "skills" },
+            {
+              path: "threads",
+              match: {
+                "users.0.user": userId,
+              },
+              select:
+                "-users._id -users.isDeleted -users.showNotifications -users.unreadCount -users.userModel -createdAt -updatedAt",
+            },
+          ],
         })
-
         .select(
-          isVendor
-            ? { vendorId: 0 }
-            : !isAdmin
-            ? {
-                customerId: 0,
-              }
+          !isAdmin
+            ? isVendor
+              ? { vendorId: 0 }
+              : {
+                  customerId: 0,
+                }
             : {}
         );
+      let jsonData = null;
+      if (data) {
+        const pastEvents = await models.Bookings.aggregate([
+          {
+            $match: {
+              vendorId: mongoose.Types.ObjectId(data.vendorId._id),
+              status: {
+                $in: ["completedByCustomer", "completedByVendor", "completed"],
+              },
+            },
+          },
+          {
+            $group: {
+              _id: {
+                eventId: "$eventId",
+              },
+              count: {
+                $sum: 1,
+              },
+            },
+          },
+          {
+            $group: {
+              _id: null,
+              count: {
+                $sum: "$count",
+              },
+            },
+          },
+        ]);
+        jsonData = data.toJSON();
+        jsonData.vendorId.pastEventsCount = pastEvents[0]
+          ? pastEvents[0].count
+          : 0;
+      }
       return res.json({
         status: 200,
         message: messages.success,
-        data,
+        data: jsonData,
       });
     } catch (err) {
       next(err);

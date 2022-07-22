@@ -4,7 +4,7 @@ require("dotenv").config();
 /**
  * Add packages globally
  */
-require("./src/global-package");
+require("./src/globalPackage");
 /**
  * Add Helper globally
  */
@@ -190,6 +190,7 @@ var text = `declare global {
   var passportJWT: typeof import("passport-jwt");
   var mongoose: typeof import("mongoose");
   var crypto: typeof import("crypto");
+  var moment: typeof import("moment");
   var JWT: typeof import("jsonwebtoken");
   var bodyParser: typeof import("body-parser");
   var cors: typeof import("cors");
@@ -199,6 +200,9 @@ var text = `declare global {
   var axios: typeof import("axios").default;
   var s3: typeof import("@aws-sdk/client-s3");
   var s3RequestPresigner: typeof import("@aws-sdk/s3-request-presigner");
+  var redis: typeof import("redis");
+  var redisClient: ReturnType<typeof redis.createClient>;
+  var qs: typeof import("qs");
   
   //MIDDLEWARES
   var middlewares: ${convertToCode(types.middlewares)};
@@ -220,7 +224,7 @@ var text = `declare global {
   var helpers: ${convertToCode(types.helpers)};
   
   var messages: typeof import("./config/messages");
-  var dataConstraint: typeof import("./config/data_constraints");
+  var dataConstraint: typeof import("./config/dataConstraints");
   var emailConstraints: typeof import("./config/emailConstraints");
   var constants: typeof import("./config/constants");
   var digitOceanUrl: typeof import("../config/digital_ocean");

@@ -93,7 +93,7 @@ module.exports.get = {
         {
           $project: {
             users: {
-              ...models.Customers.excludedAttributes.reduce(
+              ...models.Customers.privateAttributes.reduce(
                 (acc, cur) => ({ ...acc, [cur]: 0 }),
                 {}
               ),
@@ -192,6 +192,22 @@ module.exports.get = {
         status: 200,
         message: messages.success,
         data: unreadMessageCount[0].count,
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+  onlineStatus: async (req, res, next) => {
+    try {
+      const {
+        params: { userId },
+      } = req;
+      const get = await util.promisify(redisClient.get).bind(redisClient);
+      const isOnline = await get(userId);
+      return res.json({
+        status: 200,
+        message: messages.success,
+        data: Boolean(isOnline),
       });
     } catch (err) {
       next(err);

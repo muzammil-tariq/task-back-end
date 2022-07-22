@@ -7,6 +7,7 @@ module.exports.post = {
         body: {
           userId: otherUserId,
           content,
+          attachments,
           userModel: otherUserModel = USER_ROLE.VENDOR,
         },
         user: {
@@ -50,6 +51,7 @@ module.exports.post = {
         senderModel: modelName,
         thread: thread._id,
         content,
+        attachments,
       });
       helpers.chat.sendMessage({
         data: {
@@ -72,7 +74,7 @@ module.exports.post = {
   newMessage: async (req, res, next) => {
     try {
       const {
-        body: { content },
+        body: { content, attachments },
         user: { _id: userId },
         params: { id: threadId },
       } = req;
@@ -87,6 +89,7 @@ module.exports.post = {
         sender: userId,
         thread: threadId,
         content,
+        attachments,
       });
       return res.json({
         status: 200,

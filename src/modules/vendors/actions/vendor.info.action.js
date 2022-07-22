@@ -1,6 +1,8 @@
 const VendorCrudService = new services.CrudService(models.Vendors);
 
 const strongParams = [
+  "createdAt",
+  "updatedAt",
   "password",
   "email",
   "isVerified",
@@ -38,10 +40,7 @@ exports.info = {
       } = req;
 
       if (!informationSteps || informationSteps !== "address")
-        throw createError(
-          400,
-          messages.missingInfoStep("Business Information")
-        );
+        throw createError(400, messages.missingStep("Business Information"));
 
       payload["informationSteps"] = "completed";
       const data = await VendorCrudService.update(

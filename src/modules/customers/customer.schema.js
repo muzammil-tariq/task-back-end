@@ -5,7 +5,7 @@ const CustomerSchema = new mongoose.Schema(
   {
     firstName: { type: String, trim: true },
     lastName: { type: String, trim: true },
-    email: { type: String, trim: true },
+    email: { type: String, trim: true, lowercase: true },
     username: { type: String, trim: true },
     password: {
       type: String,
@@ -37,8 +37,23 @@ const CustomerSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    zipCode: { type: Number },
-    country: { type: String },
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: [
+        {
+          type: Number,
+        },
+      ],
+      address: { type: String, trim: true },
+      city: { type: String, trim: true },
+      state: { type: String, trim: true },
+      country: { type: String, trim: true },
+      postalCode: { type: String, trim: true },
+    },
     languages: [
       {
         type: String,
@@ -53,9 +68,15 @@ const CustomerSchema = new mongoose.Schema(
     websiteUrl: {
       type: String,
     },
+    gender: {
+      type: String,
+      enum: ["male", "female", "non-binary", "prefer-not-to-answer"],
+    },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+CustomerSchema.index({ location: "2dsphere" });
 
 CustomerSchema.methods.verifyPassword = function (pwd) {
   return this.password == utils.hash.makeHashValue(pwd);
@@ -74,18 +95,36 @@ CustomerSchema.methods.getJWTToken = function () {
   });
 };
 
-CustomerSchema.statics.excludedAttributes = [
+CustomerSchema.virtual("fullName").get(function () {
+  return this.firstName + " " + this.lastName;
+});
+
+// attributes to be excluded from the response
+CustomerSchema.statics.privateAttributes = [
   "password",
   "accessToken",
   "verificationCode",
-  "isVerified",
   "codeExpiryTime",
   "uId",
+  "provider",
+];
+
+CustomerSchema.statics.createForbiddenAttributes = [
+  ..._.without(CustomerSchema.statics.privateAttributes, "password"),
+  "createdAt",
+  "updatedAt",
+  "isVerified",
+];
+CustomerSchema.statics.updateForbiddenAttributes = [
+  ...CustomerSchema.statics.createForbiddenAttributes,
+  "password",
+  "username",
+  "email",
 ];
 
 CustomerSchema.methods.toJSON = function () {
   const obj = this.toObject();
-  return _.omit(obj, CustomerSchema.statics.excludedAttributes);
+  return _.omit(obj, CustomerSchema.statics.privateAttributes);
 };
 
 module.exports = mongoose.model("Customers", CustomerSchema);

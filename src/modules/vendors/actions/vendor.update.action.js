@@ -1,54 +1,21 @@
-const VendorCrudService = new services.CrudService(models.Vendors);
 const settingsService = new services.SettingsService(models.Vendors);
 
-const strongParams = [
-  ...models.Vendors.excludedAttributes,
-  "username",
-  "email",
-  "rating",
-];
-
 exports.update = {
-  profilePhoto: async (req, res, next) => {
-    try {
-      const {
-        user: { _id: vendorId },
-        file,
-      } = req;
-      if (!file) throw createError(400, messages.missingAttr("Image File"));
-      const payload = { profilePhoto: `images/${file.filename}` };
-      const data = await VendorCrudService.update(
-        _.omit(payload, strongParams),
-        vendorId,
-        messages.notFound("Vendor")
-      );
-      return res.json({
-        status: 200,
-        message: messages.updatedModel("Vendor"),
-        data,
-      });
-    } catch (err) {
-      next(err);
-    }
-  },
   profile: async (req, res, next) => {
     try {
       const { body: payload, user } = req;
 
       const data = await models.Vendors.findOneAndUpdate(
         { _id: user._id },
-        _.omit(payload, strongParams),
+        _.omit(payload, models.Vendors.updateForbiddenAttributes),
         { new: true }
       );
       if (payload.password && payload.existingPassword) {
         await settingsService.changePassword({
-          existingPassword: payload.password,
-          password: payload.existingPassword,
+          existingPassword: payload.existingPassword,
+          password: payload.password,
           user,
         });
-      }
-      if (payload.email) {
-        await settingsService.changeEmail({ email: payload.email, user });
       }
       return res.json({
         status: 200,
@@ -59,4 +26,76 @@ exports.update = {
       next(err);
     }
   },
+  status: async (req, res, next) => {
+    try {
+      const {
+        params: { id },
+        body: { status },
+      } = req;
+      const data = await updateVendorStatus({ id, status });
+      return res.json({
+        status: 200,
+        message: messages.success,
+        data,
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+  statusBulk: async (req, res, next) => {
+    try {
+      const {
+        body: { status, ids },
+      } = req;
+      for (let id of ids) {
+        await updateVendorStatus({ id, status });
+      }
+      return res.json({
+        status: 200,
+        message: messages.success,
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+};
+
+async function updateVendorStatus({ id, status }) {
+  const data = await models.Vendors.findById(id);
+  if (
+    data?.status !== status &&
+    statusStateChart[data?.status].includes(status)
+  ) {
+    const old = data?.status;
+    data.status = status;
+    await data.save();
+
+    if (
+      status === models.Vendors.status.APPROVED &&
+      old !== models.Vendors.status.SUSPENDED
+    ) {
+      libs.emailService.vendorApproval({
+        user: data,
+      });
+    } else if (status === models.Vendors.status.REJECTED) {
+      libs.emailService.vendorNonApproval({
+        user: data,
+      });
+    }
+  }
+  return data;
+}
+
+// State chart for vendor status
+const statusStateChart = {
+  [models.Vendors.status.PENDING]: [
+    models.Vendors.status.APPROVED,
+    models.Vendors.status.REJECTED,
+  ],
+  [models.Vendors.status.APPROVED]: [models.Vendors.status.SUSPENDED],
+  [models.Vendors.status.REJECTED]: [
+    models.Vendors.status.PENDING,
+    models.Vendors.status.APPROVED,
+  ],
+  [models.Vendors.status.SUSPENDED]: [models.Vendors.status.APPROVED],
 };

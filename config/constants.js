@@ -25,6 +25,30 @@ const constants = {
       methods: ["GET"],
       path: /^(.+)?\/public\/?(.+)?/,
     },
+    {
+      methods: ["GET"],
+      path: /^(.+)?\/services\/?$/,
+    },
+    {
+      methods: ["GET"],
+      path: /^(.+)?\/services\/([0-9a-fA-F]{24})\/?$/,
+    },
+    {
+      methods: ["GET"],
+      path: /^(.+)?\/services\/([0-9a-fA-F]{24})\/vendors\/?$/,
+    },
+    {
+      methods: ["GET"],
+      path: /^(.+)?\/events\/types\/?(.+)?/,
+    },
+    {
+      methods: ["POST"],
+      path: /^(.+)?\/paypal\/webhook\/?/,
+    },
+    {
+      methods: ["GET"],
+      path: /^\/vendors\/([0-9a-fA-F]{24})\/?$/,
+    },
   ],
 };
 

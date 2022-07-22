@@ -8,6 +8,21 @@ router
     middlewares.validation.request,
     actions.quotes.add.quote
   )
+  .patch(
+    "/quotes/:id",
+    middlewares.verifyUserRole(USER_ROLE.VENDOR),
+    actions.quotes.update
+  )
+  .patch(
+    "/quotes/:id/decline",
+    middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
+    actions.quotes.decline
+  )
+  .delete(
+    "/quotes/:id",
+    middlewares.verifyUserRole(USER_ROLE.VENDOR),
+    actions.quotes.delete
+  )
   .get(
     "/quotes",
     validators.quotes.getList,
@@ -16,13 +31,14 @@ router
   )
   .get(
     "/quotes/:id",
-    validators.quotes.getById,
+    validators.common.getById,
     middlewares.validation.request,
     actions.quotes.getById
   )
   .get(
     "/events/:eventId/quotes",
     validators.quotes.getEventQuotes,
+    validators.common.getList,
     middlewares.validation.request,
     actions.quotes.getEventQuotes
   );

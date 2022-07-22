@@ -23,7 +23,7 @@ exports.getUploadSignedUrl = async function ({ path, expiresIn = 900 }) {
   };
 };
 
-exports.getObjectSignedUrl = async function ({ key, expiresIn = 60 }) {
+exports.getObjectSignedUrl = async function ({ key, expiresIn = 900 }) {
   const command = new GetObjectCommand({
     Bucket: AWS_BUCKET_NAME,
     Key: key,

@@ -1,9 +1,10 @@
 class AuthService {
   constructor(model) {
     this.model = model;
+    this.crudService = new services.CrudService(model);
   }
 
-  async signUp(payload) {
+  async signUp(payload, appendToken = true) {
     let user = await this.model.findOne({
       email: payload.email,
     });
@@ -13,9 +14,10 @@ class AuthService {
     }
     payload["verificationCode"] = utils.random.generateRandomNumber();
     user = await this.model.create(payload);
-    await libs.email_service.sendEmail(user);
-    var token = user.getJWTToken();
-    user._doc["token"] = token;
+    if (appendToken) {
+      const token = user.getJWTToken();
+      user._doc["token"] = token;
+    }
     return user;
   }
 
@@ -69,9 +71,49 @@ class AuthService {
       throw createError(400, messages.alreadyVerified);
     }
 
-    await libs.email_service.sendEmail(user);
+    await libs.emailService.verificationCode({
+      user,
+      verificationCode: user.verificationCode,
+    });
 
     return user;
+  }
+  async forgotPassword({ email }) {
+    let user = await this.verifyEmail({
+      email,
+    });
+    const verificationCode = utils.random.generateRandomNumber();
+    const codeExpiryTime = Date.now();
+    user = await this.crudService.update(
+      { verificationCode, codeExpiryTime },
+      user._id,
+      messages.userNotFound
+    );
+    await libs.emailService.forgotPassword({
+      user,
+      verificationCode: user.verificationCode,
+    });
+  }
+  async resetPassword({ email, password, verificationCode }) {
+    const user = await this.verifyEmail({
+      email,
+    });
+    const currentTime = Date.now();
+    // It will be empty when no request had been made for resetPassword
+    if (!user.codeExpiryTime) {
+      throw createError(400, messages.invalidCode);
+    }
+    if (currentTime - user.codeExpiryTime > dataConstraint.CODE_EXPIRY_TIME) {
+      throw createError(400, messages.codeExpried);
+    }
+    if (user.verificationCode !== verificationCode) {
+      throw createError(400, messages.invalidCode);
+    }
+    await this.crudService.update(
+      { password, verificationCode: "" },
+      user._id,
+      messages.userNotFound
+    );
   }
 }
 

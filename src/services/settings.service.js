@@ -17,22 +17,24 @@ class SettingsService {
     );
   }
   async changeEmail({ email, user }) {
-    if (user.email === email) {
-      throw createError(400, messages.sameEmail);
+    if (user.email !== email) {
+      const alreadyExists = await this.model.findOne({
+        email,
+      });
+      if (alreadyExists) {
+        throw createError(400, messages.emailExists);
+      }
+      const updatedUser = await this.userCrudService.update(
+        { email, isVerified: false },
+        user._id,
+        messages.userNotFound
+      );
+      libs.emailService.verificationCode({
+        user: updatedUser,
+        verificationCode: updatedUser.verificationCode,
+      });
+      return user;
     }
-    const alreadyExists = await this.model.findOne({
-      email,
-    });
-    if (alreadyExists) {
-      throw createError(400, messages.emailExists);
-    }
-    const updatedUser = await this.userCrudService.update(
-      { email, isVerified: false },
-      user._id,
-      messages.userNotFound
-    );
-    libs.email_service.sendEmail(updatedUser);
-    return user;
   }
 }
 exports.SettingsService = SettingsService;

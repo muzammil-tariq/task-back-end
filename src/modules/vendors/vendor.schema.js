@@ -1,15 +1,26 @@
 //@ts-ignore
 const { USER_ROLE } = constants;
 
+const status = {
+  PENDING: "pending",
+  REJECTED: "rejected",
+  APPROVED: "approved",
+  SUSPENDED: "suspended",
+};
+
 const VendorSchema = new mongoose.Schema(
   {
     fullName: { type: String, trim: true },
-    email: { type: String, trim: true },
+    email: { type: String, trim: true, lowercase: true },
     password: {
       type: String,
       set: (val) => utils.hash.makeHashValue(val),
     },
     profilePhoto: {
+      type: String,
+      default: "",
+    },
+    coverPhoto: {
       type: String,
       default: "",
     },
@@ -19,6 +30,11 @@ const VendorSchema = new mongoose.Schema(
       default: 0,
     },
     codeExpiryTime: { type: Date },
+    status: {
+      type: String,
+      enum: Object.values(status),
+      default: status.PENDING,
+    },
     isVerified: {
       type: Boolean,
       default: false,
@@ -76,14 +92,33 @@ const VendorSchema = new mongoose.Schema(
     felonyDescription: { type: String },
     minorityEligibility: { type: [String] },
     businessAddress: { type: String },
-    city: { type: String },
-    state: { type: String },
-    zipCode: { type: Number },
-    country: { type: String },
+    cancellationPolicy: { type: String, trim: true },
+    gallery: [
+      {
+        type: String,
+      },
+    ],
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: [
+        {
+          type: Number,
+        },
+      ],
+      address: { type: String, trim: true },
+      city: { type: String, trim: true },
+      state: { type: String, trim: true },
+      country: { type: String, trim: true },
+      postalCode: { type: String, trim: true },
+    },
     skills: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "EventSubCategories",
+        ref: "Services",
       },
     ],
     rating: {
@@ -91,9 +126,18 @@ const VendorSchema = new mongoose.Schema(
       default: 0,
       min: 0,
     },
+    isFeatured: {
+      type: Boolean,
+      default: false,
+    },
+    paypalMerchantId: {
+      type: String,
+    },
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+VendorSchema.index({ location: "2dsphere" });
 
 VendorSchema.methods.verifyPassword = function (pwd) {
   return this.password == utils.hash.makeHashValue(pwd);
@@ -116,20 +160,41 @@ VendorSchema.virtual("threads", {
   ref: "Thread",
   localField: "_id",
   foreignField: "users.1.user",
+  justOne: true,
 });
 
-VendorSchema.statics.excludedAttributes = [
+// attributes to be excluded from the response
+VendorSchema.statics.privateAttributes = [
   "password",
   "accessToken",
   "verificationCode",
-  "isVerified",
   "codeExpiryTime",
   "uId",
+  "provider",
 ];
+
+VendorSchema.statics.createForbiddenAttributes = [
+  ..._.without(VendorSchema.statics.privateAttributes, "password"),
+  "createdAt",
+  "updatedAt",
+  "rating",
+  "paypalMerchantId",
+  "isFeatured",
+  "isVerified",
+  "status",
+];
+VendorSchema.statics.updateForbiddenAttributes = [
+  ...VendorSchema.statics.createForbiddenAttributes,
+  "password",
+  "username",
+  "email",
+];
+
+VendorSchema.statics.status = status;
 
 VendorSchema.methods.toJSON = function () {
   const obj = this.toObject();
-  return _.omit(obj, VendorSchema.statics.excludedAttributes);
+  return _.omit(obj, VendorSchema.statics.privateAttributes);
 };
 
 module.exports = mongoose.model("Vendors", VendorSchema);

@@ -13,7 +13,7 @@ exports.add = {
       const user = {
         email: payload.email,
       };
-      await libs.email_service.sendEmailToSubscriber(user);
+      await libs.emailService.sendEmailToSubscriber(user);
       return res.json({
         status: 201,
         message: messages.created("email"),

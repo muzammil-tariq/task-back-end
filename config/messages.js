@@ -58,15 +58,26 @@ module.exports = {
   missingAttr: (attr) => {
     return `${attr} is missing in the payload`;
   },
-  missingInfoStep: (step) => {
+  missingStep: (step) => {
     return `Complete ${step} first to continue!`;
   },
   alreadyExists: (attr) => {
     return `${attr} already exists!`;
   },
+  bookingNotCompleted: "Can't mark booking as completed yet",
+  cantAddReview:
+    "You can't add review without paying the amount and completing the booking",
+  usernameAlreadyInUse: "This username is already in use",
   eventAlreadyExists: "Event already scheduled at this time. Try another slot!",
   eventNotForThisCustomer: "Event does not belong to this customer",
   pastDate: "Past date is not allowed!",
+  futureDate: "Future date is not allowed!",
   timeLessThanOrEqual: (date) => `Should not be less than or equal to ${date}`,
   forbidden: "You do not have enough privileges to perform this action",
+  paypalNotConnected: "Paypal is not connected",
+  paypalAlreadyConnected: "Paypal is already connected",
+  alreadyPaid: "You have already paid for this booking",
+  vendorRequestPending: "Your profile is being reviewed",
+  vendorRequestRejected: "Your request has been rejected",
+  vendorRequestSuspended: "Your account has been suspended",
 };

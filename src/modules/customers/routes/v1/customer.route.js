@@ -11,7 +11,7 @@ router
     "/customers/auth/login",
     validators.customers.signInPayloadValidation,
     middlewares.validation.request,
-    middlewares.local_passport.authenticate,
+    middlewares.localPassport.authenticate,
     actions.customers.auth.signIn
   )
   .post(
@@ -47,8 +47,7 @@ router
     actions.customers.auth.forgotPassword
   )
   .patch(
-    "/customers/auth/reset-password/:id",
-    middlewares.id_validation.validateId,
+    "/customers/auth/reset-password",
     validators.customers.resetPasswordPayload,
     middlewares.validation.request,
     actions.customers.auth.resetPassword
@@ -56,9 +55,24 @@ router
   .patch(
     "/customers",
     middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
+    middlewares.removeNullishValuesFromBody,
     validators.customers.update,
     middlewares.validation.request,
     actions.customers.update.profile
+  )
+  .get(
+    "/customers/:id",
+    middlewares.verifyUserRole(USER_ROLE.ADMIN),
+    validators.common.getById,
+    middlewares.validation.request,
+    actions.customers.get.byId
+  )
+  .get(
+    "/customers",
+    middlewares.verifyUserRole(USER_ROLE.ADMIN),
+    validators.common.getList,
+    middlewares.validation.request,
+    actions.customers.get.list
   );
 
 module.exports = { prefix: "customers", router };

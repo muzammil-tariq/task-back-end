@@ -28,10 +28,13 @@ module.exports = function () {
             message: "Invalid Token",
             status: 401,
           };
-
-          let model = req.roleModel;
-          if (jwt_payload.model && !model) {
+          let model;
+          if (jwt_payload.model) {
             model = models[jwt_payload.model];
+          } else if (req.roleModel) {
+            model = req.roleModel;
+          } else {
+            done(customError, false);
           }
           let user = await model.findById(jwt_payload.id);
           user ? done(null, user) : done(customError, false);

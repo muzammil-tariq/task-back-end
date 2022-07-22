@@ -1,9 +1,3 @@
-const updateCustomerStrongParams = [
-  ...models.Customers.excludedAttributes,
-  "username",
-  "email",
-];
-
 const settingsService = new services.SettingsService(models.Customers);
 
 module.exports.update = {
@@ -13,13 +7,13 @@ module.exports.update = {
 
       const data = await models.Customers.findOneAndUpdate(
         { _id: user._id },
-        _.omit(payload, updateCustomerStrongParams),
+        _.omit(payload, models.Customers.updateForbiddenAttributes),
         { new: true }
       );
       if (payload.password && payload.existingPassword) {
         await settingsService.changePassword({
-          existingPassword: payload.password,
-          password: payload.existingPassword,
+          existingPassword: payload.existingPassword,
+          password: payload.password,
           user,
         });
       }

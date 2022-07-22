@@ -5,6 +5,12 @@ const QuotesSchema = new mongoose.Schema(
       trim: true,
     },
     price: Number,
+    servicesId: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Services",
+      },
+    ],
     eventId: { type: mongoose.Types.ObjectId, ref: "Events" },
     vendorId: {
       type: mongoose.Types.ObjectId,
@@ -19,6 +25,7 @@ const QuotesSchema = new mongoose.Schema(
       enum: ["pending", "booked", "declined"],
       default: "pending",
     },
+    isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

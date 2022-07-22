@@ -14,6 +14,7 @@ const messageSchema = new mongoose.Schema(
       ref: "Thread",
     },
     content: String,
+    attachments: [String],
     isDeleted: {
       type: Boolean,
       default: false,

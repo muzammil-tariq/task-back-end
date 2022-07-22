@@ -12,30 +12,23 @@ let addEventPayload = [
     .exists()
     .withMessage(messages.notPresent)
     .notEmpty()
+    .withMessage(messages.notEmpty),
+  body("type.name")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
     .withMessage(messages.notEmpty)
     .isString()
     .withMessage(messages.invalidDataType("String")),
+  ...validators.common.bodyMongoId("type.eventTypeId"),
   body("description")
     .notEmpty()
     .withMessage(messages.notEmpty)
     .isString()
     .withMessage(messages.invalidDataType("String"))
     .optional(),
-  body("scheduledDate")
-    .exists()
-    .withMessage(messages.notPresent)
-    .notEmpty()
-    .withMessage(messages.notEmpty)
-    .withMessage(messages.invalidDataType("Date"))
-    .custom((value) => {
-      const date = new Date();
-      date.setHours(0, 0, 0, 0);
-      if (new Date(value) < date) {
-        throw new Error(messages.pastDate);
-      }
-      return true;
-    }),
-  body("location")
+
+  body("venueType")
     .exists()
     .withMessage(messages.notPresent)
     .notEmpty()
@@ -50,7 +43,46 @@ let addEventPayload = [
     .withMessage(messages.notEmpty)
     .isString()
     .withMessage(messages.invalidDataType("String")),
-  body("venueAddress")
+  body("location").notEmpty().withMessage(messages.notEmpty),
+  body("location.coordinates")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isArray()
+    .withMessage(messages.invalidDataType("Array"))
+    .custom((value) => {
+      if (!value?.length) {
+        throw createError(
+          400,
+          messages.invalidDataType("location.coordinates")
+        );
+      }
+      if (value?.length !== 2) {
+        throw createError(400, messages.invalidFormat("coordinates"));
+      }
+      value.forEach((item) => {
+        if (typeof item !== "number") {
+          throw createError(400, messages.invalidFormat("coordinates"));
+        }
+      });
+      return true;
+    }),
+  body("location.address")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String")),
+  body("location.state")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isString()
+    .withMessage(messages.invalidDataType("String")),
+  body("location.country")
     .exists()
     .withMessage(messages.notPresent)
     .notEmpty()
@@ -64,35 +96,83 @@ let addEventPayload = [
     .withMessage(messages.notEmpty)
     .isInt()
     .withMessage(messages.invalidDataType("Integer")),
+  body("services")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isArray()
+    .withMessage(messages.invalidDataType("Array")),
+  ...validators.common.bodyMongoId("services.*.serviceId"),
   body("startTime")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .withMessage(messages.invalidDataType("Date"))
+    .custom((value) => {
+      const date = new Date();
+      if (new Date(value) < date) {
+        throw new Error(messages.pastDate);
+      }
+      return true;
+    }),
+  body("endTime")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .withMessage(messages.invalidDataType("Date"))
+    .custom((endTime, { req }) => {
+      const { startTime } = req.body;
+      if (startTime >= endTime) {
+        throw new Error(messages.timeLessThanOrEqual("endTime"));
+      }
+      return true;
+    }),
+];
+
+const getList = [...validators.common.pagination, ...validators.common.sort];
+
+const addEventTypePayload = [
+  body("name")
     .exists()
     .withMessage(messages.notPresent)
     .notEmpty()
     .withMessage(messages.notEmpty)
     .isString()
     .withMessage(messages.invalidDataType("String")),
-  body("endTime")
+  body("images")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isArray()
+    .withMessage(messages.invalidDataType("Array")),
+];
+const updateEventTypePayload = [
+  ...validators.common.paramMongoId(),
+  body("name")
     .exists()
     .withMessage(messages.notPresent)
     .notEmpty()
     .withMessage(messages.notEmpty)
     .isString()
     .withMessage(messages.invalidDataType("String"))
-    .custom((endTime, { req }) => {
-      const { scheduledDate, startTime } = req.body;
-      const startTimeDate = new Date(scheduledDate);
-      const endTimeDate = new Date(scheduledDate);
-      const [startTimeHours, startTimeMins] = startTime.split(":");
-      const [endTimeHours, endTimeMins] = endTime.split(":");
-      startTimeDate.setHours(startTimeHours, startTimeMins, 0, 0);
-      endTimeDate.setHours(endTimeHours, endTimeMins, 0, 0);
-      if (startTime >= endTime) {
-        throw new Error(messages.timeLessThanOrEqual("startTime"));
-      }
-      return true;
-    }),
+    .optional(),
+  body("images")
+    .exists()
+    .withMessage(messages.notPresent)
+    .notEmpty()
+    .withMessage(messages.notEmpty)
+    .isArray()
+    .withMessage(messages.invalidDataType("Array"))
+    .optional(),
 ];
 
 module.exports = {
   addEventPayload,
+  getList,
+  addEventTypePayload,
+  updateEventTypePayload,
 };
