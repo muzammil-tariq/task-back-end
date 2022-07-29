@@ -17,20 +17,22 @@ module.exports.get = {
       } = req;
       const isVendor = modelName === USER_ROLE.VENDOR;
       const isAdmin = modelName === USER_ROLE.ADMIN;
+
       const where = {
-        $and: [
-          {
-            $or: [
-              {
-                vendorId: userId,
-              },
-              {
-                customerId: userId,
-              },
-            ],
-          },
-        ],
+        $and: [],
       };
+      if (!isAdmin) {
+        where.$and.push({
+          $or: [
+            {
+              vendorId: userId,
+            },
+            {
+              customerId: userId,
+            },
+          ],
+        });
+      }
       if (text)
         where.$and.push({
           $or: [
