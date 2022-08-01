@@ -87,6 +87,23 @@ module.exports.get = {
       next(err);
     }
   },
+  isEmailAvailable: async (req, res, next) => {
+    const {
+      params: { email },
+    } = req;
+    try {
+      const vendor = await models.Vendors.findOne({
+        email,
+      });
+      return res.json({
+        status: 200,
+        message: messages.success,
+        data: !Boolean(vendor),
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
   stats: async (req, res, next) => {
     try {
       const {
