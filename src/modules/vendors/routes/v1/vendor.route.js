@@ -118,8 +118,7 @@ router
     actions.vendors.favourited.getList
   )
   .get(
-    "/vendors/emailAvailable/:email",
-    middlewares.verifyUserRole(USER_ROLE.VENDOR),
+    "/vendors/auth/emailAvailability/:email",
     middlewares.validation.request,
     actions.vendors.get.isEmailAvailable
   )
