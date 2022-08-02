@@ -80,4 +80,6 @@ module.exports = {
   vendorRequestPending: "Your profile is being reviewed",
   vendorRequestRejected: "Your request has been rejected",
   vendorRequestSuspended: "Your account has been suspended",
+  criteriaDidNotMatch:
+    "Criteria didn't match! you can't request a free quote to this vendor",
 };

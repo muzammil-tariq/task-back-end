@@ -38,6 +38,10 @@ const constants = {
       path: /^(.+)?\/services\/([0-9a-fA-F]{24})\/vendors\/?$/,
     },
     {
+      methods: ["POST"],
+      path: /^(.+)?\/quickFreeQuote\/vendors\/([0-9a-fA-F]{24})\/?$/,
+    },
+    {
       methods: ["GET"],
       path: /^(.+)?\/events\/types\/?(.+)?/,
     },
