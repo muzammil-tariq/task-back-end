@@ -24,7 +24,7 @@ exports.create = async (req, res, next) => {
       _id: id,
       ..._where,
     });
-    if (!vendor) throw createError(400, messages.freeQuoteCriteria);
+    if (!vendor) throw createError(400, messages.criteriaDidNotMatch);
     const quickFreeQuote = await models.QuickFreeQuotes.create({
       ..._.omit(body, models.QuickFreeQuotes.createForbiddenAttributes),
       vendorId: id,
