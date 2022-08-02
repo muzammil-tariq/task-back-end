@@ -39,5 +39,9 @@ const QuickFreeQuote = new mongoose.Schema(
   },
   { timestamps: true }
 );
-QuickFreeQuote.statics.createForbiddenAttributes = ["createdAt", "updatedAt"];
+QuickFreeQuote.statics.createForbiddenAttributes = [
+  "createdAt",
+  "updatedAt",
+  "isDeleted",
+];
 module.exports = mongoose.model("QuickFreeQuotes", QuickFreeQuote);
