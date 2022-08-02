@@ -29,6 +29,10 @@ exports.create = async (req, res, next) => {
       ...body,
       vendorId: id,
     });
+    await libs.emailService.sendEmailToSubscriber({
+      email: vendor.email,
+      fullName: vendor.fullName,
+    });
     return res.json({
       status: 200,
       message: messages.success,

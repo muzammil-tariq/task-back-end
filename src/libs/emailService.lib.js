@@ -52,3 +52,6 @@ exports.forgotPassword = async function ({ user }) {
 exports.sendEmailToSubscriber = async function ({ user }) {
   await sendEmail(emailConstraints.newsLetter({ user }));
 };
+exports.quickFreeQuote = async function ({ email, fullName }) {
+  await sendEmail(emailConstraints.quickFreeQuote({ email, fullName }));
+};

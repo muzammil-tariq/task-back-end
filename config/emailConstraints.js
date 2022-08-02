@@ -201,6 +201,16 @@ module.exports = {
     SUBJECT: `ThePartyStarter | You are booked!✅`,
     html: `
     Hi ${user.fullName},
-    Subcribe Successfully`,
+    Subscribed Successfully`,
+  }),
+  quickFreeQuote: ({ email, fullName }) => ({
+    to: email,
+    from: EMAIL_FROM,
+    SUBJECT: `ThePartyStarter | Quick Free Quote`,
+    html: `
+    Hi ${fullName},
+    You just received a request for a free quote from a party planner.
+    Wishing you all the best!
+    Cheers 🎉`,
   }),
 };
