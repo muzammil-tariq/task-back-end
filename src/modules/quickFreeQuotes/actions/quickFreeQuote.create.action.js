@@ -26,7 +26,8 @@ exports.create = async (req, res, next) => {
     });
     if (!vendor) throw createError(400, messages.notFound("vendor"));
     const quickFreeQuote = await models.QuickFreeQuotes.create({
-      ...body,
+      // ...body,
+      ..._.omit(body, models.QuickFreeQuotes.createForbiddenAttributes),
       vendorId: id,
     });
     await libs.emailService.sendEmailToSubscriber({

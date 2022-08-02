@@ -198,10 +198,10 @@ module.exports = {
   newsLetter: ({ user }) => ({
     to: user.email,
     from: EMAIL_FROM,
-    SUBJECT: `ThePartyStarter | You are booked!✅`,
+    SUBJECT: `ThePartyStarter | NewsLetter subscription`,
     html: `
     Hi ${user.fullName},
-    Subscribed Successfully`,
+    Thank You For Subscribing`,
   }),
   quickFreeQuote: ({ email, fullName }) => ({
     to: email,
