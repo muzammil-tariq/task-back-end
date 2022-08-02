@@ -117,6 +117,11 @@ router
     middlewares.validation.request,
     actions.vendors.favourited.getList
   )
+  .get(
+    "/vendors/auth/emailAvailability/:email",
+    middlewares.validation.request,
+    actions.vendors.get.isEmailAvailable
+  )
   .patch(
     "/vendors/favourited/add",
     middlewares.verifyUserRole(USER_ROLE.CUSTOMER),
