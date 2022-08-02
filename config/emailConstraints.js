@@ -4,13 +4,13 @@ module.exports = {
   verificationCode: ({ user, verificationCode }) => ({
     to: user.email,
     from: EMAIL_FROM,
-    SUBJECT: "ThePartyStarter Verification Code",
+    subject: "ThePartyStarter Verification Code",
     html: "Your Verification code is " + verificationCode,
   }),
   forgotPassword: ({ user, verificationCode }) => ({
     to: user.email,
     from: EMAIL_FROM,
-    SUBJECT: "ThePartyStarter password reset request",
+    subject: "ThePartyStarter password reset request",
     html: `We received a password reset request for your account. 
     If you initiated this request then enter this code to continue to process. If this request was not initiated by you then you can ignore this message.
     
@@ -19,7 +19,7 @@ module.exports = {
   signUp: ({ user, verificationCode }) => ({
     to: user.email,
     from: EMAIL_FROM,
-    SUBJECT: `Hello ${user.fullName}, Welcome to ThePartyStarter!`,
+    subject: `Hello ${user.fullName}, Welcome to ThePartyStarter!`,
     html: `
     Hello ${user.fullName},
     You want the best of the best, we get that. As you are already off to a great start by signing up 
@@ -52,7 +52,7 @@ module.exports = {
   customerEventSubmittal: ({ user }) => ({
     to: user.email,
     from: EMAIL_FROM,
-    SUBJECT: `ThePartyStarter | Congratulations on your upcomming event!`,
+    subject: `ThePartyStarter | Congratulations on your upcomming event!`,
     html: `
     Hi ${user.fullName},
     Excited about your upcoming event? We are too!🎉
@@ -73,7 +73,7 @@ module.exports = {
   customerBooking: ({ user }) => ({
     to: user.email,
     from: EMAIL_FROM,
-    SUBJECT: `ThePartyStarter | Your Event is BOOKED!`,
+    subject: `ThePartyStarter | Your Event is BOOKED!`,
     html: `
     Hi ${user.fullName},
     Congratulations on booking your event on ThePartyStarter!🎉
@@ -96,7 +96,7 @@ module.exports = {
   vendorSignup: ({ user, verificationCode }) => ({
     to: user.email,
     from: EMAIL_FROM,
-    SUBJECT: `ThePartyStarter | Thank you for signing up🎉`,
+    subject: `ThePartyStarter | Thank you for signing up🎉`,
     html: `
     Hi ${user.fullName},
     Do you also want to get more client inquiries to grow your business? Get excited, you have 
@@ -121,7 +121,7 @@ module.exports = {
   vendorApproval: ({ user }) => ({
     to: user.email,
     from: EMAIL_FROM,
-    SUBJECT: `Welcome to the ThePartyStarter Vendor’s Club! 🎉`,
+    subject: `Welcome to the ThePartyStarter Vendor’s Club! 🎉`,
     html: `
     Hi ${user.fullName},
     Congratulations, you did it! Your business has been approved as a ThePartyStarter vendor.🎉
@@ -147,7 +147,7 @@ module.exports = {
   vendorNonApproval: ({ user }) => ({
     to: user.email,
     from: EMAIL_FROM,
-    SUBJECT: `Sorry, we are not a good fit at the moment.`,
+    subject: `Sorry, we are not a good fit at the moment.`,
     html: `
     Hi ${user.fullName},
     Thank you for taking the time to consider ThePartyStarter.
@@ -162,7 +162,7 @@ module.exports = {
   vendorReceivingQuotes: ({ user, link }) => ({
     to: user.email,
     from: EMAIL_FROM,
-    SUBJECT: `ThePartyStarter | You have a new quote!`,
+    subject: `ThePartyStarter | You have a new quote!`,
     html: `
     Hi ${user.fullName},
     You just received a request for a quote from a party planner! Check out the quote HERE ${link} 
@@ -176,7 +176,7 @@ module.exports = {
   vendorBooking: ({ user, event }) => ({
     to: user.email,
     from: EMAIL_FROM,
-    SUBJECT: `ThePartyStarter | You are booked!✅`,
+    subject: `ThePartyStarter | You are booked!✅`,
     html: `
     Hi ${user.fullName},
     Congratulations, another exciting opportunity has come knocking at your door! You are booked 
