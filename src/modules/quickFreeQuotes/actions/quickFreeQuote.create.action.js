@@ -29,7 +29,7 @@ exports.create = async (req, res, next) => {
       ..._.omit(body, models.QuickFreeQuotes.createForbiddenAttributes),
       vendorId: id,
     });
-    await libs.emailService.sendEmailToSubscriber({
+    await libs.emailService.quickFreeQuote({
       email: vendor.email,
       fullName: vendor.fullName,
     });
