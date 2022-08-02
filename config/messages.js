@@ -81,5 +81,5 @@ module.exports = {
   vendorRequestRejected: "Your request has been rejected",
   vendorRequestSuspended: "Your account has been suspended",
   criteriaDidNotMatch:
-    "Criteria din't match! you can't request a free quote to this vendor",
+    "Criteria didn't match! you can't request a free quote to this vendor",
 };
