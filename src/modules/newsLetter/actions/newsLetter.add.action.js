@@ -15,7 +15,7 @@ exports.add = {
       };
       req?.user?._id && (clauses.userId = req?.user?._id);
       const newsLetter = await NewsLetterCrudService.add(clauses);
-      await libs.emailService.quickFreeQuote({
+      await libs.emailService.sendEmailToSubscriber({
         email: req?.user?.email ?? email,
       });
       return res.json({

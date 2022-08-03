@@ -195,12 +195,11 @@ module.exports = {
     Wishing you a wonderful event!
     Cheers 🎉`,
   }),
-  newsLetter: ({ user }) => ({
-    to: user.email,
+  newsLetter: ({ email }) => ({
+    to: email,
     from: EMAIL_FROM,
     subject: `ThePartyStarter | NewsLetter subscription`,
     html: `
-    Hi ${user.fullName},
     Thank You For Subscribing`,
   }),
   quickFreeQuote: ({ email, fullName }) => ({
