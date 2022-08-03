@@ -5,19 +5,18 @@ exports.add = {
     try {
       const {
         body: { email },
-        user: { _id, email: userEmail },
       } = req;
       const alreadyExist = await models.NewsLetter.findOne({
         email,
       });
       if (alreadyExist) throw createError(400, messages.alreadyExists(email));
       const clauses = {
-        email: userEmail ?? email,
+        email: req?.user?.email ?? email,
       };
-      _id && (clauses.userId = _id);
+      req?.user?._id && (clauses.userId = req?.user?._id);
       const newsLetter = await NewsLetterCrudService.add(clauses);
       await libs.emailService.sendEmailToSubscriber({
-        email: userEmail ?? email,
+        email: req?.user?.email ?? email,
       });
       return res.json({
         status: 201,

@@ -22,6 +22,10 @@ const constants = {
       path: /^(.+)?\/auth\/?(.+)?/,
     },
     {
+      methods: ["POST"],
+      path: /^(.+)?\/newsLetter\/?(.+)?$/,
+    },
+    {
       methods: ["GET"],
       path: /^(.+)?\/public\/?(.+)?/,
     },
