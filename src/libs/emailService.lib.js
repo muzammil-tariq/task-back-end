@@ -49,7 +49,7 @@ exports.verificationCode = async function ({ user, verificationCode }) {
 exports.forgotPassword = async function ({ user }) {
   await sendEmail(emailConstraints.forgotPassword({ user }));
 };
-exports.sendEmailToSubscriber = async function ({ user }) {
+exports.sendEmailToSubscriber = async function ({ email }) {
   await sendEmail(emailConstraints.newsLetter({ email }));
 };
 exports.quickFreeQuote = async function ({ email, fullName }) {
