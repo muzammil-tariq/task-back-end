@@ -15,12 +15,12 @@ exports.add = {
       };
       req?.user?._id && (clauses.userId = req?.user?._id);
       const newsLetter = await NewsLetterCrudService.add(clauses);
-      await libs.emailService.sendEmailToSubscriber({
+      await libs.emailService.quickFreeQuote({
         email: req?.user?.email ?? email,
       });
       return res.json({
         status: 201,
-        message: messages.created("email"),
+        message: messages.success,
         data: newsLetter,
       });
     } catch (error) {
